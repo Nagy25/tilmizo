@@ -2,8 +2,9 @@
 
 This directory contains the backend-only Phase 1 setup for Supabase project
 `tilmizo` (`trmkevgtjdbvbzyknaih`). Authentication is designed around a
-verified Egyptian mobile number with the OTP delivered through WhatsApp. It
-does not contain or require Flutter changes.
+verified Egyptian mobile number. Development currently uses Supabase's hosted
+test-phone mapping; the future WhatsApp delivery integration is retained but
+is not used by the synthetic test number.
 
 ## Database migrations
 
@@ -17,6 +18,11 @@ verified Egyptian mobile number the immutable profile identity, and updates the
 Auth triggers and grants. The migration stops without committing if an
 existing Auth user lacks a valid Egyptian mobile number.
 
+Run `phase_1_phone_normalization.sql` after either existing setup. It keeps the
+strict E.164 profile constraint while canonicalizing the phone value exposed by
+Supabase's hosted test-number flow, which may omit the leading `+` inside Auth
+triggers. The same normalization is included in the current base migrations.
+
 ## Authentication configuration
 
 ### Current intended settings
@@ -26,13 +32,24 @@ existing Auth user lacks a valid Egyptian mobile number.
 - Email provider: disabled.
 - Google provider: disabled.
 - Apple provider: disabled.
-- Phone provider: disabled until the Meta WhatsApp hook configuration is ready.
+- Phone provider: enabled for the restricted hosted test-phone flow.
+- Phone confirmations: enabled.
+- OTP length: six digits; OTP expiry/cooldown: 60 seconds.
+- Test mapping: `+201000000000` → `123456`, valid until 2026-10-31.
 - Site URL: keep `http://localhost:3000` until application redirect handling is
   designed.
 - Redirect allowlist: keep empty until application deep links are designed.
 
-Keeping Phone disabled until Meta is configured intentionally means there is
-no usable sign-in method in the interim.
+The mapped test number bypasses delivery and therefore does not invoke the
+WhatsApp hook. It still uses Supabase's normal `signInWithOtp` and `verifyOtp`
+APIs, creates or reuses `auth.users`, issues a real session, runs the profile
+trigger, and applies normal RLS. It must never be treated as production
+authentication because anyone who knows the published test credentials can
+access the same test account.
+
+Before production, delete the test mapping, disable the application's test
+mode and remove its test values, then configure and acceptance-test an
+approved delivery provider. Keep Phone confirmation enabled.
 
 ### WhatsApp OTP through Meta Cloud API
 

@@ -75,7 +75,10 @@ begin
         ''
       )
     ),
-    new.phone,
+    case
+      when new.phone ~ '^201[0125][0-9]{8}$' then '+' || new.phone
+      else new.phone
+    end,
     coalesce(
       nullif(btrim(new.raw_user_meta_data ->> 'avatar_url'), ''),
       nullif(btrim(new.raw_user_meta_data ->> 'picture'), '')
@@ -102,7 +105,10 @@ begin
   end if;
 
   update public.profiles
-  set phone = new.phone
+  set phone = case
+    when new.phone ~ '^201[0125][0-9]{8}$' then '+' || new.phone
+    else new.phone
+  end
   where id = new.id;
 
   return new;

@@ -1,6 +1,25 @@
 library;
 
+export 'src/auth/auth_failure.dart';
+export 'src/auth/auth_providers.dart';
+export 'src/auth/auth_session_status.dart';
+export 'src/auth/phone_auth_service.dart';
+export 'src/auth/supabase_phone_auth_service.dart';
+export 'src/config/supabase_config.dart';
+export 'src/design_system/telmizo_buttons.dart';
+export 'src/design_system/telmizo_colors.dart';
+export 'src/design_system/telmizo_feedback.dart';
+export 'src/design_system/telmizo_font_licenses.dart';
+export 'src/design_system/telmizo_form_field.dart';
+export 'src/design_system/telmizo_layout.dart';
+export 'src/design_system/telmizo_radius.dart';
+export 'src/design_system/telmizo_shadows.dart';
+export 'src/design_system/telmizo_spacing.dart';
+export 'src/design_system/telmizo_theme.dart';
+export 'src/design_system/telmizo_typography.dart';
+export 'src/errors/network_errors.dart';
 export 'src/helpers/context_extensions.dart';
+export 'src/phone/egyptian_phone.dart';
 export 'src/providers/shared_preferences_provider.dart';
 export 'src/providers/store_service_providers.dart';
 export 'src/services/app_info_service.dart';
