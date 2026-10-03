@@ -1,0 +1,4 @@
+project_id = "telmizo"
+
+[functions.send-whatsapp-otp]
+verify_jwt = false
