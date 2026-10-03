@@ -48,18 +48,6 @@ class VerifiedPhoneField extends StatelessWidget {
                 ),
               ),
               prefixIconConstraints: const BoxConstraints(),
-              suffixIcon: Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  end: TelmizoSpacing.sm,
-                ),
-                child: TelmizoPill(
-                  label: LocaleKeys.profile_phone_verified.tr(),
-                  icon: Icons.check,
-                  background: TelmizoColors.primaryTint,
-                  foreground: TelmizoColors.primary,
-                ),
-              ),
-              suffixIconConstraints: const BoxConstraints(),
             ),
           ),
           const SizedBox(height: TelmizoSpacing.xs),

@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const app_name = 'app_name';
   static const brand_name = 'brand_name';
   static const brand_teacher = 'brand_teacher';
@@ -48,7 +48,8 @@ abstract class  LocaleKeys {
   static const otp_field_semantics = 'otp_field_semantics';
   static const otp_digits_entered = 'otp_digits_entered';
   static const otp_resend_in = 'otp_resend_in';
-  static const otp_resend_countdown_semantics = 'otp_resend_countdown_semantics';
+  static const otp_resend_countdown_semantics =
+      'otp_resend_countdown_semantics';
   static const otp_resend = 'otp_resend';
   static const otp_resent = 'otp_resent';
   static const otp_verify = 'otp_verify';
@@ -75,7 +76,7 @@ abstract class  LocaleKeys {
   static const profile_name_hint = 'profile_name_hint';
   static const profile_name_required = 'profile_name_required';
   static const profile_phone_label = 'profile_phone_label';
-  static const profile_phone_verified = 'profile_phone_verified';
+
   static const profile_phone_note = 'profile_phone_note';
   static const profile_subject_label = 'profile_subject_label';
   static const profile_subject_caption = 'profile_subject_caption';
@@ -156,5 +157,4 @@ abstract class  LocaleKeys {
   static const group_not_found_title = 'group_not_found_title';
   static const group_not_found_body = 'group_not_found_body';
   static const back_to_groups = 'back_to_groups';
-
 }
