@@ -2,13 +2,9 @@ import 'package:core_package/core_package.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../domain/teacher_profile.dart';
-import 'avatar_card.dart';
-import 'suggestion_chips.dart';
-import 'verified_phone_field.dart';
 
 typedef ProfileSubmit = void Function({
   required String fullName,
@@ -68,7 +64,12 @@ class _ProfileFormState extends State<ProfileForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AvatarCard(avatarUrl: widget.profile.avatarUrl),
+          TelmizoAvatarCard(
+            avatarUrl: widget.profile.avatarUrl,
+            title: LocaleKeys.profile_avatar_title.tr(),
+            body: LocaleKeys.profile_avatar_body.tr(),
+            semanticLabel: LocaleKeys.profile_avatar_semantics.tr(),
+          ),
           const SizedBox(height: TelmizoSpacing.lg),
           TelmizoFormField(
             label: LocaleKeys.profile_name_label.tr(),
@@ -91,7 +92,11 @@ class _ProfileFormState extends State<ProfileForm> {
             ),
           ),
           const SizedBox(height: TelmizoSpacing.lg),
-          VerifiedPhoneField(phone: widget.profile.phone),
+          VerifiedPhoneField(
+            phone: widget.profile.phone,
+            label: LocaleKeys.profile_phone_label.tr(),
+            note: LocaleKeys.profile_phone_note.tr(),
+          ),
           const SizedBox(height: TelmizoSpacing.lg),
           TelmizoFormField(
             label: LocaleKeys.profile_subject_label.tr(),
@@ -121,7 +126,7 @@ class _ProfileFormState extends State<ProfileForm> {
             ),
           ),
           const SizedBox(height: TelmizoSpacing.sm),
-          SuggestionChips(
+          TelmizoSuggestionChips(
             controller: _subject,
             enabled: !widget.isSaving,
             suggestions: [

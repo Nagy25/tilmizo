@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../core/widgets/snackbars.dart';
 import '../../../../generated/locale_keys.g.dart';
 
 /// Gradient invite-code card with copy and share actions.
@@ -23,7 +22,7 @@ class InviteCodeCard extends StatelessWidget {
   Future<void> _copy(BuildContext context, String code) async {
     await Clipboard.setData(ClipboardData(text: code));
     if (context.mounted) {
-      showAppSnackBar(context, LocaleKeys.invite_copied.tr());
+      showTelmizoSnackBar(context, LocaleKeys.invite_copied.tr());
     }
   }
 

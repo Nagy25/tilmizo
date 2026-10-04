@@ -1,6 +1,6 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/auth/presentation/screens/phone_login_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/empty_groups_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/groups_dashboard_screen.dart';

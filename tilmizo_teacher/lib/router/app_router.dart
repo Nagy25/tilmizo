@@ -5,6 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/phone_login_screen.dart';
 import '../features/auth/presentation/screens/splash_screen.dart';
+import '../features/group_access/presentation/screens/group_students_screen.dart';
+import '../features/group_access/presentation/screens/join_request_details_screen.dart';
+import '../features/group_access/presentation/screens/join_requests_screen.dart';
+import '../features/group_access/presentation/screens/student_access_details_screen.dart';
 import '../features/groups/presentation/screens/create_group_screen.dart';
 import '../features/groups/presentation/screens/empty_groups_screen.dart';
 import '../features/groups/presentation/screens/group_details_screen.dart';
@@ -66,6 +70,26 @@ class AppRouter extends RootStackRouter {
       AutoRoute(
         page: GroupDetailsRoute.page,
         path: '/groups/:groupId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: JoinRequestsRoute.page,
+        path: '/groups/:groupId/requests',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: JoinRequestDetailsRoute.page,
+        path: '/groups/:groupId/requests/:requestId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: GroupStudentsRoute.page,
+        path: '/groups/:groupId/students',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: StudentAccessDetailsRoute.page,
+        path: '/groups/:groupId/students/:membershipId',
         guards: teacherGuards,
       ),
       RedirectRoute(path: '*', redirectTo: '/'),

@@ -1,8 +1,9 @@
+import 'package:core_package/core_package.dart';
+
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/groups/domain/group_draft.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/controllers/group_editor_controller.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/controllers/groups_controller.dart';

@@ -4,18 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/development_auth_config.dart';
 import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/form_screen_body.dart';
-import '../../../../core/widgets/snackbars.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_destination_route.dart';
 import '../../../../router/app_router.dart';
 import '../controllers/otp_controller.dart';
-import '../widgets/auth_info_box.dart';
-import '../widgets/otp_code_input.dart';
-import '../widgets/otp_header.dart';
-import '../widgets/resend_countdown_card.dart';
 
 @RoutePage()
 class OtpVerificationScreen extends ConsumerStatefulWidget {
@@ -60,7 +53,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     if (ref.read(otpControllerProvider(widget.phone)).didResend) {
       _code.clear();
       _focus.requestFocus();
-      showAppSnackBar(context, LocaleKeys.otp_resent.tr());
+      showTelmizoSnackBar(context, LocaleKeys.otp_resent.tr());
     }
   }
 
@@ -84,15 +77,21 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
         showBack: true,
         onBack: _changeNumber,
       ),
-      body: FormScreenBody(
+      body: TelmizoScrollBody(
         children: [
           OtpHeader(
+            badge: LocaleKeys.otp_badge.tr(),
+            title: LocaleKeys.otp_title.tr(),
+            subtitle: LocaleKeys.otp_subtitle.tr(),
+            changeNumberLabel: LocaleKeys.otp_change_number.tr(),
+            changeNumberSemanticLabel: LocaleKeys.otp_change_number_semantics
+                .tr(),
             maskedPhone: EgyptianPhone.mask(widget.phone),
             onChangeNumber: state.isVerifying ? null : _changeNumber,
           ),
           if (DevelopmentAuthConfig.isReady) ...[
             const SizedBox(height: TelmizoSpacing.lg),
-            AuthInfoBox(
+            TelmizoInfoBox(
               icon: Icons.science_outlined,
               title: LocaleKeys.otp_test_title.tr(),
               body: LocaleKeys.otp_test_body.tr(
@@ -102,6 +101,8 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
           ],
           const SizedBox(height: TelmizoSpacing.lg),
           OtpCodeInput(
+            semanticLabel: LocaleKeys.otp_field_semantics.tr(),
+            length: otpLength,
             controller: _code,
             focusNode: _focus,
             enabled: !state.isVerifying,
@@ -127,6 +128,11 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
           ],
           const SizedBox(height: TelmizoSpacing.lg),
           ResendCountdownCard(
+            countdownLabel: LocaleKeys.otp_resend_in.tr(),
+            resendLabel: LocaleKeys.otp_resend.tr(),
+            countdownSemanticLabel: (seconds) => LocaleKeys
+                .otp_resend_countdown_semantics
+                .tr(args: ['$seconds']),
             secondsRemaining: state.secondsRemaining,
             isResending: state.isResending,
             onResend: state.canResend ? _resend : null,
@@ -139,7 +145,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
             onPressed: _code.text.length == otpLength ? _verify : null,
           ),
           const SizedBox(height: TelmizoSpacing.lg),
-          AuthInfoBox(
+          TelmizoInfoBox(
             icon: Icons.shield_outlined,
             title: LocaleKeys.otp_security_title.tr(),
             body: LocaleKeys.otp_security_body.tr(),

@@ -1,7 +1,8 @@
+import 'package:core_package/core_package.dart';
+
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/profile/domain/profile_update.dart';
 import 'package:tilmizo_teacher/features/profile/presentation/controllers/current_profile_controller.dart';
 import 'package:tilmizo_teacher/features/profile/presentation/controllers/profile_form_controller.dart';

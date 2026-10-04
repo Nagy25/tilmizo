@@ -1,7 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../groups/presentation/controllers/groups_controller.dart';
 import '../../../profile/presentation/controllers/current_profile_controller.dart';
 import '../../domain/app_destination.dart';

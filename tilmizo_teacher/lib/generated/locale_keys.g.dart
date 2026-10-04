@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const app_name = 'app_name';
   static const brand_name = 'brand_name';
   static const brand_teacher = 'brand_teacher';
@@ -48,8 +48,7 @@ abstract class LocaleKeys {
   static const otp_field_semantics = 'otp_field_semantics';
   static const otp_digits_entered = 'otp_digits_entered';
   static const otp_resend_in = 'otp_resend_in';
-  static const otp_resend_countdown_semantics =
-      'otp_resend_countdown_semantics';
+  static const otp_resend_countdown_semantics = 'otp_resend_countdown_semantics';
   static const otp_resend = 'otp_resend';
   static const otp_resent = 'otp_resent';
   static const otp_verify = 'otp_verify';
@@ -76,7 +75,7 @@ abstract class LocaleKeys {
   static const profile_name_hint = 'profile_name_hint';
   static const profile_name_required = 'profile_name_required';
   static const profile_phone_label = 'profile_phone_label';
-
+  static const profile_phone_verified = 'profile_phone_verified';
   static const profile_phone_note = 'profile_phone_note';
   static const profile_subject_label = 'profile_subject_label';
   static const profile_subject_caption = 'profile_subject_caption';
@@ -157,4 +156,58 @@ abstract class LocaleKeys {
   static const group_not_found_title = 'group_not_found_title';
   static const group_not_found_body = 'group_not_found_body';
   static const back_to_groups = 'back_to_groups';
+  static const access_section_title = 'access_section_title';
+  static const access_requests_title = 'access_requests_title';
+  static const access_requests_body = 'access_requests_body';
+  static const access_students_title = 'access_students_title';
+  static const access_students_body = 'access_students_body';
+  static const access_pending_count = 'access_pending_count';
+  static const access_requests_empty_title = 'access_requests_empty_title';
+  static const access_requests_empty_body = 'access_requests_empty_body';
+  static const access_students_empty_title = 'access_students_empty_title';
+  static const access_students_empty_body = 'access_students_empty_body';
+  static const access_load_error_title = 'access_load_error_title';
+  static const access_unnamed_student = 'access_unnamed_student';
+  static const access_request_type_join = 'access_request_type_join';
+  static const access_request_type_replacement = 'access_request_type_replacement';
+  static const access_platform_android = 'access_platform_android';
+  static const access_platform_ios = 'access_platform_ios';
+  static const access_requested_on = 'access_requested_on';
+  static const access_joined_on = 'access_joined_on';
+  static const access_phone_label = 'access_phone_label';
+  static const access_requested_device = 'access_requested_device';
+  static const access_approved_device = 'access_approved_device';
+  static const access_no_approved_device = 'access_no_approved_device';
+  static const access_device_privacy = 'access_device_privacy';
+  static const access_replacement_warning_title = 'access_replacement_warning_title';
+  static const access_replacement_warning_body = 'access_replacement_warning_body';
+  static const access_join_info_body = 'access_join_info_body';
+  static const access_approve = 'access_approve';
+  static const access_reject = 'access_reject';
+  static const access_approve_confirm_title = 'access_approve_confirm_title';
+  static const access_approve_confirm_body = 'access_approve_confirm_body';
+  static const access_approve_replacement_confirm_body = 'access_approve_replacement_confirm_body';
+  static const access_reject_confirm_title = 'access_reject_confirm_title';
+  static const access_reject_confirm_body = 'access_reject_confirm_body';
+  static const access_approved_success = 'access_approved_success';
+  static const access_replacement_success = 'access_replacement_success';
+  static const access_rejected_success = 'access_rejected_success';
+  static const access_request_details_title = 'access_request_details_title';
+  static const access_request_unavailable_title = 'access_request_unavailable_title';
+  static const access_request_unavailable = 'access_request_unavailable';
+  static const access_student_details_title = 'access_student_details_title';
+  static const access_member_unavailable_title = 'access_member_unavailable_title';
+  static const access_member_unavailable = 'access_member_unavailable';
+  static const access_status_active = 'access_status_active';
+  static const access_status_suspended = 'access_status_suspended';
+  static const access_suspend = 'access_suspend';
+  static const access_suspend_confirm_title = 'access_suspend_confirm_title';
+  static const access_suspend_confirm_body = 'access_suspend_confirm_body';
+  static const access_suspend_confirm = 'access_suspend_confirm';
+  static const access_suspended_success = 'access_suspended_success';
+  static const access_suspended_note = 'access_suspended_note';
+  static const access_open_request_semantics = 'access_open_request_semantics';
+  static const access_open_student_semantics = 'access_open_student_semantics';
+  static const access_back_to_list = 'access_back_to_list';
+
 }

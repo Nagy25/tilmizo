@@ -1,7 +1,7 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../domain/group_draft.dart';
 import '../../domain/teacher_group.dart';
 import 'groups_controller.dart';

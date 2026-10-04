@@ -38,7 +38,6 @@ void main() {
     );
     expect(field.readOnly, isTrue);
     expect(find.text('010 1234 5678'), findsOneWidget);
-    expect(find.text('موثّق بواسطة Supabase'), findsOneWidget);
   });
 
   testWidgets('name and specialization are required', (tester) async {

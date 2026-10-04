@@ -4,14 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/development_auth_config.dart';
 import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/form_screen_body.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../controllers/phone_login_controller.dart';
-import '../widgets/auth_info_box.dart';
-import '../widgets/egyptian_phone_field.dart';
 
 @RoutePage()
 class PhoneLoginScreen extends ConsumerStatefulWidget {
@@ -55,7 +51,7 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
 
     return Scaffold(
       appBar: AppHeader(title: LocaleKeys.app_name.tr()),
-      body: FormScreenBody(
+      body: TelmizoScrollBody(
         children: [
           Text(LocaleKeys.login_title.tr(), style: textTheme.headlineMedium),
           const SizedBox(height: TelmizoSpacing.sm),
@@ -79,6 +75,10 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                     )
                   : null,
               child: EgyptianPhoneField(
+                hintText: LocaleKeys.login_phone_hint.tr(),
+                countryCodeSemanticLabel: LocaleKeys
+                    .login_country_code_semantics
+                    .tr(),
                 controller: _phone,
                 isValid: isValid,
                 enabled: !state.isSubmitting,
@@ -94,7 +94,7 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
             ),
           ),
           const SizedBox(height: TelmizoSpacing.lg),
-          AuthInfoBox(
+          TelmizoInfoBox(
             icon: DevelopmentAuthConfig.isReady
                 ? Icons.science_outlined
                 : Icons.sms_outlined,

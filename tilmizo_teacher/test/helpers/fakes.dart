@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:core_package/core_package.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/groups/domain/group_draft.dart';
 import 'package:tilmizo_teacher/features/groups/domain/groups_repository.dart';
 import 'package:tilmizo_teacher/features/groups/domain/teacher_group.dart';

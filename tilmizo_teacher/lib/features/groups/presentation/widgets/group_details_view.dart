@@ -4,16 +4,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../../core/errors/failure_messages.dart';
-import '../../../../core/widgets/form_screen_body.dart';
-import '../../../../core/widgets/snackbars.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../domain/teacher_group.dart';
 import '../controllers/group_editor_controller.dart';
 import '../controllers/groups_controller.dart';
 import 'delete_group_dialog.dart';
+import '../../../group_access/presentation/widgets/group_access_entry_card.dart';
 import 'group_form_controllers.dart';
 import 'group_form_fields.dart';
 import 'group_overview_card.dart';
@@ -54,10 +52,10 @@ class _GroupDetailsViewState extends ConsumerState<GroupDetailsView> {
     if (!mounted) return;
     if (updated != null) {
       ref.invalidate(groupDetailsProvider(widget.group.id));
-      showAppSnackBar(context, LocaleKeys.edit_group_saved.tr());
+      showTelmizoSnackBar(context, LocaleKeys.edit_group_saved.tr());
     } else if (ref.read(groupEditorControllerProvider).failure ==
         AppFailureType.notFound) {
-      showAppSnackBar(context, LocaleKeys.error_group_not_found.tr());
+      showTelmizoSnackBar(context, LocaleKeys.error_group_not_found.tr());
       widget.onGroupMissing();
     }
   }
@@ -71,7 +69,7 @@ class _GroupDetailsViewState extends ConsumerState<GroupDetailsView> {
         .read(groupEditorControllerProvider.notifier)
         .delete(widget.group.id);
     if (hasRemaining == null || !mounted) return;
-    showAppSnackBar(context, LocaleKeys.delete_group_success.tr());
+    showTelmizoSnackBar(context, LocaleKeys.delete_group_success.tr());
     await router.replaceAll([
       hasRemaining ? const GroupsDashboardRoute() : const EmptyGroupsRoute(),
     ]);
@@ -85,11 +83,13 @@ class _GroupDetailsViewState extends ConsumerState<GroupDetailsView> {
 
     return Form(
       key: _formKey,
-      child: FormScreenBody(
+      child: TelmizoScrollBody(
         children: [
           GroupOverviewCard(group: group),
           const SizedBox(height: TelmizoSpacing.lg),
           InviteCodeCard(groupName: group.name, inviteCode: group.inviteCode),
+          const SizedBox(height: TelmizoSpacing.lg),
+          GroupAccessEntryCard(groupId: group.id),
           const SizedBox(height: TelmizoSpacing.lg),
           TelmizoCard(
             child: Column(

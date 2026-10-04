@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
-import 'package:tilmizo_teacher/core/providers/clock_provider.dart';
 import 'package:tilmizo_teacher/features/auth/domain/app_destination.dart';
 import 'package:tilmizo_teacher/features/auth/presentation/controllers/otp_controller.dart';
 

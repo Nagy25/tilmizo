@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../core/widgets/app_header.dart';
 import '../../../../generated/locale_keys.g.dart';

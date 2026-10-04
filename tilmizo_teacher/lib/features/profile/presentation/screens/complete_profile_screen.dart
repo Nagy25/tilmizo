@@ -4,9 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/form_screen_body.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../groups/presentation/controllers/groups_controller.dart';
@@ -54,7 +52,7 @@ class CompleteProfileScreen extends ConsumerWidget {
         subtitle: LocaleKeys.profile_complete_title.tr(),
       ),
       body: ProfileLoadState(
-        builder: (profile) => FormScreenBody(
+        builder: (profile) => TelmizoScrollBody(
           children: [
             Text(
               LocaleKeys.profile_complete_title.tr(),
@@ -71,7 +69,7 @@ class CompleteProfileScreen extends ConsumerWidget {
             ProfileForm(
               profile: profile,
               submitLabel: LocaleKeys.profile_save_continue.tr(),
-              submitIcon: Icons.arrow_back,
+              submitIcon: Icons.arrow_forward,
               isSaving: formState.isSaving,
               failure: formState.failure,
               onSubmit: ({required fullName, required teachingSubject}) =>

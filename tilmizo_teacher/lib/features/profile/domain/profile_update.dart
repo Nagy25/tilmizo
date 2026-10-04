@@ -1,6 +1,5 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
-
-import '../../../core/text_normalization.dart';
 
 /// The teacher-editable profile fields. The verified phone, ID, and
 /// timestamps are intentionally absent.

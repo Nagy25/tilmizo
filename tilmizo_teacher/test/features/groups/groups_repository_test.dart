@@ -1,8 +1,9 @@
+import 'package:core_package/core_package.dart';
+
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_remote_data_source.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_repository_impl.dart';
 import 'package:tilmizo_teacher/features/groups/domain/group_draft.dart';

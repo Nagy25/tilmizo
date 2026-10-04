@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/form_screen_body.dart';
-import '../../../../core/widgets/snackbars.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../auth/presentation/controllers/app_flow_controller.dart';
@@ -33,7 +31,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         .read(profileFormControllerProvider.notifier)
         .submit(fullName: fullName, teachingSubject: teachingSubject);
     if (saved != null && mounted) {
-      showAppSnackBar(context, LocaleKeys.profile_saved.tr());
+      showTelmizoSnackBar(context, LocaleKeys.profile_saved.tr());
     }
   }
 
@@ -67,7 +65,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     } on AuthFailure {
       if (!mounted) return;
       setState(() => _isSigningOut = false);
-      showAppSnackBar(context, LocaleKeys.profile_logout_failed.tr());
+      showTelmizoSnackBar(context, LocaleKeys.profile_logout_failed.tr());
     }
   }
 
@@ -82,7 +80,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         showBack: true,
       ),
       body: ProfileLoadState(
-        builder: (profile) => FormScreenBody(
+        builder: (profile) => TelmizoScrollBody(
           children: [
             ProfileForm(
               profile: profile,

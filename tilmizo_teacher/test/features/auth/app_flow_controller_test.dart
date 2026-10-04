@@ -1,6 +1,5 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/auth/domain/app_destination.dart';
 import 'package:tilmizo_teacher/features/auth/presentation/controllers/app_flow_controller.dart';
 

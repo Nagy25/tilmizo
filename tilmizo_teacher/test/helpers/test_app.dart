@@ -6,11 +6,12 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tilmizo_teacher/app/my_app.dart';
-import 'package:tilmizo_teacher/core/providers/app_version_provider.dart';
+import 'package:tilmizo_teacher/features/group_access/data/group_access_repository_impl.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_repository_impl.dart';
 import 'package:tilmizo_teacher/features/profile/data/supabase_profile_repository.dart';
 import 'package:tilmizo_teacher/generated/codegen_loader.g.dart';
 
+import 'fake_group_access.dart';
 import 'fakes.dart';
 
 const arabic = Locale('ar');
@@ -21,18 +22,22 @@ class TestBackend {
     FakePhoneAuthService? auth,
     FakeProfileRepository? profiles,
     FakeGroupsRepository? groups,
-  }) : auth = auth ?? FakePhoneAuthService(),
+    FakeGroupAccessRepository? access,
+  }) : access = access ?? FakeGroupAccessRepository(),
+       auth = auth ?? FakePhoneAuthService(),
        profiles = profiles ?? FakeProfileRepository(),
        groups = groups ?? FakeGroupsRepository();
 
   final FakePhoneAuthService auth;
   final FakeProfileRepository profiles;
   final FakeGroupsRepository groups;
+  final FakeGroupAccessRepository access;
 
   List<Override> get overrides => [
     phoneAuthServiceProvider.overrideWithValue(auth),
     profileRepositoryProvider.overrideWithValue(profiles),
     groupsRepositoryProvider.overrideWithValue(groups),
+    groupAccessRepositoryProvider.overrideWithValue(access),
     appVersionProvider.overrideWithValue('1.0.0'),
   ];
 

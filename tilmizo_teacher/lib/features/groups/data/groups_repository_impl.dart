@@ -1,8 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/errors/app_failure.dart';
-import '../../../core/providers/current_user_id.dart';
 import '../domain/group_draft.dart';
 import '../domain/groups_repository.dart';
 import '../domain/teacher_group.dart';

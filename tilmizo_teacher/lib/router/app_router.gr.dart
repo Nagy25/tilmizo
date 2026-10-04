@@ -127,6 +127,58 @@ class GroupDetailsRouteArgs {
 }
 
 /// generated route for
+/// [GroupStudentsScreen]
+class GroupStudentsRoute extends PageRouteInfo<GroupStudentsRouteArgs> {
+  GroupStudentsRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         GroupStudentsRoute.name,
+         args: GroupStudentsRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'GroupStudentsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<GroupStudentsRouteArgs>(
+        orElse: () =>
+            GroupStudentsRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return GroupStudentsScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class GroupStudentsRouteArgs {
+  const GroupStudentsRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'GroupStudentsRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! GroupStudentsRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
 /// [GroupsDashboardScreen]
 class GroupsDashboardRoute extends PageRouteInfo<void> {
   const GroupsDashboardRoute({List<PageRouteInfo>? children})
@@ -140,6 +192,130 @@ class GroupsDashboardRoute extends PageRouteInfo<void> {
       return const GroupsDashboardScreen();
     },
   );
+}
+
+/// generated route for
+/// [JoinRequestDetailsScreen]
+class JoinRequestDetailsRoute
+    extends PageRouteInfo<JoinRequestDetailsRouteArgs> {
+  JoinRequestDetailsRoute({
+    Key? key,
+    required String groupId,
+    required String requestId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         JoinRequestDetailsRoute.name,
+         args: JoinRequestDetailsRouteArgs(
+           key: key,
+           groupId: groupId,
+           requestId: requestId,
+         ),
+         rawPathParams: {'groupId': groupId, 'requestId': requestId},
+         initialChildren: children,
+       );
+
+  static const String name = 'JoinRequestDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<JoinRequestDetailsRouteArgs>(
+        orElse: () => JoinRequestDetailsRouteArgs(
+          groupId: pathParams.getString('groupId'),
+          requestId: pathParams.getString('requestId'),
+        ),
+      );
+      return JoinRequestDetailsScreen(
+        key: args.key,
+        groupId: args.groupId,
+        requestId: args.requestId,
+      );
+    },
+  );
+}
+
+class JoinRequestDetailsRouteArgs {
+  const JoinRequestDetailsRouteArgs({
+    this.key,
+    required this.groupId,
+    required this.requestId,
+  });
+
+  final Key? key;
+
+  final String groupId;
+
+  final String requestId;
+
+  @override
+  String toString() {
+    return 'JoinRequestDetailsRouteArgs{key: $key, groupId: $groupId, requestId: $requestId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! JoinRequestDetailsRouteArgs) return false;
+    return key == other.key &&
+        groupId == other.groupId &&
+        requestId == other.requestId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode ^ requestId.hashCode;
+}
+
+/// generated route for
+/// [JoinRequestsScreen]
+class JoinRequestsRoute extends PageRouteInfo<JoinRequestsRouteArgs> {
+  JoinRequestsRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         JoinRequestsRoute.name,
+         args: JoinRequestsRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'JoinRequestsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<JoinRequestsRouteArgs>(
+        orElse: () =>
+            JoinRequestsRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return JoinRequestsScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class JoinRequestsRouteArgs {
+  const JoinRequestsRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'JoinRequestsRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! JoinRequestsRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
 }
 
 /// generated route for
@@ -252,4 +428,76 @@ class SplashRoute extends PageRouteInfo<void> {
       return const SplashScreen();
     },
   );
+}
+
+/// generated route for
+/// [StudentAccessDetailsScreen]
+class StudentAccessDetailsRoute
+    extends PageRouteInfo<StudentAccessDetailsRouteArgs> {
+  StudentAccessDetailsRoute({
+    Key? key,
+    required String groupId,
+    required String membershipId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         StudentAccessDetailsRoute.name,
+         args: StudentAccessDetailsRouteArgs(
+           key: key,
+           groupId: groupId,
+           membershipId: membershipId,
+         ),
+         rawPathParams: {'groupId': groupId, 'membershipId': membershipId},
+         initialChildren: children,
+       );
+
+  static const String name = 'StudentAccessDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<StudentAccessDetailsRouteArgs>(
+        orElse: () => StudentAccessDetailsRouteArgs(
+          groupId: pathParams.getString('groupId'),
+          membershipId: pathParams.getString('membershipId'),
+        ),
+      );
+      return StudentAccessDetailsScreen(
+        key: args.key,
+        groupId: args.groupId,
+        membershipId: args.membershipId,
+      );
+    },
+  );
+}
+
+class StudentAccessDetailsRouteArgs {
+  const StudentAccessDetailsRouteArgs({
+    this.key,
+    required this.groupId,
+    required this.membershipId,
+  });
+
+  final Key? key;
+
+  final String groupId;
+
+  final String membershipId;
+
+  @override
+  String toString() {
+    return 'StudentAccessDetailsRouteArgs{key: $key, groupId: $groupId, membershipId: $membershipId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! StudentAccessDetailsRouteArgs) return false;
+    return key == other.key &&
+        groupId == other.groupId &&
+        membershipId == other.membershipId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode ^ membershipId.hashCode;
 }

@@ -3,7 +3,6 @@ import 'package:core_package/core_package.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/widgets/form_screen_body.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../widgets/groups_app_header.dart';
@@ -19,7 +18,7 @@ class EmptyGroupsScreen extends StatelessWidget {
     final textTheme = context.textTheme;
     return Scaffold(
       appBar: const GroupsAppHeader(),
-      body: FormScreenBody(
+      body: TelmizoScrollBody(
         children: [
           const TeacherGreeting(),
           const SizedBox(height: TelmizoSpacing.lg),

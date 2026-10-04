@@ -1,8 +1,9 @@
+import 'package:core_package/core_package.dart';
+
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tilmizo_teacher/core/errors/app_failure.dart';
 import 'package:tilmizo_teacher/features/profile/data/profile_dto.dart';
 import 'package:tilmizo_teacher/features/profile/data/profile_remote_data_source.dart';
 import 'package:tilmizo_teacher/features/profile/data/supabase_profile_repository.dart';

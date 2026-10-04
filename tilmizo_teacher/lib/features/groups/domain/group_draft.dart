@@ -1,6 +1,5 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
-
-import '../../../core/text_normalization.dart';
 
 /// Teacher-editable group fields. Ownership, ID, and timestamps are never
 /// part of a draft.

@@ -1,7 +1,7 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../domain/profile_update.dart';
 import '../../domain/teacher_profile.dart';
 import 'current_profile_controller.dart';

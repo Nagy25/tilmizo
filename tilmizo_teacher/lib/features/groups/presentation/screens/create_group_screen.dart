@@ -4,11 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/errors/app_failure.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../core/widgets/app_header.dart';
-import '../../../../core/widgets/form_screen_body.dart';
-import '../../../../core/widgets/snackbars.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../profile/presentation/controllers/current_profile_controller.dart';
@@ -55,7 +52,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
         .read(groupEditorControllerProvider.notifier)
         .create(draft);
     if (created == null || !mounted) return;
-    showAppSnackBar(context, LocaleKeys.create_group_success.tr());
+    showTelmizoSnackBar(context, LocaleKeys.create_group_success.tr());
     await context.router.replaceAll([const GroupsDashboardRoute()]);
   }
 
@@ -73,7 +70,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
       ),
       body: Form(
         key: _formKey,
-        child: FormScreenBody(
+        child: TelmizoScrollBody(
           children: [
             Text(
               LocaleKeys.create_group_title.tr(),

@@ -35,7 +35,10 @@ triggers. The same normalization is included in the current base migrations.
 - Phone provider: enabled for the restricted hosted test-phone flow.
 - Phone confirmations: enabled.
 - OTP length: six digits; OTP expiry/cooldown: 60 seconds.
-- Test mapping: `+201000000000` → `123456`, valid until 2026-10-31.
+- Teacher test mapping: `+201000000000` → `123456`, valid until
+  2026-10-31.
+- Student test mapping: `+201100000000` → `123456`, valid until
+  2026-10-31.
 - Site URL: keep `http://localhost:3000` until application redirect handling is
   designed.
 - Redirect allowlist: keep empty until application deep links are designed.
@@ -124,6 +127,68 @@ Persistent local session storage and logout are client responsibilities. The
 future Flutter implementation must restore the Supabase session and call the
 Supabase Auth `signOut` API for logout.
 
+## Phase 2 group access and device approval
+
+Run `phase_2_group_access.sql` after the Phase 1 migrations. It adds a
+group-scoped approval workflow without adding attendance, lessons, chat,
+payments, or other classroom features.
+
+- `student_devices` stores a server-side SHA-256 hash of the random app
+  installation identifier plus a teacher-readable device name and platform.
+  It never stores IMEI, serial number, MAC address, or advertising identifiers.
+- `group_join_requests` records initial join and replacement-device requests.
+- `group_memberships` allows one approved device and one approved Supabase
+  session per student per group.
+- `request_group_access` looks up an active invite code without exposing group
+  discovery, records the current JWT `session_id`, and returns either a pending
+  request or immediate access for the already-approved installation.
+- `decide_group_access_request` lets only the owning teacher accept or reject a
+  pending request. Acceptance atomically replaces the previous approved device
+  and session.
+- `revoke_group_member_access` lets the owning teacher suspend group access;
+  `leave_group` lets a student remove their own access.
+
+RLS requires the authenticated student's UID and the approved JWT session ID
+for group and membership reads. A replaced session therefore loses server-side
+group access immediately even though its stateless access token may remain
+cryptographically valid until expiry. Flutter should observe request or
+membership changes, clear group caches, and sign out or show the pending-access
+screen when access is revoked. This controls access to each teacher's group; it
+does not allow one teacher to terminate a student's access to other teachers.
+
+The installation identifier is an application control, not hardware
+attestation. A determined modified client may spoof it. Play Integrity and App
+Attest are intentionally deferred beyond this phase.
+
+The Security Advisor reports the four public workflow RPCs as callable
+`SECURITY DEFINER` functions. This is intentional: authenticated clients have
+no direct mutation grants on the three Phase 2 tables, so these narrowly
+scoped functions are the mutation boundary. Each function has an empty search
+path, derives the caller and session from the verified JWT, validates ownership
+or membership internally, and is not executable by `anon` or `PUBLIC`.
+
+Run `phase_2_student_access_support.sql` after `phase_2_group_access.sql`. It
+adds the safe `get_my_group_access_overview` read model used to restore pending,
+rejected, approved, replaced-device, suspended, and removed states without
+returning invite codes, installation hashes, or session UUIDs. It also adds
+`request_group_device_replacement`, which lets an authenticated student request
+a new device for their own active membership without re-entering the invite
+code. The existing device remains active until the teacher approves the
+replacement. Students may read their own membership status from any session,
+but the `groups` policy remains bound to the single approved JWT session.
+
+Direct authenticated reads of the three Phase 2 workflow tables are
+column-limited. Clients must name the required columns explicitly; wildcard
+selects are intentionally rejected. The Data API never grants authenticated
+users direct access to `installation_id_hash`, request `session_id`, or
+membership `approved_session_id`. The safe overview RPC exposes only derived
+booleans and the state needed by the UI.
+
+The Security Advisor will also report these two narrowly scoped public RPCs as
+callable `SECURITY DEFINER` functions. They use the same empty-search-path,
+JWT-derived identity, ownership validation, and explicit grant pattern as the
+original Phase 2 workflow functions.
+
 ## Edge Function security
 
 - The function rejects unsigned requests and does not trust a client JWT.
@@ -150,6 +215,8 @@ Supabase Auth `signOut` API for logout.
   roles.
 - Authentication metadata initializes optional display fields only. It is not
   used for authorization.
-- Every authenticated Phase 1 user is treated as a teacher because roles and
-  students are outside this phase.
+- Phase 1 treated every authenticated user as a teacher. Phase 2 authorizes
+  teacher actions through group ownership and student actions through an
+  approved membership/session; it does not yet add a global account-role
+  system.
 - Invite codes are nullable, case-sensitive, and not generated by the database.

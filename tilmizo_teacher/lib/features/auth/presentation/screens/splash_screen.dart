@@ -4,12 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/providers/app_version_provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_destination_route.dart';
 import '../../domain/app_destination.dart';
 import '../controllers/app_flow_controller.dart';
-import '../widgets/splash_brand.dart';
 
 /// The only startup screen: resolves the session and routes onward.
 @RoutePage()
@@ -60,7 +58,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             padding: const EdgeInsets.all(TelmizoSpacing.lg),
             child: Column(
               children: [
-                const Expanded(child: Center(child: SplashBrand())),
+                Expanded(
+                  child: Center(
+                    child: TelmizoSplashBrand(
+                      badge: LocaleKeys.splash_badge.tr(),
+                      name: LocaleKeys.brand_name.tr(),
+                      audience: LocaleKeys.brand_teacher.tr(),
+                      tagline: LocaleKeys.splash_tagline.tr(),
+                      logoSemanticLabel: LocaleKeys.logo_semantics.tr(),
+                    ),
+                  ),
+                ),
                 if (startup.hasError && !startup.isLoading)
                   _StartupError(onRetry: _retry)
                 else
