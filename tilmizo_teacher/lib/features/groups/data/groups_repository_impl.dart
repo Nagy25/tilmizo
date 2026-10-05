@@ -59,8 +59,10 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       });
 
   @override
-  Future<void> deleteGroup(String groupId) =>
-      _guard(() => _dataSource.deleteGroup(requireUserId(_auth), groupId));
+  Future<TeacherGroup> archiveGroup(String groupId) => _guard(() async {
+    requireUserId(_auth);
+    return GroupDto.fromRow(await _dataSource.archiveGroup(groupId));
+  });
 
   Future<T> _guard<T>(Future<T> Function() action) async {
     try {

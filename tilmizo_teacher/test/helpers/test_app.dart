@@ -9,9 +9,11 @@ import 'package:tilmizo_teacher/app/my_app.dart';
 import 'package:tilmizo_teacher/features/group_access/data/group_access_repository_impl.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_repository_impl.dart';
 import 'package:tilmizo_teacher/features/profile/data/supabase_profile_repository.dart';
+import 'package:tilmizo_teacher/features/teacher_students/data/teacher_students_repository_impl.dart';
 import 'package:tilmizo_teacher/generated/codegen_loader.g.dart';
 
 import 'fake_group_access.dart';
+import 'fake_teacher_students.dart';
 import 'fakes.dart';
 
 const arabic = Locale('ar');
@@ -23,7 +25,9 @@ class TestBackend {
     FakeProfileRepository? profiles,
     FakeGroupsRepository? groups,
     FakeGroupAccessRepository? access,
+    FakeTeacherStudentsRepository? teacherStudents,
   }) : access = access ?? FakeGroupAccessRepository(),
+       teacherStudents = teacherStudents ?? FakeTeacherStudentsRepository(),
        auth = auth ?? FakePhoneAuthService(),
        profiles = profiles ?? FakeProfileRepository(),
        groups = groups ?? FakeGroupsRepository();
@@ -32,12 +36,14 @@ class TestBackend {
   final FakeProfileRepository profiles;
   final FakeGroupsRepository groups;
   final FakeGroupAccessRepository access;
+  final FakeTeacherStudentsRepository teacherStudents;
 
   List<Override> get overrides => [
     phoneAuthServiceProvider.overrideWithValue(auth),
     profileRepositoryProvider.overrideWithValue(profiles),
     groupsRepositoryProvider.overrideWithValue(groups),
     groupAccessRepositoryProvider.overrideWithValue(access),
+    teacherStudentsRepositoryProvider.overrideWithValue(teacherStudents),
     appVersionProvider.overrideWithValue('1.0.0'),
   ];
 

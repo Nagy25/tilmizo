@@ -63,8 +63,8 @@ final class _FakeGroupsDataSource implements GroupsRemoteDataSource {
   }
 
   @override
-  Future<void> deleteGroup(String teacherId, String groupId) =>
-      _run('delete:$teacherId:$groupId', null);
+  Future<Map<String, dynamic>> archiveGroup(String groupId) =>
+      _run('archive:$groupId', {...groupRow(groupId), 'is_active': false});
 }
 
 void main() {
@@ -156,9 +156,10 @@ void main() {
     );
   });
 
-  test('delete is scoped to the owner', () async {
-    await repository.deleteGroup('g1');
-    expect(dataSource.calls.single, 'delete:$testUserId:g1');
+  test('archive returns an inactive group from the RPC', () async {
+    final archived = await repository.archiveGroup('g1');
+    expect(dataSource.calls.single, 'archive:g1');
+    expect(archived.isActive, isFalse);
   });
 
   test('network and unknown errors are mapped', () {

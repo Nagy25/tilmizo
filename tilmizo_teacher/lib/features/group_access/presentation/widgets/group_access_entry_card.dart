@@ -110,7 +110,7 @@ class _EntryTile extends StatelessWidget {
                 backgroundColor: TelmizoColors.error,
               ),
             ),
-          const Icon(Icons.chevron_left),
+          const Icon(Icons.chevron_right),
         ],
       ),
     );

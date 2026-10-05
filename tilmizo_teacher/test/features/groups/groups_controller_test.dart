@@ -86,20 +86,19 @@ void main() {
     expect(groupIds(), isEmpty);
   });
 
-  test('deleting the last group reports that none remain', () async {
-    expect(await editor().delete('g1'), isFalse);
-    expect(groupIds(), isEmpty);
-  });
-
-  test('deleting one of several groups reports remaining groups', () async {
-    await editor().create(GroupDraft.tryCreate(name: 'ثانية')!);
-    expect(await editor().delete('g1'), isTrue);
+  test('archive retains the group and marks it inactive', () async {
+    expect((await editor().archive('g1'))?.isActive, isFalse);
+    expect(groupIds(), ['g1']);
+    expect(
+      container.read(groupsControllerProvider).value!.single.isActive,
+      isFalse,
+    );
   });
 
   test('actions are rejected while another is pending', () async {
     backend.groups.pendingMutation = Completer();
-    final pending = editor().delete('g1');
-    expect(container.read(groupEditorControllerProvider).isDeleting, isTrue);
+    final pending = editor().archive('g1');
+    expect(container.read(groupEditorControllerProvider).isArchiving, isTrue);
     expect(await editor().create(GroupDraft.tryCreate(name: 'x')!), isNull);
 
     backend.groups.pendingMutation!.complete();

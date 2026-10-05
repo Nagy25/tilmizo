@@ -10,9 +10,12 @@ import '../../../../router/app_router.dart';
 import '../../domain/teacher_group.dart';
 import '../controllers/groups_controller.dart';
 import '../widgets/group_card.dart';
+import '../widgets/classes_placeholder_tile.dart';
 import '../widgets/groups_app_header.dart';
 import '../widgets/groups_summary_card.dart';
 import '../widgets/teacher_greeting.dart';
+import '../../../teacher_students/presentation/widgets/all_students_home_tile.dart';
+import '../../../teacher_students/presentation/controllers/teacher_students_provider.dart';
 
 @RoutePage()
 class GroupsDashboardScreen extends ConsumerStatefulWidget {
@@ -56,7 +59,12 @@ class _GroupsDashboardScreenState extends ConsumerState<GroupsDashboardScreen> {
           onRetry: notifier.refresh,
         ),
         data: (groups) => RefreshIndicator(
-          onRefresh: notifier.refresh,
+          onRefresh: () async {
+            await Future.wait([
+              notifier.refresh(),
+              ref.refresh(teacherStudentsProvider.future).then((_) {}),
+            ]);
+          },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(
@@ -69,6 +77,11 @@ class _GroupsDashboardScreenState extends ConsumerState<GroupsDashboardScreen> {
               const TeacherGreeting(),
               const SizedBox(height: TelmizoSpacing.lg),
               GroupsSummaryCard(groups: groups),
+              const SizedBox(height: TelmizoSpacing.md),
+              const AllStudentsHomeTile(),
+
+              const SizedBox(height: TelmizoSpacing.md),
+              const ClassesPlaceholderTile(),
               for (final group in groups) ...[
                 const SizedBox(height: TelmizoSpacing.md),
                 GroupCard(

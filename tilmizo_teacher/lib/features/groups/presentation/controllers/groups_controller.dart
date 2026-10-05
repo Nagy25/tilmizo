@@ -43,12 +43,15 @@ class GroupsController extends AsyncNotifier<List<TeacherGroup>> {
     }
   }
 
-  /// Deletes a group and returns whether any groups remain.
-  Future<bool> delete(String groupId) async {
-    await ref.read(groupsRepositoryProvider).deleteGroup(groupId);
-    _removeLocally(groupId);
+  Future<TeacherGroup> archiveGroup(String groupId) async {
+    final archived = await ref
+        .read(groupsRepositoryProvider)
+        .archiveGroup(groupId);
+    state = AsyncData([
+      for (final group in _current) group.id == groupId ? archived : group,
+    ]);
     await _syncQuietly();
-    return _current.isNotEmpty;
+    return archived;
   }
 
   List<TeacherGroup> get _current => state.value ?? const [];

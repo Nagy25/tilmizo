@@ -7,7 +7,6 @@ import 'package:tilmizo_teacher/features/groups/presentation/screens/create_grou
 import 'package:tilmizo_teacher/features/groups/presentation/screens/group_details_screen.dart';
 import 'package:tilmizo_teacher/features/profile/presentation/screens/complete_profile_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/groups_dashboard_screen.dart';
-import 'package:tilmizo_teacher/features/groups/presentation/widgets/group_card.dart';
 
 import '../helpers/fakes.dart';
 import '../helpers/test_app.dart';
@@ -70,9 +69,9 @@ void main() {
         groups: FakeGroupsRepository([buildGroup()]),
       ),
     );
-    await tester.drag(find.byType(ListView), const Offset(0, -300));
+    await tester.drag(find.byType(ListView), const Offset(0, -650));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(GroupCard));
+    await tester.tap(find.text('مجموعة التفوق'));
     await tester.pumpAndSettle();
     expect(find.byType(GroupDetailsScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
@@ -80,8 +79,6 @@ void main() {
     await tester.tap(find.byTooltip('رجوع'));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('إنشاء مجموعة'), 200);
-    await tester.drag(find.byType(ListView), const Offset(0, -200));
-    await tester.pumpAndSettle();
     await tester.tap(find.text('إنشاء مجموعة'));
     await tester.pumpAndSettle();
     expect(find.byType(CreateGroupScreen), findsOneWidget);

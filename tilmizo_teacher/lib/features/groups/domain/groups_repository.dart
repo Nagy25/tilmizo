@@ -13,5 +13,5 @@ abstract interface class GroupsRepository {
 
   Future<TeacherGroup> updateGroup(String groupId, GroupDraft draft);
 
-  Future<void> deleteGroup(String groupId);
+  Future<TeacherGroup> archiveGroup(String groupId);
 }

@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/create_group_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/empty_groups_screen.dart';
+import 'package:tilmizo_teacher/features/groups/presentation/screens/edit_group_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/group_details_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/groups_dashboard_screen.dart';
 
@@ -11,7 +13,15 @@ import '../../helpers/fakes.dart';
 import '../../helpers/test_app.dart';
 
 Future<void> tapText(WidgetTester tester, String text) async {
-  await tester.ensureVisible(find.text(text).last);
+  if (find.text(text).evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      find.text(text),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
+  } else {
+    await tester.ensureVisible(find.text(text).last);
+  }
   await tester.tap(find.text(text).last);
   await tester.pumpAndSettle();
 }
@@ -63,9 +73,19 @@ void main() {
     expect(find.byType(GroupsDashboardScreen), findsOneWidget);
     expectNoUnsupportedNavigation();
     expect(find.text('مجموعة أ'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('غير نشطة'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('غير نشطة'), findsOneWidget);
     expect(find.text('بدون كود انضمام'), findsOneWidget);
     expect(find.text('مجموعتان'), findsOneWidget);
+    expect(find.text('الحصص'), findsOneWidget);
+    expect(find.text('قريبًا'), findsOneWidget);
+    await tester.tap(find.text('الحصص'));
+    await tester.pumpAndSettle();
+    expect(find.byType(GroupsDashboardScreen), findsOneWidget);
   });
 
   testWidgets('create group requires a name and prefills the subject', (
@@ -141,7 +161,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('details shows the invite card and deactivates a group', (
+  testWidgets('details is read-only and edit opens its own screen', (
     tester,
   ) async {
     final backend = backendWith([buildGroup(id: 'g1')]);
@@ -154,26 +174,101 @@ void main() {
     expect(find.text('MATH-2025'), findsWidgets);
     expect(find.text('نسخ الكود'), findsOneWidget);
     expect(find.text('مشاركة الكود'), findsOneWidget);
+    expect(find.text('الحصص'), findsOneWidget);
+    expect(find.byKey(const Key('group-name')), findsNothing);
 
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditGroupScreen), findsOneWidget);
     await tester.ensureVisible(find.byKey(const Key('group-active')));
     await tester.tap(find.byKey(const Key('group-active')));
     await tapText(tester, 'حفظ التعديلات');
     expect(backend.groups.groups.single.isActive, isFalse);
+    expect(find.byType(GroupDetailsScreen), findsOneWidget);
   });
 
-  testWidgets('deleting the last group opens the empty screen', (tester) async {
+  testWidgets('archive requires confirmation and retains history', (
+    tester,
+  ) async {
     final backend = backendWith([buildGroup(id: 'g1')]);
     await pumpTeacherApp(tester, backend);
     await tester.tap(find.text('مجموعة التفوق'));
     await tester.pumpAndSettle();
 
-    await tapText(tester, 'حذف المجموعة');
-    expect(find.text('حذف المجموعة؟'), findsOneWidget);
-    await tester.tap(find.text('حذف نهائي'));
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'أرشفة المجموعة');
+    expect(find.text('أرشفة المجموعة؟'), findsOneWidget);
+    await tester.tap(find.text('أرشفة'));
     await tester.pumpAndSettle();
 
-    expect(backend.groups.groups, isEmpty);
-    expect(find.byType(EmptyGroupsScreen), findsOneWidget);
+    expect(backend.groups.groups, hasLength(1));
+    expect(backend.groups.groups.single.isActive, isFalse);
+    expect(find.byType(GroupDetailsScreen), findsOneWidget);
+  });
+
+  testWidgets('canceling edit leaves the group unchanged', (tester) async {
+    final backend = backendWith([buildGroup(id: 'g1')]);
+    await pumpTeacherApp(tester, backend);
+    await tester.tap(find.text('مجموعة التفوق'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('group-name')), 'اسم جديد');
+    await tapText(tester, 'إلغاء التغييرات');
+
+    expect(find.byType(GroupDetailsScreen), findsOneWidget);
+    expect(backend.groups.groups.single.name, 'مجموعة التفوق');
+  });
+
+  testWidgets('a failed edit keeps the form open and group unchanged', (
+    tester,
+  ) async {
+    final backend = backendWith([buildGroup(id: 'g1')]);
+    backend.groups.mutationFailure = const AppFailure(AppFailureType.network);
+    await pumpTeacherApp(tester, backend);
+    await tester.tap(find.text('مجموعة التفوق'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('group-name')), 'اسم جديد');
+    await tapText(tester, 'حفظ التعديلات');
+
+    expect(find.byType(EditGroupScreen), findsOneWidget);
+    expect(backend.groups.groups.single.name, 'مجموعة التفوق');
+  });
+
+  testWidgets('canceling archive keeps the group active', (tester) async {
+    final backend = backendWith([buildGroup(id: 'g1')]);
+    await pumpTeacherApp(tester, backend);
+    await tester.tap(find.text('مجموعة التفوق'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'أرشفة المجموعة');
+    await tester.tap(find.text('إلغاء').last);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(EditGroupScreen), findsOneWidget);
+    expect(backend.groups.groups.single.isActive, isTrue);
+  });
+
+  testWidgets('a failed archive stays on edit without changing the group', (
+    tester,
+  ) async {
+    final backend = backendWith([buildGroup(id: 'g1')]);
+    backend.groups.mutationFailure = const AppFailure(AppFailureType.network);
+    await pumpTeacherApp(tester, backend);
+    await tester.tap(find.text('مجموعة التفوق'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('group-edit')));
+    await tester.pumpAndSettle();
+    await tapText(tester, 'أرشفة المجموعة');
+    await tester.tap(find.text('أرشفة'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(EditGroupScreen), findsOneWidget);
+    expect(backend.groups.groups.single.isActive, isTrue);
   });
 
   testWidgets('a group deleted elsewhere shows an unavailable state', (

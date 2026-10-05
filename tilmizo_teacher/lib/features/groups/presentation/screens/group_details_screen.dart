@@ -72,7 +72,7 @@ class GroupDetailsScreen extends ConsumerWidget {
         data: (group) => GroupDetailsView(
           key: ValueKey(group.id),
           group: group,
-          onGroupMissing: () => _returnToGroups(context, ref),
+          onEdit: () => context.router.push(EditGroupRoute(groupId: group.id)),
         ),
       ),
     );

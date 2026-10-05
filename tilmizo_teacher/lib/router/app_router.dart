@@ -10,11 +10,13 @@ import '../features/group_access/presentation/screens/join_request_details_scree
 import '../features/group_access/presentation/screens/join_requests_screen.dart';
 import '../features/group_access/presentation/screens/student_access_details_screen.dart';
 import '../features/groups/presentation/screens/create_group_screen.dart';
+import '../features/groups/presentation/screens/edit_group_screen.dart';
 import '../features/groups/presentation/screens/empty_groups_screen.dart';
 import '../features/groups/presentation/screens/group_details_screen.dart';
 import '../features/groups/presentation/screens/groups_dashboard_screen.dart';
 import '../features/profile/presentation/screens/complete_profile_screen.dart';
 import '../features/profile/presentation/screens/edit_profile_screen.dart';
+import '../features/teacher_students/presentation/screens/all_students_screen.dart';
 import 'route_guards.dart';
 
 part 'app_router.gr.dart';
@@ -63,8 +65,18 @@ class AppRouter extends RootStackRouter {
         guards: teacherGuards,
       ),
       AutoRoute(
+        page: AllStudentsRoute.page,
+        path: '/students',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
         page: CreateGroupRoute.page,
         path: '/groups/new',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: EditGroupRoute.page,
+        path: '/groups/:groupId/edit',
         guards: teacherGuards,
       ),
       AutoRoute(

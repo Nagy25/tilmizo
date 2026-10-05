@@ -16,7 +16,7 @@ abstract interface class GroupsRemoteDataSource {
     Map<String, dynamic> payload,
   );
 
-  Future<void> deleteGroup(String teacherId, String groupId);
+  Future<Map<String, dynamic>> archiveGroup(String groupId);
 }
 
 final class SupabaseGroupsDataSource implements GroupsRemoteDataSource {
@@ -63,7 +63,6 @@ final class SupabaseGroupsDataSource implements GroupsRemoteDataSource {
   }
 
   @override
-  Future<void> deleteGroup(String teacherId, String groupId) async {
-    await _groups.delete().eq('teacher_id', teacherId).eq('id', groupId);
-  }
+  Future<Map<String, dynamic>> archiveGroup(String groupId) async =>
+      await _client.rpc('archive_group', params: {'p_group_id': groupId});
 }

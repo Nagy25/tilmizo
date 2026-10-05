@@ -189,6 +189,43 @@ callable `SECURITY DEFINER` functions. They use the same empty-search-path,
 JWT-derived identity, ownership validation, and explicit grant pattern as the
 original Phase 2 workflow functions.
 
+## Phase 3 schedules, class sessions, and attendance
+
+Apply the versioned `phase_3_sessions_schedule_attendance` migration after both
+Phase 2 scripts, followed by `phase_3_foreign_key_indexes`. The first two
+phases were largely applied through SQL scripts rather than migration history;
+the Phase 3 migrations depend on their existing tables and do not rewrite the
+older migration records.
+
+- `group_schedule_entries` stores Cairo-local weekly time slots and default
+  physical locations or HTTPS meeting links. An active slot immediately fills
+  the next 28 Cairo calendar days. `pg_cron` repeats this daily at 00:10 UTC.
+- `class_sessions` stores actual UTC-aware timestamps and copied location
+  details. `(schedule_entry_id, original_date)` prevents the job from
+  duplicating or reviving a rescheduled or cancelled occurrence. Manual extra
+  sessions have no schedule entry.
+- `session_attendance` stores at most one status per session and student. No
+  rows are seeded when a session is created; a missing row means `not_marked`.
+  Existing rows remain when membership status changes.
+- Approved students may read the weekly schedule, class sessions (including
+  notes and meeting links), and only their own attendance. Teachers manage
+  their owned groups. All three tables have RLS and explicit API grants.
+- Authenticated teachers use `create_manual_class_session`,
+  `set_session_attendance`, and `archive_group` RPCs. These public
+  `SECURITY DEFINER` functions check group ownership internally and are not
+  executable by `anon`. The private generation functions have no client
+  execution grant.
+- Archiving sets `groups.is_active = false`, stops generation, and keeps
+  historical student read access. A group with class sessions cannot be hard
+  deleted. The teacher app's existing direct-delete action must switch to
+  `archive_group` during the later Flutter phase; until then, deleting such a
+  group returns a foreign-key error.
+
+The Phase 3 security advisor notices for the three public RPCs are expected:
+their authenticated execution grants are intentional, and each RPC checks the
+caller's group ownership. The initial migration and its index follow-up were
+applied to project `tilmizo` on 2026-10-04.
+
 ## Edge Function security
 
 - The function rejects unsigned requests and does not trust a client JWT.

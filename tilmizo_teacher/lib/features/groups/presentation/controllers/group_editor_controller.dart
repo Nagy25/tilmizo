@@ -10,15 +10,15 @@ import 'groups_controller.dart';
 final class GroupEditorState {
   const GroupEditorState({
     this.isSubmitting = false,
-    this.isDeleting = false,
+    this.isArchiving = false,
     this.failure,
   });
 
   final bool isSubmitting;
-  final bool isDeleting;
+  final bool isArchiving;
   final AppFailureType? failure;
 
-  bool get isBusy => isSubmitting || isDeleting;
+  bool get isBusy => isSubmitting || isArchiving;
 }
 
 final groupEditorControllerProvider =
@@ -26,7 +26,7 @@ final groupEditorControllerProvider =
       GroupEditorController.new,
     );
 
-/// Create, update, and delete actions for one group form.
+/// Create, update, and archive actions for one group form.
 class GroupEditorController extends Notifier<GroupEditorState> {
   @override
   GroupEditorState build() => const GroupEditorState();
@@ -39,14 +39,13 @@ class GroupEditorController extends Notifier<GroupEditorState> {
   Future<TeacherGroup?> update(String groupId, GroupDraft draft) =>
       _submit(() => _groups.updateGroup(groupId, draft));
 
-  /// Returns whether groups remain, or `null` when deletion failed.
-  Future<bool?> delete(String groupId) async {
+  Future<TeacherGroup?> archive(String groupId) async {
     if (state.isBusy) return null;
-    state = const GroupEditorState(isDeleting: true);
+    state = const GroupEditorState(isArchiving: true);
     try {
-      final hasRemaining = await _groups.delete(groupId);
+      final archived = await _groups.archiveGroup(groupId);
       if (ref.mounted) state = const GroupEditorState();
-      return hasRemaining;
+      return archived;
     } on AppFailure catch (failure) {
       if (ref.mounted) state = GroupEditorState(failure: failure.type);
       return null;

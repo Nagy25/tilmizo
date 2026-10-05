@@ -103,7 +103,7 @@ class GroupCard extends StatelessWidget {
                       radius: 20,
                       backgroundColor: TelmizoColors.surfaceContainerLow,
                       foregroundColor: TelmizoColors.onSurface,
-                      child: Icon(Icons.chevron_left),
+                      child: Icon(Icons.chevron_right),
                     ),
                   ],
                 ),

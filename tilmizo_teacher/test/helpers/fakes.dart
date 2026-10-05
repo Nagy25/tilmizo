@@ -211,9 +211,23 @@ final class FakeGroupsRepository implements GroupsRepository {
   }
 
   @override
-  Future<void> deleteGroup(String groupId) async {
+  Future<TeacherGroup> archiveGroup(String groupId) async {
     await _beforeMutation(null, groupId);
-    groups.removeWhere((group) => group.id == groupId);
+    final index = groups.indexWhere((group) => group.id == groupId);
+    if (index < 0) throw const AppFailure(AppFailureType.notFound);
+    final group = groups[index];
+    final archived = TeacherGroup(
+      id: group.id,
+      name: group.name,
+      subject: group.subject,
+      grade: group.grade,
+      inviteCode: group.inviteCode,
+      isActive: false,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt.add(const Duration(minutes: 1)),
+    );
+    groups[index] = archived;
+    return archived;
   }
 
   Future<void> _beforeMutation(String? inviteCode, String? groupId) async {

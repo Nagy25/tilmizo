@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AllStudentsScreen]
+class AllStudentsRoute extends PageRouteInfo<void> {
+  const AllStudentsRoute({List<PageRouteInfo>? children})
+    : super(AllStudentsRoute.name, initialChildren: children);
+
+  static const String name = 'AllStudentsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AllStudentsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [CompleteProfileScreen]
 class CompleteProfileRoute extends PageRouteInfo<void> {
   const CompleteProfileRoute({List<PageRouteInfo>? children})
@@ -40,6 +56,58 @@ class CreateGroupRoute extends PageRouteInfo<void> {
       return const CreateGroupScreen();
     },
   );
+}
+
+/// generated route for
+/// [EditGroupScreen]
+class EditGroupRoute extends PageRouteInfo<EditGroupRouteArgs> {
+  EditGroupRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditGroupRoute.name,
+         args: EditGroupRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'EditGroupRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditGroupRouteArgs>(
+        orElse: () =>
+            EditGroupRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return EditGroupScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class EditGroupRouteArgs {
+  const EditGroupRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'EditGroupRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditGroupRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
 }
 
 /// generated route for

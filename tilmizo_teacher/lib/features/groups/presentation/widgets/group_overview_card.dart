@@ -8,9 +8,10 @@ import 'group_status_pill.dart';
 
 /// Group name, status, and creation date.
 class GroupOverviewCard extends StatelessWidget {
-  const GroupOverviewCard({super.key, required this.group});
+  const GroupOverviewCard({super.key, required this.group, this.onEdit});
 
   final TeacherGroup group;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,13 @@ class GroupOverviewCard extends StatelessWidget {
               Expanded(child: Text(group.name, style: textTheme.headlineSmall)),
               const SizedBox(width: TelmizoSpacing.sm),
               GroupStatusPill(isActive: group.isActive),
+              if (onEdit != null)
+                IconButton(
+                  key: const Key('group-edit'),
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                  tooltip: LocaleKeys.edit_group_title.tr(),
+                ),
             ],
           ),
           const SizedBox(height: TelmizoSpacing.sm),
