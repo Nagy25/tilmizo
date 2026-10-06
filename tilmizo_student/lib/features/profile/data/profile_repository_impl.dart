@@ -52,6 +52,10 @@ final class ProfileRepositoryImpl implements ProfileRepository {
         fullName: row['full_name'] as String?,
         phone: row['phone'] as String,
         avatarUrl: row['avatar_url'] as String?,
+        updatedAt: switch (row['updated_at']) {
+          final String value => DateTime.parse(value),
+          _ => null,
+        },
       );
 
   Future<T> _guard<T>(Future<T> Function() action) async {

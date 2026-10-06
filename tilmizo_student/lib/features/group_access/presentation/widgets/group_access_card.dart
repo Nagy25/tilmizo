@@ -8,10 +8,16 @@ import '../../domain/student_access_state.dart';
 
 /// One group on the home screen with its access state and next action.
 class GroupAccessCard extends StatelessWidget {
-  const GroupAccessCard({super.key, required this.entry, required this.onTap});
+  const GroupAccessCard({
+    super.key,
+    required this.entry,
+    required this.onTap,
+    this.isArchived = false,
+  });
 
   final GroupAccessEntry entry;
   final VoidCallback onTap;
+  final bool isArchived;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class GroupAccessCard extends StatelessWidget {
             spacing: TelmizoSpacing.sm,
             runSpacing: TelmizoSpacing.xs,
             children: [
-              _StatePill(state: entry.state),
+              _StatePill(state: entry.state, isArchived: isArchived),
               if (entry.grade case final grade?)
                 TelmizoPill(
                   label: grade,
@@ -95,56 +101,64 @@ class GroupAccessCard extends StatelessWidget {
 }
 
 class _StatePill extends StatelessWidget {
-  const _StatePill({required this.state});
+  const _StatePill({required this.state, required this.isArchived});
 
   final StudentAccessState state;
+  final bool isArchived;
 
   @override
   Widget build(BuildContext context) {
-    final (label, icon, background, foreground) = switch (state) {
-      StudentAccessState.approved => (
-        LocaleKeys.state_approved,
-        Icons.check_circle_outline,
-        TelmizoColors.successContainer,
-        TelmizoColors.success,
-      ),
-      StudentAccessState.pendingJoin => (
-        LocaleKeys.state_pending,
-        Icons.hourglass_top,
-        TelmizoColors.tertiaryContainer,
-        TelmizoColors.onTertiaryContainer,
-      ),
-      StudentAccessState.replacementPending => (
-        LocaleKeys.state_replacement_pending,
-        Icons.hourglass_top,
-        TelmizoColors.tertiaryContainer,
-        TelmizoColors.onTertiaryContainer,
-      ),
-      StudentAccessState.newDeviceRequired => (
-        LocaleKeys.state_new_device,
-        Icons.phonelink_setup_outlined,
-        TelmizoColors.secondaryContainer,
-        TelmizoColors.onSecondaryContainer,
-      ),
-      StudentAccessState.accessReplaced => (
-        LocaleKeys.state_replaced,
-        Icons.phonelink_erase_outlined,
-        TelmizoColors.errorContainer,
-        TelmizoColors.onErrorContainer,
-      ),
-      StudentAccessState.rejected => (
-        LocaleKeys.state_rejected,
-        Icons.block,
-        TelmizoColors.errorContainer,
-        TelmizoColors.onErrorContainer,
-      ),
-      StudentAccessState.accessRemoved => (
-        LocaleKeys.state_removed,
-        Icons.person_off_outlined,
-        TelmizoColors.errorContainer,
-        TelmizoColors.onErrorContainer,
-      ),
-    };
+    final (label, icon, background, foreground) = isArchived
+        ? (
+            LocaleKeys.group_archived,
+            Icons.archive_outlined,
+            TelmizoColors.surfaceContainerLow,
+            TelmizoColors.onSurfaceVariant,
+          )
+        : switch (state) {
+            StudentAccessState.approved => (
+              LocaleKeys.state_approved,
+              Icons.check_circle_outline,
+              TelmizoColors.successContainer,
+              TelmizoColors.success,
+            ),
+            StudentAccessState.pendingJoin => (
+              LocaleKeys.state_pending,
+              Icons.hourglass_top,
+              TelmizoColors.tertiaryContainer,
+              TelmizoColors.onTertiaryContainer,
+            ),
+            StudentAccessState.replacementPending => (
+              LocaleKeys.state_replacement_pending,
+              Icons.hourglass_top,
+              TelmizoColors.tertiaryContainer,
+              TelmizoColors.onTertiaryContainer,
+            ),
+            StudentAccessState.newDeviceRequired => (
+              LocaleKeys.state_new_device,
+              Icons.phonelink_setup_outlined,
+              TelmizoColors.secondaryContainer,
+              TelmizoColors.onSecondaryContainer,
+            ),
+            StudentAccessState.accessReplaced => (
+              LocaleKeys.state_replaced,
+              Icons.phonelink_erase_outlined,
+              TelmizoColors.errorContainer,
+              TelmizoColors.onErrorContainer,
+            ),
+            StudentAccessState.rejected => (
+              LocaleKeys.state_rejected,
+              Icons.block,
+              TelmizoColors.errorContainer,
+              TelmizoColors.onErrorContainer,
+            ),
+            StudentAccessState.accessRemoved => (
+              LocaleKeys.state_removed,
+              Icons.person_off_outlined,
+              TelmizoColors.errorContainer,
+              TelmizoColors.onErrorContainer,
+            ),
+          };
     return TelmizoPill(
       label: label.tr(),
       icon: icon,

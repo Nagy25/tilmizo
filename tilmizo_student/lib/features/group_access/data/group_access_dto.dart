@@ -6,7 +6,8 @@ import '../domain/group_access_entry.dart';
 import '../domain/join_request_outcome.dart';
 
 abstract final class GroupAccessDto {
-  static const approvedGroupColumns = 'id, name, subject, grade';
+  static const approvedGroupColumns =
+      'id, name, subject, grade, is_active, invite_code';
 
   static GroupAccessEntry entryFromRow(Map<String, dynamic> row) {
     T? parse<T>(String key, T Function(String) parser) {
@@ -59,6 +60,8 @@ abstract final class GroupAccessDto {
     name: row['name'] as String,
     subject: row['subject'] as String?,
     grade: row['grade'] as String?,
+    isActive: row['is_active'] as bool? ?? true,
+    inviteCode: row['invite_code'] as String?,
   );
 
   /// Device payload for both access RPCs. Only a random installation ID and

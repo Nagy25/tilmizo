@@ -10,10 +10,11 @@ import '../../../../router/app_router.dart';
 import '../../domain/teacher_group.dart';
 import '../controllers/groups_controller.dart';
 import '../widgets/group_card.dart';
-import '../widgets/classes_placeholder_tile.dart';
 import '../widgets/groups_app_header.dart';
 import '../widgets/groups_summary_card.dart';
 import '../widgets/teacher_greeting.dart';
+import '../../../classes/presentation/controllers/classes_providers.dart';
+import '../../../classes/presentation/widgets/classes_home_tile.dart';
 import '../../../teacher_students/presentation/widgets/all_students_home_tile.dart';
 import '../../../teacher_students/presentation/controllers/teacher_students_provider.dart';
 
@@ -63,6 +64,7 @@ class _GroupsDashboardScreenState extends ConsumerState<GroupsDashboardScreen> {
             await Future.wait([
               notifier.refresh(),
               ref.refresh(teacherStudentsProvider.future).then((_) {}),
+              ref.refresh(nextSessionProvider(null).future).then((_) {}),
             ]);
           },
           child: ListView(
@@ -79,9 +81,8 @@ class _GroupsDashboardScreenState extends ConsumerState<GroupsDashboardScreen> {
               GroupsSummaryCard(groups: groups),
               const SizedBox(height: TelmizoSpacing.md),
               const AllStudentsHomeTile(),
-
               const SizedBox(height: TelmizoSpacing.md),
-              const ClassesPlaceholderTile(),
+              const ClassesHomeTile(),
               for (final group in groups) ...[
                 const SizedBox(height: TelmizoSpacing.md),
                 GroupCard(

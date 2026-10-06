@@ -17,3 +17,15 @@ String appFailureMessage(AppFailureType type) => switch (type) {
 
 AppFailureType failureTypeOf(Object? error) =>
     error is AppFailure ? error.type : AppFailureType.unknown;
+
+String profileAvatarFailureMessage(ProfileAvatarFailureType type) =>
+    switch (type) {
+      ProfileAvatarFailureType.unsupportedFormat =>
+        LocaleKeys.profile_avatar_unsupported,
+      ProfileAvatarFailureType.tooLarge => LocaleKeys.profile_avatar_too_large,
+      ProfileAvatarFailureType.network ||
+      ProfileAvatarFailureType.unauthenticated ||
+      ProfileAvatarFailureType.rejected ||
+      ProfileAvatarFailureType.unknown =>
+        LocaleKeys.profile_avatar_upload_failed,
+    }.tr();

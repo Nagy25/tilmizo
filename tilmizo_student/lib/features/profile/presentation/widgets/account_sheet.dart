@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../../core/errors/failure_messages.dart';
 import '../controllers/current_profile_controller.dart';
+import '../controllers/profile_avatar_controller.dart';
 
 /// Account summary with logout. Logout calls Supabase `signOut`; the app
 /// shell then clears cached data and returns to login.
@@ -23,6 +25,21 @@ class _AccountSheet extends ConsumerStatefulWidget {
 
 class _AccountSheetState extends ConsumerState<_AccountSheet> {
   bool _signingOut = false;
+
+  Future<void> _updateAvatar() async {
+    final updated = await ref
+        .read(profileAvatarControllerProvider.notifier)
+        .pickAndUpload();
+    if (!mounted) return;
+    if (updated) {
+      showTelmizoSnackBar(context, LocaleKeys.profile_avatar_updated.tr());
+      return;
+    }
+    final failure = ref.read(profileAvatarControllerProvider).failure;
+    if (failure != null) {
+      showTelmizoSnackBar(context, profileAvatarFailureMessage(failure));
+    }
+  }
 
   Future<void> _signOut() async {
     final confirmed = await showDialog<bool>(
@@ -60,6 +77,7 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(currentProfileProvider).value;
+    final avatarState = ref.watch(profileAvatarControllerProvider);
     final textTheme = context.textTheme;
     return SafeArea(
       child: Padding(
@@ -76,13 +94,49 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
             Text(LocaleKeys.account_title.tr(), style: textTheme.headlineSmall),
             const SizedBox(height: TelmizoSpacing.md),
             if (profile != null) ...[
-              Text(profile.fullName ?? '', style: textTheme.titleMedium),
-              Text(
-                EgyptianPhone.mask(profile.phone),
-                textDirection: TextDirection.ltr,
-                textAlign: TextAlign.start,
-                style: textTheme.bodyMedium?.copyWith(
-                  color: TelmizoColors.onSurfaceVariant,
+              Row(
+                children: [
+                  TelmizoAvatar(
+                    avatarUrl: profile.avatarUrl,
+                    fullName: profile.fullName,
+                    avatarRevision: profile.updatedAt
+                        ?.toUtc()
+                        .toIso8601String(),
+                    size: 72,
+                    semanticLabel: LocaleKeys.profile_avatar_semantics.tr(),
+                    editTooltip: LocaleKeys.profile_avatar_change.tr(),
+                    onEdit: _updateAvatar,
+                    isUpdating: avatarState.isUpdating,
+                  ),
+                  const SizedBox(width: TelmizoSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          profile.fullName ?? '',
+                          style: textTheme.titleMedium,
+                        ),
+                        Text(
+                          EgyptianPhone.mask(profile.phone),
+                          textDirection: TextDirection.ltr,
+                          textAlign: TextAlign.start,
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: TelmizoColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: TelmizoSpacing.sm),
+              TextButton.icon(
+                onPressed: avatarState.isUpdating ? null : _updateAvatar,
+                icon: const Icon(Icons.photo_library_outlined),
+                label: Text(LocaleKeys.profile_avatar_change.tr()),
+                style: TextButton.styleFrom(
+                  alignment: AlignmentDirectional.centerStart,
                 ),
               ),
               const SizedBox(height: TelmizoSpacing.lg),

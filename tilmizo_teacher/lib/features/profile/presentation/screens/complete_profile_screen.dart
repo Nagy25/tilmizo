@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_header.dart';
+import '../../../../core/errors/failure_messages.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../groups/presentation/controllers/groups_controller.dart';
 import '../controllers/profile_form_controller.dart';
+import '../controllers/profile_avatar_controller.dart';
 import '../widgets/profile_form.dart';
 import '../widgets/profile_load_state.dart';
 
@@ -41,9 +43,25 @@ class CompleteProfileScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _updateAvatar(BuildContext context, WidgetRef ref) async {
+    final updated = await ref
+        .read(profileAvatarControllerProvider.notifier)
+        .pickAndUpload();
+    if (!context.mounted) return;
+    if (updated) {
+      showTelmizoSnackBar(context, LocaleKeys.profile_avatar_updated.tr());
+      return;
+    }
+    final failure = ref.read(profileAvatarControllerProvider).failure;
+    if (failure != null) {
+      showTelmizoSnackBar(context, profileAvatarFailureMessage(failure));
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formState = ref.watch(profileFormControllerProvider);
+    final avatarState = ref.watch(profileAvatarControllerProvider);
     final textTheme = context.textTheme;
 
     return Scaffold(
@@ -79,6 +97,8 @@ class CompleteProfileScreen extends ConsumerWidget {
                     fullName: fullName,
                     teachingSubject: teachingSubject,
                   ),
+              onAvatarEdit: () => _updateAvatar(context, ref),
+              isAvatarUpdating: avatarState.isUpdating,
             ),
           ],
         ),

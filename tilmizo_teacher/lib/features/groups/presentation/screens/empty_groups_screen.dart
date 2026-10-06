@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../widgets/groups_app_header.dart';
-import '../widgets/classes_placeholder_tile.dart';
 import '../widgets/teacher_greeting.dart';
 import '../../../teacher_students/presentation/widgets/all_students_home_tile.dart';
 
@@ -67,8 +66,6 @@ class EmptyGroupsScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: TelmizoSpacing.lg),
-          const ClassesPlaceholderTile(),
           const SizedBox(height: TelmizoSpacing.lg),
           const AllStudentsHomeTile(),
         ],

@@ -226,6 +226,117 @@ their authenticated execution grants are intentional, and each RPC checks the
 caller's group ownership. The initial migration and its index follow-up were
 applied to project `tilmizo` on 2026-10-04.
 
+## Phase 4 group resources
+
+Phase 4 is backend-only. Apply the versioned
+`phase_4_resources_backend` migration after all Phase 3 migrations, then deploy
+the `resource-upload`, `resource-delete`, and `resource-storage-cleanup` Edge
+Functions. No Flutter resource feature is included in this phase.
+
+Phase 4 intentionally stays on the Supabase Free plan. The migration creates one
+private `group-resources` bucket with the platform's fixed 50 MB upload ceiling;
+uploaded MP4 resources are therefore capped at 50 MB rather than the originally
+planned 100 MB. It never creates a public file URL.
+
+The public `resources` table is read-only through the Data API. Teachers create
+external links with `create_external_resource`, edit metadata with
+`update_resource_metadata`, and use the Edge Functions for uploaded-file
+lifecycle and deletion. Approved students receive read and authenticated
+download access dynamically through their current approved group session, so a
+newly approved student can read resources created before they joined.
+
+Uploaded content is immutable. `resource-upload` accepts three JSON actions:
+
+- `reserve` validates the active owned group, optional session, declared file
+  metadata, type limit, and locked teacher quota, then returns a two-hour signed
+  upload token for a unique object path. Files above 6 MB should use Supabase's
+  resumable TUS upload endpoint.
+- `finalize` reads the object metadata and leading bytes from Storage, validates
+  the actual size and file signature, and atomically creates the resource.
+- `cancel` hides the pending upload immediately. Its quota reservation remains
+  until the signed/resumable upload lifetime has elapsed, preventing a cancelled
+  token from bypassing the configured quota.
+
+`resource-delete` removes the resource from readers transactionally and then
+deletes its object. Failed object deletions remain charged to the teacher and
+are retried by `resource-storage-cleanup`. Archived groups remain readable but
+all resource mutations require an active owned group.
+
+### Cleanup configuration
+
+Generate one high-entropy cleanup secret and set the same value in both places:
+
+1. Deploy `resource-storage-cleanup` with `RESOURCE_CLEANUP_SECRET` as an Edge
+   Function secret.
+2. In Vault, create `resource_cleanup_secret` containing that value and
+   `telmizo_project_url` containing `https://trmkevgtjdbvbzyknaih.supabase.co`.
+
+The migration installs a 15-minute Cron job. It remains a no-op until both Vault
+entries exist, so secrets never need to be committed. A second daily Cron job
+reconciles the database quota ledger from resources, outstanding reservations,
+and pending deletion jobs.
+
+The configurable default product plan is stored in
+`private.resource_plans`: 1 GB per teacher, 25 MB for PDF/general files, 10 MB
+for images, and 50 MB for MP4. The Free plan's 1 GB file-storage allowance is
+shared by the entire Supabase project, so it can become the effective ceiling
+before an individual teacher reaches 1 GB. Assign future plan overrides through
+`private.teacher_resource_plans`; do not hard-code subscription limits in a
+client.
+
+Authenticated teachers can call `get_my_resource_storage_usage` without any
+arguments to display the current plan, committed and reserved bytes, combined
+usage, remaining bytes, usage percentage, and per-type limits. The RPC always
+derives the account from `auth.uid()` and does not accept a teacher ID.
+
+### Teacher resource screen contract
+
+- List a group's resources by selecting from `public.resources` with
+  `group_id = <selected group id>`, ordered by `created_at` descending. The
+  explicit `SELECT` grant and row-level policy limit results to the teacher's
+  own groups; students see only resources in their currently approved groups.
+  The table includes `type`, optional `session_id`, file metadata, and
+  `external_url`, so search and type/session filters need no additional RPC.
+- The type picker has exactly six backend values: `pdf`, `image`, `file`,
+  `uploaded_video`, `external_link`, and `video_link`. The first four use the
+  `resource-upload` reserve/upload/finalize flow; the link types use
+  `create_external_resource`. Read per-type byte limits from
+  `get_my_resource_storage_usage`, not from design mockups. The default Free
+  limits are 25 MB PDF/file, 10 MB image, and 50 MB MP4.
+- Delete by invoking `resource-delete` with a JSON body containing
+  `resource_id` and the caller's access token. Only the active group's owner
+  can delete. A successful response is either `200` with
+  `cleanup_pending: false` or `202` with `cleanup_pending: true`; both mean the
+  resource is no longer visible. The latter means object cleanup and quota
+  release will be retried asynchronously. Do not delete table rows or Storage
+  objects directly from a client.
+- The backend has no draft, pinned-resource, notification, offline-access, or
+  copy-protection feature. Resource creation publishes immediately to approved
+  students; private Storage access must not be described as DRM.
+
+After deployment, verify an authorized teacher reserve/upload/finalize/delete
+cycle, an approved-student authenticated download, rejected cross-group access,
+cancelled-upload cleanup, and exact quota boundaries. Run the database Security
+and Performance Advisors after the migration.
+
+## Private profile avatars
+
+Teacher and student profile photos use the private `profile-avatars` bucket.
+Each authenticated account owns exactly one object at `<user-id>/avatar` and
+may create or overwrite only that path. The bucket accepts JPEG, PNG, and WebP
+images up to 5 MB.
+
+After every successful upload or upsert, call `set_my_profile_avatar()` without
+arguments. The RPC derives the account from `auth.uid()`, confirms that the
+authenticated caller owns the expected object, and stores its object path in
+`profiles.avatar_url`. Direct client updates to `avatar_url` are revoked.
+
+Downloads must use the authenticated Storage API. Owners can always load their
+own photo; other signed-in users can load it only when the existing profile RLS
+already permits them to read that profile. No public URL or delete policy is
+created. Avatar bytes do not count against the teacher resource ledger, but do
+use the Supabase project's shared Free-plan Storage allowance.
+
 ## Edge Function security
 
 - The function rejects unsigned requests and does not trust a client JWT.

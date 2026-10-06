@@ -2,8 +2,8 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/teacher_group.dart';
+import '../../../classes/presentation/widgets/classes_home_tile.dart';
 import '../../../group_access/presentation/widgets/group_access_entry_card.dart';
-import 'classes_placeholder_tile.dart';
 import 'group_overview_card.dart';
 import 'invite_code_card.dart';
 
@@ -23,7 +23,7 @@ class GroupDetailsView extends StatelessWidget {
     children: [
       GroupOverviewCard(group: group, onEdit: onEdit),
       const SizedBox(height: TelmizoSpacing.lg),
-      const ClassesPlaceholderTile(),
+      ClassesHomeTile(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),
       GroupAccessEntryCard(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),

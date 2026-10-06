@@ -33,7 +33,12 @@ class GroupsAppHeader extends ConsumerWidget implements PreferredSizeWidget {
             child: SizedBox.square(
               dimension: 52,
               child: Center(
-                child: TelmizoAvatar(avatarUrl: profile?.avatarUrl, size: 44),
+                child: TelmizoAvatar(
+                  avatarUrl: profile?.avatarUrl,
+                  fullName: profile?.fullName,
+                  avatarRevision: profile?.updatedAt.toUtc().toIso8601String(),
+                  size: 44,
+                ),
               ),
             ),
           ),

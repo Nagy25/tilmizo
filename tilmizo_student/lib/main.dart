@@ -14,6 +14,7 @@ Future<void> main() async {
   // Fails fast when SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY is missing.
   final supabaseConfig = SupabaseConfig.fromEnvironment();
   registerTelmizoFontLicenses();
+  CairoTime.ensureInitialized();
 
   final (sharedPreferences, _, _, _) = await (
     SharedPreferences.getInstance(),

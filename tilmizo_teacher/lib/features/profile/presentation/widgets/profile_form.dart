@@ -21,6 +21,8 @@ class ProfileForm extends StatefulWidget {
     required this.isSaving,
     required this.onSubmit,
     this.failure,
+    this.onAvatarEdit,
+    this.isAvatarUpdating = false,
   });
 
   final TeacherProfile profile;
@@ -29,6 +31,8 @@ class ProfileForm extends StatefulWidget {
   final bool isSaving;
   final AppFailureType? failure;
   final ProfileSubmit onSubmit;
+  final VoidCallback? onAvatarEdit;
+  final bool isAvatarUpdating;
 
   @override
   State<ProfileForm> createState() => _ProfileFormState();
@@ -66,9 +70,14 @@ class _ProfileFormState extends State<ProfileForm> {
         children: [
           TelmizoAvatarCard(
             avatarUrl: widget.profile.avatarUrl,
+            fullName: widget.profile.fullName,
+            avatarRevision: widget.profile.updatedAt.toUtc().toIso8601String(),
             title: LocaleKeys.profile_avatar_title.tr(),
             body: LocaleKeys.profile_avatar_body.tr(),
             semanticLabel: LocaleKeys.profile_avatar_semantics.tr(),
+            editTooltip: LocaleKeys.profile_avatar_change.tr(),
+            onEdit: widget.onAvatarEdit,
+            isUpdating: widget.isAvatarUpdating,
           ),
           const SizedBox(height: TelmizoSpacing.lg),
           TelmizoFormField(

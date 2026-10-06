@@ -17,6 +17,9 @@ import '../widgets/home_greeting_card.dart';
 import '../widgets/join_banner.dart';
 import '../widgets/privacy_note_card.dart';
 import '../widgets/student_access_live_scope.dart';
+import '../../../student_classes/presentation/controllers/student_classes_providers.dart';
+import '../../../student_classes/presentation/widgets/student_classes_refresh_scope.dart';
+import '../../../student_classes/presentation/widgets/student_home_classes_section.dart';
 
 @RoutePage()
 class GroupsHomeScreen extends ConsumerStatefulWidget {
@@ -46,17 +49,19 @@ class _GroupsHomeScreenState extends ConsumerState<GroupsHomeScreen> {
     final overview = ref.watch(groupAccessOverviewProvider);
     return Scaffold(
       appBar: const GroupsAppHeader(),
-      body: StudentAccessLiveScope(
-        child: overview.when(
-          skipLoadingOnRefresh: true,
-          loading: () => const TelmizoLoadingView(),
-          error: (error, _) => TelmizoErrorView(
-            title: LocaleKeys.status_load_error_title.tr(),
-            message: appFailureMessage(failureTypeOf(error)),
-            retryLabel: LocaleKeys.common_retry.tr(),
-            onRetry: () => ref.invalidate(groupAccessOverviewProvider),
+      body: StudentClassesRefreshScope(
+        child: StudentAccessLiveScope(
+          child: overview.when(
+            skipLoadingOnRefresh: true,
+            loading: () => const TelmizoLoadingView(),
+            error: (error, _) => TelmizoErrorView(
+              title: LocaleKeys.status_load_error_title.tr(),
+              message: appFailureMessage(failureTypeOf(error)),
+              retryLabel: LocaleKeys.common_retry.tr(),
+              onRetry: () => ref.invalidate(groupAccessOverviewProvider),
+            ),
+            data: (entries) => _HomeList(entries: entries),
           ),
-          data: (entries) => _HomeList(entries: entries),
         ),
       ),
     );
@@ -70,6 +75,7 @@ class _HomeList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final activity = ref.watch(studentGroupActivityProvider).value;
     final approved = [
       for (final e in entries)
         if (e.state == StudentAccessState.approved) e,
@@ -92,13 +98,17 @@ class _HomeList extends ConsumerWidget {
         const SizedBox(height: TelmizoSpacing.md),
         GroupAccessCard(
           entry: entry,
+          isArchived: activity?[entry.groupId] == false,
           onTap: () => context.router.push(accessStateRoute(entry)),
         ),
       ],
     ];
 
     return RefreshIndicator(
-      onRefresh: () => ref.read(groupAccessOverviewProvider.notifier).refresh(),
+      onRefresh: () async {
+        await ref.read(groupAccessOverviewProvider.notifier).refresh();
+        refreshStudentClasses(ref);
+      },
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(
@@ -108,9 +118,17 @@ class _HomeList extends ConsumerWidget {
           TelmizoSpacing.xl,
         ),
         children: [
-          HomeGreetingCard(activeGroups: approved.length),
+          HomeGreetingCard(
+            activeGroups: activity == null
+                ? null
+                : approved.where((e) => activity[e.groupId] == true).length,
+          ),
           const SizedBox(height: TelmizoSpacing.lg),
           JoinBanner(onTap: () => context.router.push(const JoinGroupRoute())),
+          if (approved.isNotEmpty) ...[
+            const SizedBox(height: TelmizoSpacing.lg),
+            const StudentHomeClassesSection(),
+          ],
           if (approved.isNotEmpty)
             ...section(LocaleKeys.section_my_groups.tr(), approved),
           if (pending.isNotEmpty)

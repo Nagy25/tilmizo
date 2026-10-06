@@ -8,11 +8,7 @@ abstract final class ProfileDto {
       'updated_at';
 
   /// Columns the authenticated role may update.
-  static const updatableColumns = {
-    'full_name',
-    'teaching_subject',
-    'avatar_url',
-  };
+  static const updatableColumns = {'full_name', 'teaching_subject'};
 
   static TeacherProfile fromRow(Map<String, dynamic> row) => TeacherProfile(
     id: row['id'] as String,

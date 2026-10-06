@@ -552,3 +552,109 @@ class SplashRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [StudentClassesScreen]
+class StudentClassesRoute extends PageRouteInfo<StudentClassesRouteArgs> {
+  StudentClassesRoute({
+    Key? key,
+    String? groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         StudentClassesRoute.name,
+         args: StudentClassesRouteArgs(key: key, groupId: groupId),
+         initialChildren: children,
+       );
+
+  static const String name = 'StudentClassesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<StudentClassesRouteArgs>(
+        orElse: () => const StudentClassesRouteArgs(),
+      );
+      return StudentClassesScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class StudentClassesRouteArgs {
+  const StudentClassesRouteArgs({this.key, this.groupId});
+
+  final Key? key;
+
+  final String? groupId;
+
+  @override
+  String toString() {
+    return 'StudentClassesRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! StudentClassesRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
+/// [StudentSessionDetailsScreen]
+class StudentSessionDetailsRoute
+    extends PageRouteInfo<StudentSessionDetailsRouteArgs> {
+  StudentSessionDetailsRoute({
+    Key? key,
+    required String sessionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         StudentSessionDetailsRoute.name,
+         args: StudentSessionDetailsRouteArgs(key: key, sessionId: sessionId),
+         rawPathParams: {'sessionId': sessionId},
+         initialChildren: children,
+       );
+
+  static const String name = 'StudentSessionDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<StudentSessionDetailsRouteArgs>(
+        orElse: () => StudentSessionDetailsRouteArgs(
+          sessionId: pathParams.getString('sessionId'),
+        ),
+      );
+      return StudentSessionDetailsScreen(
+        key: args.key,
+        sessionId: args.sessionId,
+      );
+    },
+  );
+}
+
+class StudentSessionDetailsRouteArgs {
+  const StudentSessionDetailsRouteArgs({this.key, required this.sessionId});
+
+  final Key? key;
+
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'StudentSessionDetailsRouteArgs{key: $key, sessionId: $sessionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! StudentSessionDetailsRouteArgs) return false;
+    return key == other.key && sessionId == other.sessionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sessionId.hashCode;
+}

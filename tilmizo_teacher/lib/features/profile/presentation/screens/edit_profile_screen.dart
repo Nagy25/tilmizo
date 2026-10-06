@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/app_header.dart';
+import '../../../../core/errors/failure_messages.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../auth/presentation/controllers/app_flow_controller.dart';
 import '../controllers/profile_form_controller.dart';
+import '../controllers/profile_avatar_controller.dart';
 import '../widgets/profile_form.dart';
 import '../widgets/profile_load_state.dart';
+import '../widgets/resource_storage_usage_card.dart';
 
 @RoutePage()
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -32,6 +35,21 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         .submit(fullName: fullName, teachingSubject: teachingSubject);
     if (saved != null && mounted) {
       showTelmizoSnackBar(context, LocaleKeys.profile_saved.tr());
+    }
+  }
+
+  Future<void> _updateAvatar() async {
+    final updated = await ref
+        .read(profileAvatarControllerProvider.notifier)
+        .pickAndUpload();
+    if (!mounted) return;
+    if (updated) {
+      showTelmizoSnackBar(context, LocaleKeys.profile_avatar_updated.tr());
+      return;
+    }
+    final failure = ref.read(profileAvatarControllerProvider).failure;
+    if (failure != null) {
+      showTelmizoSnackBar(context, profileAvatarFailureMessage(failure));
     }
   }
 
@@ -72,6 +90,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final formState = ref.watch(profileFormControllerProvider);
+    final avatarState = ref.watch(profileAvatarControllerProvider);
 
     return Scaffold(
       appBar: AppHeader(
@@ -89,7 +108,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               isSaving: formState.isSaving,
               failure: formState.failure,
               onSubmit: _save,
+              onAvatarEdit: _updateAvatar,
+              isAvatarUpdating: avatarState.isUpdating,
             ),
+            const SizedBox(height: TelmizoSpacing.xl),
+            const ResourceStorageUsageCard(),
             const SizedBox(height: TelmizoSpacing.xl),
             const Divider(),
             const SizedBox(height: TelmizoSpacing.md),

@@ -9,6 +9,7 @@ import 'package:tilmizo_student/app/my_app.dart';
 import 'package:tilmizo_student/features/group_access/data/group_access_repository_impl.dart';
 import 'package:tilmizo_student/features/profile/data/profile_repository_impl.dart';
 import 'package:tilmizo_student/generated/codegen_loader.g.dart';
+import 'package:tilmizo_student/features/student_classes/data/student_classes_repository_impl.dart';
 
 import 'fakes.dart';
 
@@ -20,13 +21,16 @@ class TestBackend {
     FakePhoneAuthService? auth,
     FakeProfileRepository? profiles,
     FakeGroupAccessRepository? access,
+    FakeStudentClassesRepository? classes,
   }) : auth = auth ?? FakePhoneAuthService(),
        profiles = profiles ?? FakeProfileRepository(),
-       access = access ?? FakeGroupAccessRepository();
+       access = access ?? FakeGroupAccessRepository(),
+       classes = classes ?? FakeStudentClassesRepository();
 
   final FakePhoneAuthService auth;
   final FakeProfileRepository profiles;
   final FakeGroupAccessRepository access;
+  final FakeStudentClassesRepository classes;
 
   /// Defaults to [testPreferences].
   final SharedPreferences? preferences;
@@ -35,6 +39,7 @@ class TestBackend {
     phoneAuthServiceProvider.overrideWithValue(auth),
     profileRepositoryProvider.overrideWithValue(profiles),
     groupAccessRepositoryProvider.overrideWithValue(access),
+    studentClassesRepositoryProvider.overrideWithValue(classes),
     deviceInfoServiceProvider.overrideWithValue(FakeDeviceInfoService()),
     appVersionProvider.overrideWithValue('1.0.0'),
     sharedPreferencesProvider.overrideWithValue(preferences ?? testPreferences),
@@ -55,6 +60,7 @@ late SharedPreferences testPreferences;
 
 Future<void> initTestPreferences() async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  CairoTime.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   testPreferences = await SharedPreferences.getInstance();
 }

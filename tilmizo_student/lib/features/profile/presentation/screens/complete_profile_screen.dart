@@ -12,6 +12,7 @@ import '../../../auth/presentation/controllers/app_flow_controller.dart';
 import '../../../group_access/presentation/controllers/group_access_providers.dart';
 import '../../../../router/student_destination_route.dart';
 import '../controllers/current_profile_controller.dart';
+import '../controllers/profile_avatar_controller.dart';
 import '../controllers/profile_form_controller.dart';
 
 /// Student profile completion: name required, verified phone read-only, and
@@ -50,10 +51,26 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     }
   }
 
+  Future<void> _updateAvatar() async {
+    final updated = await ref
+        .read(profileAvatarControllerProvider.notifier)
+        .pickAndUpload();
+    if (!mounted) return;
+    if (updated) {
+      showTelmizoSnackBar(context, LocaleKeys.profile_avatar_updated.tr());
+      return;
+    }
+    final failure = ref.read(profileAvatarControllerProvider).failure;
+    if (failure != null) {
+      showTelmizoSnackBar(context, profileAvatarFailureMessage(failure));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(currentProfileProvider);
     final form = ref.watch(profileFormControllerProvider);
+    final avatarState = ref.watch(profileAvatarControllerProvider);
     final textTheme = context.textTheme;
 
     return Scaffold(
@@ -89,9 +106,14 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
               const SizedBox(height: TelmizoSpacing.lg),
               TelmizoAvatarCard(
                 avatarUrl: profile.avatarUrl,
+                fullName: profile.fullName,
+                avatarRevision: profile.updatedAt?.toUtc().toIso8601String(),
                 title: LocaleKeys.profile_avatar_title.tr(),
                 body: LocaleKeys.profile_avatar_body.tr(),
                 semanticLabel: LocaleKeys.profile_avatar_semantics.tr(),
+                editTooltip: LocaleKeys.profile_avatar_change.tr(),
+                onEdit: _updateAvatar,
+                isUpdating: avatarState.isUpdating,
               ),
               const SizedBox(height: TelmizoSpacing.lg),
               TelmizoFormField(

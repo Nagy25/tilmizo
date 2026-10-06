@@ -2,9 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/attendance/presentation/screens/attendance_screen.dart';
 import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/phone_login_screen.dart';
 import '../features/auth/presentation/screens/splash_screen.dart';
+import '../features/classes/presentation/screens/classes_screen.dart';
+import '../features/classes/presentation/screens/edit_schedule_entry_screen.dart';
+import '../features/classes/presentation/screens/group_schedule_screen.dart';
+import '../features/classes/presentation/screens/one_time_session_screen.dart';
+import '../features/classes/presentation/screens/session_details_screen.dart';
+import '../features/classes/presentation/screens/session_edit_screen.dart';
+import '../features/classes/presentation/screens/weekly_schedule_form_screen.dart';
 import '../features/group_access/presentation/screens/group_students_screen.dart';
 import '../features/group_access/presentation/screens/join_request_details_screen.dart';
 import '../features/group_access/presentation/screens/join_requests_screen.dart';
@@ -102,6 +110,46 @@ class AppRouter extends RootStackRouter {
       AutoRoute(
         page: StudentAccessDetailsRoute.page,
         path: '/groups/:groupId/students/:membershipId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: ClassesRoute.page,
+        path: '/classes',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: GroupScheduleRoute.page,
+        path: '/groups/:groupId/schedule',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: WeeklyScheduleFormRoute.page,
+        path: '/groups/:groupId/schedule/new',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: EditScheduleEntryRoute.page,
+        path: '/groups/:groupId/schedule/:entryId/edit',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: OneTimeSessionRoute.page,
+        path: '/groups/:groupId/sessions/new',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: SessionDetailsRoute.page,
+        path: '/sessions/:sessionId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: SessionEditRoute.page,
+        path: '/sessions/:sessionId/edit',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: AttendanceRoute.page,
+        path: '/sessions/:sessionId/attendance',
         guards: teacherGuards,
       ),
       RedirectRoute(path: '*', redirectTo: '/'),

@@ -8,6 +8,8 @@ import 'package:tilmizo_student/features/group_access/domain/group_access_reposi
 import 'package:tilmizo_student/features/group_access/domain/join_request_outcome.dart';
 import 'package:tilmizo_student/features/profile/domain/profile_repository.dart';
 import 'package:tilmizo_student/features/profile/domain/student_profile.dart';
+import 'package:tilmizo_student/features/student_classes/domain/student_class.dart';
+import 'package:tilmizo_student/features/student_classes/domain/student_classes_repository.dart';
 
 const testUserId = 'student-1';
 const testPhone = '+201100000000';
@@ -255,4 +257,76 @@ final class FakeGroupAccessRepository implements GroupAccessRepository {
 final class FakeDeviceInfoService implements DeviceInfoService {
   @override
   Future<DeviceDisplayInfo> load() async => testDevice;
+}
+
+final class FakeStudentClassesRepository implements StudentClassesRepository {
+  final sessions = <StudentClassSession>[];
+  final schedules = <StudentScheduleEntry>[];
+  final activity = <String, bool>{};
+  AppFailure? failure;
+  int fetches = 0;
+
+  @override
+  Future<StudentSessionsPage> fetchSessions({
+    required List<String> approvedGroupIds,
+    required StudentSessionsView view,
+    required DateTime now,
+    String? groupId,
+    int offset = 0,
+    int limit = 20,
+  }) async {
+    fetches++;
+    if (failure case final error?) throw error;
+    final visible = sessions.where((session) {
+      if (!approvedGroupIds.contains(session.groupId) ||
+          (groupId != null && session.groupId != groupId)) {
+        return false;
+      }
+      return switch (view) {
+        StudentSessionsView.upcoming =>
+          session.status == SessionStatus.scheduled &&
+              session.endsAt.isAfter(now),
+        StudentSessionsView.past =>
+          session.status != SessionStatus.cancelled &&
+              (session.status == SessionStatus.completed ||
+                  !session.endsAt.isAfter(now)),
+        StudentSessionsView.cancelled =>
+          session.status == SessionStatus.cancelled,
+      };
+    }).toList();
+    visible.sort(
+      (a, b) => view == StudentSessionsView.upcoming
+          ? a.startsAt.compareTo(b.startsAt)
+          : b.startsAt.compareTo(a.startsAt),
+    );
+    return StudentSessionsPage(
+      sessions: visible.skip(offset).take(limit).toList(),
+      hasMore: offset + limit < visible.length,
+      total: visible.length,
+    );
+  }
+
+  @override
+  Future<StudentClassSession> fetchSession({
+    required String sessionId,
+    required List<String> approvedGroupIds,
+  }) async {
+    if (failure case final error?) throw error;
+    for (final session in sessions) {
+      if (session.id == sessionId &&
+          approvedGroupIds.contains(session.groupId)) {
+        return session;
+      }
+    }
+    throw const AppFailure(AppFailureType.notFound);
+  }
+
+  @override
+  Future<List<StudentScheduleEntry>> fetchSchedule(String groupId) async =>
+      schedules.where((entry) => entry.groupId == groupId).toList();
+
+  @override
+  Future<Map<String, bool>> fetchGroupActivity(List<String> groupIds) async => {
+    for (final id in groupIds) id: activity[id] ?? true,
+  };
 }

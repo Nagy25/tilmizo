@@ -7,6 +7,7 @@ final class StudentProfile {
     required this.phone,
     this.fullName,
     this.avatarUrl,
+    this.updatedAt,
   });
 
   final String id;
@@ -15,6 +16,7 @@ final class StudentProfile {
   /// The verified Egyptian E.164 number; never client-editable.
   final String phone;
   final String? avatarUrl;
+  final DateTime? updatedAt;
 
   /// A student needs only a nonblank name and the verified phone.
   bool get isComplete =>
@@ -32,8 +34,9 @@ final class StudentProfile {
       other.id == id &&
       other.fullName == fullName &&
       other.phone == phone &&
-      other.avatarUrl == avatarUrl;
+      other.avatarUrl == avatarUrl &&
+      other.updatedAt == updatedAt;
 
   @override
-  int get hashCode => Object.hash(id, fullName, phone, avatarUrl);
+  int get hashCode => Object.hash(id, fullName, phone, avatarUrl, updatedAt);
 }

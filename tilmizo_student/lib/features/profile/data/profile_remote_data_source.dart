@@ -12,7 +12,7 @@ abstract interface class ProfileRemoteDataSource {
 final class SupabaseProfileDataSource implements ProfileRemoteDataSource {
   SupabaseProfileDataSource(this._client);
 
-  static const columns = 'id, full_name, phone, avatar_url';
+  static const columns = 'id, full_name, phone, avatar_url, updated_at';
 
   final SupabaseClient _client;
 

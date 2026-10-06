@@ -27,6 +27,107 @@ class AllStudentsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AttendanceScreen]
+class AttendanceRoute extends PageRouteInfo<AttendanceRouteArgs> {
+  AttendanceRoute({
+    Key? key,
+    required String sessionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AttendanceRoute.name,
+         args: AttendanceRouteArgs(key: key, sessionId: sessionId),
+         rawPathParams: {'sessionId': sessionId},
+         initialChildren: children,
+       );
+
+  static const String name = 'AttendanceRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<AttendanceRouteArgs>(
+        orElse: () =>
+            AttendanceRouteArgs(sessionId: pathParams.getString('sessionId')),
+      );
+      return AttendanceScreen(key: args.key, sessionId: args.sessionId);
+    },
+  );
+}
+
+class AttendanceRouteArgs {
+  const AttendanceRouteArgs({this.key, required this.sessionId});
+
+  final Key? key;
+
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'AttendanceRouteArgs{key: $key, sessionId: $sessionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AttendanceRouteArgs) return false;
+    return key == other.key && sessionId == other.sessionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sessionId.hashCode;
+}
+
+/// generated route for
+/// [ClassesScreen]
+class ClassesRoute extends PageRouteInfo<ClassesRouteArgs> {
+  ClassesRoute({Key? key, String? groupId, List<PageRouteInfo>? children})
+    : super(
+        ClassesRoute.name,
+        args: ClassesRouteArgs(key: key, groupId: groupId),
+        rawQueryParams: {'groupId': groupId},
+        initialChildren: children,
+      );
+
+  static const String name = 'ClassesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final queryParams = data.queryParams;
+      final args = data.argsAs<ClassesRouteArgs>(
+        orElse: () =>
+            ClassesRouteArgs(groupId: queryParams.optString('groupId')),
+      );
+      return ClassesScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class ClassesRouteArgs {
+  const ClassesRouteArgs({this.key, this.groupId});
+
+  final Key? key;
+
+  final String? groupId;
+
+  @override
+  String toString() {
+    return 'ClassesRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ClassesRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
 /// [CompleteProfileScreen]
 class CompleteProfileRoute extends PageRouteInfo<void> {
   const CompleteProfileRoute({List<PageRouteInfo>? children})
@@ -127,6 +228,77 @@ class EditProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EditScheduleEntryScreen]
+class EditScheduleEntryRoute extends PageRouteInfo<EditScheduleEntryRouteArgs> {
+  EditScheduleEntryRoute({
+    Key? key,
+    required String groupId,
+    required String entryId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         EditScheduleEntryRoute.name,
+         args: EditScheduleEntryRouteArgs(
+           key: key,
+           groupId: groupId,
+           entryId: entryId,
+         ),
+         rawPathParams: {'groupId': groupId, 'entryId': entryId},
+         initialChildren: children,
+       );
+
+  static const String name = 'EditScheduleEntryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<EditScheduleEntryRouteArgs>(
+        orElse: () => EditScheduleEntryRouteArgs(
+          groupId: pathParams.getString('groupId'),
+          entryId: pathParams.getString('entryId'),
+        ),
+      );
+      return EditScheduleEntryScreen(
+        key: args.key,
+        groupId: args.groupId,
+        entryId: args.entryId,
+      );
+    },
+  );
+}
+
+class EditScheduleEntryRouteArgs {
+  const EditScheduleEntryRouteArgs({
+    this.key,
+    required this.groupId,
+    required this.entryId,
+  });
+
+  final Key? key;
+
+  final String groupId;
+
+  final String entryId;
+
+  @override
+  String toString() {
+    return 'EditScheduleEntryRouteArgs{key: $key, groupId: $groupId, entryId: $entryId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! EditScheduleEntryRouteArgs) return false;
+    return key == other.key &&
+        groupId == other.groupId &&
+        entryId == other.entryId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode ^ entryId.hashCode;
+}
+
+/// generated route for
 /// [EmptyGroupsScreen]
 class EmptyGroupsRoute extends PageRouteInfo<void> {
   const EmptyGroupsRoute({List<PageRouteInfo>? children})
@@ -187,6 +359,58 @@ class GroupDetailsRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! GroupDetailsRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
+/// [GroupScheduleScreen]
+class GroupScheduleRoute extends PageRouteInfo<GroupScheduleRouteArgs> {
+  GroupScheduleRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         GroupScheduleRoute.name,
+         args: GroupScheduleRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'GroupScheduleRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<GroupScheduleRouteArgs>(
+        orElse: () =>
+            GroupScheduleRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return GroupScheduleScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class GroupScheduleRouteArgs {
+  const GroupScheduleRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'GroupScheduleRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! GroupScheduleRouteArgs) return false;
     return key == other.key && groupId == other.groupId;
   }
 
@@ -387,6 +611,58 @@ class JoinRequestsRouteArgs {
 }
 
 /// generated route for
+/// [OneTimeSessionScreen]
+class OneTimeSessionRoute extends PageRouteInfo<OneTimeSessionRouteArgs> {
+  OneTimeSessionRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         OneTimeSessionRoute.name,
+         args: OneTimeSessionRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'OneTimeSessionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<OneTimeSessionRouteArgs>(
+        orElse: () =>
+            OneTimeSessionRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return OneTimeSessionScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class OneTimeSessionRouteArgs {
+  const OneTimeSessionRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'OneTimeSessionRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! OneTimeSessionRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
 /// [OtpVerificationScreen]
 class OtpVerificationRoute extends PageRouteInfo<OtpVerificationRouteArgs> {
   OtpVerificationRoute({
@@ -483,6 +759,111 @@ class PhoneLoginRouteArgs {
 }
 
 /// generated route for
+/// [SessionDetailsScreen]
+class SessionDetailsRoute extends PageRouteInfo<SessionDetailsRouteArgs> {
+  SessionDetailsRoute({
+    Key? key,
+    required String sessionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SessionDetailsRoute.name,
+         args: SessionDetailsRouteArgs(key: key, sessionId: sessionId),
+         rawPathParams: {'sessionId': sessionId},
+         initialChildren: children,
+       );
+
+  static const String name = 'SessionDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<SessionDetailsRouteArgs>(
+        orElse: () => SessionDetailsRouteArgs(
+          sessionId: pathParams.getString('sessionId'),
+        ),
+      );
+      return SessionDetailsScreen(key: args.key, sessionId: args.sessionId);
+    },
+  );
+}
+
+class SessionDetailsRouteArgs {
+  const SessionDetailsRouteArgs({this.key, required this.sessionId});
+
+  final Key? key;
+
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'SessionDetailsRouteArgs{key: $key, sessionId: $sessionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SessionDetailsRouteArgs) return false;
+    return key == other.key && sessionId == other.sessionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sessionId.hashCode;
+}
+
+/// generated route for
+/// [SessionEditScreen]
+class SessionEditRoute extends PageRouteInfo<SessionEditRouteArgs> {
+  SessionEditRoute({
+    Key? key,
+    required String sessionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         SessionEditRoute.name,
+         args: SessionEditRouteArgs(key: key, sessionId: sessionId),
+         rawPathParams: {'sessionId': sessionId},
+         initialChildren: children,
+       );
+
+  static const String name = 'SessionEditRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<SessionEditRouteArgs>(
+        orElse: () =>
+            SessionEditRouteArgs(sessionId: pathParams.getString('sessionId')),
+      );
+      return SessionEditScreen(key: args.key, sessionId: args.sessionId);
+    },
+  );
+}
+
+class SessionEditRouteArgs {
+  const SessionEditRouteArgs({this.key, required this.sessionId});
+
+  final Key? key;
+
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'SessionEditRouteArgs{key: $key, sessionId: $sessionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SessionEditRouteArgs) return false;
+    return key == other.key && sessionId == other.sessionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sessionId.hashCode;
+}
+
+/// generated route for
 /// [SplashScreen]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -568,4 +949,58 @@ class StudentAccessDetailsRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ groupId.hashCode ^ membershipId.hashCode;
+}
+
+/// generated route for
+/// [WeeklyScheduleFormScreen]
+class WeeklyScheduleFormRoute
+    extends PageRouteInfo<WeeklyScheduleFormRouteArgs> {
+  WeeklyScheduleFormRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         WeeklyScheduleFormRoute.name,
+         args: WeeklyScheduleFormRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'WeeklyScheduleFormRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<WeeklyScheduleFormRouteArgs>(
+        orElse: () => WeeklyScheduleFormRouteArgs(
+          groupId: pathParams.getString('groupId'),
+        ),
+      );
+      return WeeklyScheduleFormScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class WeeklyScheduleFormRouteArgs {
+  const WeeklyScheduleFormRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'WeeklyScheduleFormRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! WeeklyScheduleFormRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
 }

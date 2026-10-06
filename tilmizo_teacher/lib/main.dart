@@ -13,6 +13,8 @@ Future<void> main() async {
   // Fails fast when SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY is missing.
   final supabaseConfig = SupabaseConfig.fromEnvironment();
   registerTelmizoFontLicenses();
+  // Class times are Africa/Cairo wall-clock times with daylight saving.
+  CairoTime.ensureInitialized();
 
   await Future.wait([
     EasyLocalization.ensureInitialized(),

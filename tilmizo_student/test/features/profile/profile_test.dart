@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:core_package/core_package.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tilmizo_student/features/profile/data/profile_remote_data_source.dart';
 import 'package:tilmizo_student/features/profile/data/profile_repository_impl.dart';
 import 'package:tilmizo_student/features/profile/domain/student_profile.dart';
 import 'package:tilmizo_student/features/profile/presentation/controllers/profile_form_controller.dart';
+import 'package:tilmizo_student/features/profile/presentation/controllers/profile_avatar_controller.dart';
 
 import '../../helpers/fakes.dart';
 import '../../helpers/test_app.dart';
@@ -31,6 +35,34 @@ final class _FakeDataSource implements ProfileRemoteDataSource {
       'phone': testPhone,
       'avatar_url': null,
     };
+  }
+}
+
+final class _FakeAvatarPicker implements ProfileAvatarPicker {
+  _FakeAvatarPicker(this.avatar);
+
+  final PickedProfileAvatar? avatar;
+
+  @override
+  Future<PickedProfileAvatar?> pickFromGallery() async => avatar;
+}
+
+final class _FakeAvatarService implements ProfileAvatarService {
+  int uploadCount = 0;
+
+  @override
+  Future<Uint8List> download(String path, {String? cacheNonce}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ProfileAvatarUpdate> uploadOwnAvatar(
+    PickedProfileAvatar avatar,
+  ) async {
+    uploadCount++;
+    return ProfileAvatarUpdate(
+      avatarPath: '$testUserId/avatar',
+      updatedAt: DateTime.utc(2026, 10, 6),
+    );
   }
 }
 
@@ -70,5 +102,57 @@ void main() {
       isNull,
     );
     expect(backend.profiles.updates, isEmpty);
+  });
+
+  test('avatar controller cancels cleanly without uploading', () async {
+    final backend = TestBackend(auth: FakePhoneAuthService(signedIn: true));
+    final service = _FakeAvatarService();
+    final container = ProviderContainer(
+      overrides: [
+        ...backend.overrides,
+        profileAvatarPickerProvider.overrideWithValue(_FakeAvatarPicker(null)),
+        profileAvatarServiceProvider.overrideWithValue(service),
+      ],
+      retry: (_, _) => null,
+    );
+    addTearDown(container.dispose);
+    container.listen(profileAvatarControllerProvider, (_, _) {});
+
+    expect(
+      await container
+          .read(profileAvatarControllerProvider.notifier)
+          .pickAndUpload(),
+      isFalse,
+    );
+    expect(service.uploadCount, 0);
+  });
+
+  test('avatar controller uploads and refreshes the student profile', () async {
+    final backend = TestBackend(auth: FakePhoneAuthService(signedIn: true));
+    final service = _FakeAvatarService();
+    final avatar = PickedProfileAvatar(
+      bytes: Uint8List.fromList([0xff, 0xd8, 0xff]),
+      contentType: 'image/jpeg',
+    );
+    final container = ProviderContainer(
+      overrides: [
+        ...backend.overrides,
+        profileAvatarPickerProvider.overrideWithValue(
+          _FakeAvatarPicker(avatar),
+        ),
+        profileAvatarServiceProvider.overrideWithValue(service),
+      ],
+      retry: (_, _) => null,
+    );
+    addTearDown(container.dispose);
+    container.listen(profileAvatarControllerProvider, (_, _) {});
+
+    expect(
+      await container
+          .read(profileAvatarControllerProvider.notifier)
+          .pickAndUpload(),
+      isTrue,
+    );
+    expect(service.uploadCount, 1);
   });
 }

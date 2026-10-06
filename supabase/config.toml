@@ -2,3 +2,12 @@ project_id = "telmizo"
 
 [functions.send-whatsapp-otp]
 verify_jwt = false
+
+[functions.resource-upload]
+verify_jwt = false
+
+[functions.resource-delete]
+verify_jwt = false
+
+[functions.resource-storage-cleanup]
+verify_jwt = false

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tilmizo_teacher/features/classes/presentation/screens/classes_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/create_group_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/empty_groups_screen.dart';
 import 'package:tilmizo_teacher/features/groups/presentation/screens/edit_group_screen.dart';
@@ -82,10 +83,10 @@ void main() {
     expect(find.text('بدون كود انضمام'), findsOneWidget);
     expect(find.text('مجموعتان'), findsOneWidget);
     expect(find.text('الحصص'), findsOneWidget);
-    expect(find.text('قريبًا'), findsOneWidget);
+    expect(find.text('لا توجد حصص قادمة'), findsOneWidget);
     await tester.tap(find.text('الحصص'));
     await tester.pumpAndSettle();
-    expect(find.byType(GroupsDashboardScreen), findsOneWidget);
+    expect(find.byType(ClassesScreen), findsOneWidget);
   });
 
   testWidgets('create group requires a name and prefills the subject', (

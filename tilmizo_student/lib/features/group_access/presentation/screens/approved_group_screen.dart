@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_package/core_package.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/errors/failure_messages.dart';
@@ -15,6 +16,10 @@ import '../widgets/device_info_card.dart';
 import '../widgets/group_state_gate.dart';
 import '../widgets/group_summary_card.dart';
 import '../widgets/status_screen_scaffold.dart';
+import '../../../student_classes/presentation/controllers/student_classes_providers.dart';
+import '../../../student_classes/presentation/widgets/student_classes_refresh_scope.dart';
+import '../../../student_classes/presentation/widgets/student_group_schedule_section.dart';
+import '../../../student_classes/presentation/widgets/student_group_sessions_section.dart';
 
 /// Minimal approved-group summary. Group details come from the
 /// session-bound `groups` RLS; if RLS stops returning the group, cached data
@@ -74,73 +79,140 @@ class ApprovedGroupScreen extends ConsumerWidget {
 
     return StatusScreenScaffold(
       subtitle: LocaleKeys.approved_title.tr(),
-      body: GroupStateGate(
-        groupId: groupId,
-        expected: StudentAccessState.approved,
-        builder: (context, entry) {
-          final group = ref.watch(approvedGroupProvider(groupId));
-          final action = ref.watch(membershipActionControllerProvider);
-          return group.when(
-            loading: () => const TelmizoLoadingView(),
-            error: (error, _) => TelmizoErrorView(
-              title: LocaleKeys.group_unavailable_title.tr(),
-              message: failureTypeOf(error) == AppFailureType.notFound
-                  ? LocaleKeys.group_unavailable_body.tr()
-                  : appFailureMessage(failureTypeOf(error)),
-              retryLabel: LocaleKeys.common_retry.tr(),
-              onRetry: () => ref.invalidate(groupAccessOverviewProvider),
-            ),
-            data: (group) => TelmizoScrollBody(
-              children: [
-                AccessStatusHero(
-                  icon: Icons.verified_outlined,
-                  badge: LocaleKeys.approved_badge.tr(),
-                  title: LocaleKeys.approved_title.tr(),
-                  body: LocaleKeys.approved_body.tr(),
-                  tone: TelmizoMessageTone.success,
-                ),
-                const SizedBox(height: TelmizoSpacing.lg),
-                GroupSummaryCard(
-                  name: group.name,
-                  subject: group.subject,
-                  grade: group.grade,
-                  teacherName: entry.teacherName,
-                ),
-                if (entry.approvedDeviceName case final device?) ...[
-                  const SizedBox(height: TelmizoSpacing.md),
-                  DeviceInfoCard(
-                    label: LocaleKeys.approved_device_label.tr(),
-                    deviceName: device,
-                    isThisDevice: true,
+      body: StudentClassesRefreshScope(
+        child: GroupStateGate(
+          groupId: groupId,
+          expected: StudentAccessState.approved,
+          builder: (context, entry) {
+            final group = ref.watch(approvedGroupProvider(groupId));
+            final action = ref.watch(membershipActionControllerProvider);
+            return group.when(
+              loading: () => const TelmizoLoadingView(),
+              error: (error, _) => TelmizoErrorView(
+                title: LocaleKeys.group_unavailable_title.tr(),
+                message: failureTypeOf(error) == AppFailureType.notFound
+                    ? LocaleKeys.group_unavailable_body.tr()
+                    : appFailureMessage(failureTypeOf(error)),
+                retryLabel: LocaleKeys.common_retry.tr(),
+                onRetry: () => ref.invalidate(groupAccessOverviewProvider),
+              ),
+              data: (group) => RefreshIndicator(
+                onRefresh: () async {
+                  await ref
+                      .read(groupAccessOverviewProvider.notifier)
+                      .refresh();
+                  ref.invalidate(approvedGroupProvider(groupId));
+                  refreshStudentClasses(ref);
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(
+                    TelmizoSpacing.margin,
+                    TelmizoSpacing.lg,
+                    TelmizoSpacing.margin,
+                    TelmizoSpacing.xl,
                   ),
-                ],
-                if (action.failure case final failure?) ...[
-                  const SizedBox(height: TelmizoSpacing.md),
-                  TelmizoInlineMessage(message: appFailureMessage(failure)),
-                ],
-                const SizedBox(height: TelmizoSpacing.xl),
-                SizedBox(
-                  height: TelmizoSpacing.buttonHeight,
-                  child: TextButton.icon(
-                    onPressed: action.isBusy || entry.membershipId == null
-                        ? null
-                        : () => _leave(context, ref, entry),
-                    style: TextButton.styleFrom(
-                      foregroundColor: TelmizoColors.error,
+                  children: [
+                    AccessStatusHero(
+                      icon: group.isActive
+                          ? Icons.verified_outlined
+                          : Icons.archive_outlined,
+                      badge: group.isActive
+                          ? LocaleKeys.approved_badge.tr()
+                          : LocaleKeys.group_archived.tr(),
+                      title: group.isActive
+                          ? LocaleKeys.approved_title.tr()
+                          : LocaleKeys.group_archived.tr(),
+                      body: group.isActive
+                          ? LocaleKeys.approved_body.tr()
+                          : LocaleKeys.group_archived_body.tr(),
+                      tone: group.isActive
+                          ? TelmizoMessageTone.success
+                          : TelmizoMessageTone.info,
                     ),
-                    icon: action.inProgress == MembershipAction.leave
-                        ? const SizedBox.square(
-                            dimension: 18,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.logout),
-                    label: Text(LocaleKeys.leave_group.tr()),
-                  ),
+                    const SizedBox(height: TelmizoSpacing.lg),
+                    GroupSummaryCard(
+                      name: group.name,
+                      subject: group.subject,
+                      grade: group.grade,
+                      teacherName: entry.teacherName,
+                    ),
+                    if (group.isActive && group.inviteCode != null) ...[
+                      const SizedBox(height: TelmizoSpacing.md),
+                      TelmizoCard(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(LocaleKeys.group_invite_code.tr()),
+                                  SelectableText(group.inviteCode!),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: LocaleKeys.group_copy_code.tr(),
+                              onPressed: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(text: group.inviteCode!),
+                                );
+                                if (context.mounted) {
+                                  showTelmizoSnackBar(
+                                    context,
+                                    LocaleKeys.group_code_copied.tr(),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.copy_outlined),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    if (entry.approvedDeviceName case final device?) ...[
+                      const SizedBox(height: TelmizoSpacing.md),
+                      DeviceInfoCard(
+                        label: LocaleKeys.approved_device_label.tr(),
+                        deviceName: device,
+                        isThisDevice: true,
+                      ),
+                    ],
+                    const SizedBox(height: TelmizoSpacing.lg),
+                    StudentGroupScheduleSection(groupId: groupId),
+                    const SizedBox(height: TelmizoSpacing.lg),
+                    StudentGroupSessionsSection(groupId: groupId),
+                    if (action.failure case final failure?) ...[
+                      const SizedBox(height: TelmizoSpacing.md),
+                      TelmizoInlineMessage(message: appFailureMessage(failure)),
+                    ],
+                    const SizedBox(height: TelmizoSpacing.xl),
+                    SizedBox(
+                      height: TelmizoSpacing.buttonHeight,
+                      child: TextButton.icon(
+                        onPressed: action.isBusy || entry.membershipId == null
+                            ? null
+                            : () => _leave(context, ref, entry),
+                        style: TextButton.styleFrom(
+                          foregroundColor: TelmizoColors.error,
+                        ),
+                        icon: action.inProgress == MembershipAction.leave
+                            ? const SizedBox.square(
+                                dimension: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.logout),
+                        label: Text(LocaleKeys.leave_group.tr()),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
