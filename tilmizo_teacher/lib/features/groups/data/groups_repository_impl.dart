@@ -64,6 +64,17 @@ final class GroupsRepositoryImpl implements GroupsRepository {
     return GroupDto.fromRow(await _dataSource.archiveGroup(groupId));
   });
 
+  @override
+  Future<TeacherGroup> setSuspended(
+    String groupId, {
+    required bool suspended,
+  }) => _guard(() async {
+    requireUserId(_auth);
+    return GroupDto.fromRow(
+      await _dataSource.setSuspension(groupId, suspended),
+    );
+  });
+
   Future<T> _guard<T>(Future<T> Function() action) async {
     try {
       return await action();

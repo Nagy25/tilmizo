@@ -331,6 +331,22 @@ class OtpVerificationRouteArgs {
 }
 
 /// generated route for
+/// [PaymentHistoryScreen]
+class PaymentHistoryRoute extends PageRouteInfo<void> {
+  const PaymentHistoryRoute({List<PageRouteInfo>? children})
+    : super(PaymentHistoryRoute.name, initialChildren: children);
+
+  static const String name = 'PaymentHistoryRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PaymentHistoryScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [PendingRequestScreen]
 class PendingRequestRoute extends PageRouteInfo<PendingRequestRouteArgs> {
   PendingRequestRoute({

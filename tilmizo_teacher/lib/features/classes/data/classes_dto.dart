@@ -11,7 +11,8 @@ abstract final class ClassesDto {
   static const sessionColumns =
       'id, group_id, schedule_entry_id, starts_at, ends_at, location_type, '
       'physical_location, meeting_link, status, notes, '
-      'group:groups!inner(id, name, subject, is_active, teacher_id)';
+      'group:groups!inner(id, name, subject, is_active, is_suspended, '
+      'teacher_id)';
 
   static const entryColumns =
       'id, group_id, weekday, start_time, end_time, location_type, '
@@ -27,6 +28,7 @@ abstract final class ClassesDto {
         name: group['name'] as String,
         subject: group['subject'] as String?,
         isActive: group['is_active'] as bool,
+        isSuspended: group['is_suspended'] as bool? ?? false,
       ),
       scheduleEntryId: row['schedule_entry_id'] as String?,
       startsAt: DateTime.parse(row['starts_at'] as String).toUtc(),
@@ -57,6 +59,8 @@ abstract final class ClassesDto {
     ...slot.location.toColumns(),
   };
 
+  /// Parameters for `create_manual_class_session`, or for
+  /// `create_manual_session_with_payment` when the draft has an amount.
   static Map<String, dynamic> createSessionParams(OneTimeSessionDraft draft) =>
       {
         'p_group_id': draft.groupId,
@@ -66,5 +70,7 @@ abstract final class ClassesDto {
         'p_physical_location': draft.location.physicalLocation,
         'p_meeting_link': draft.location.meetingLink,
         'p_notes': draft.notes,
+        if (draft.paymentAmount case final amount?)
+          'p_payment_amount': amount.toBackend(),
       };
 }

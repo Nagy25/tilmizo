@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../resources/resource_file_service.dart';
 import 'auth_session_status.dart';
 import 'phone_auth_service.dart';
 import 'supabase_phone_auth_service.dart';
@@ -11,8 +12,13 @@ final supabaseClientProvider = Provider<SupabaseClient>(
   (ref) => Supabase.instance.client,
 );
 
+/// Signing out also clears cached resource files and images, so the next
+/// account on the device cannot open them.
 final phoneAuthServiceProvider = Provider<PhoneAuthService>(
-  (ref) => SupabasePhoneAuthService(ref.watch(supabaseClientProvider).auth),
+  (ref) => SupabasePhoneAuthService(
+    ref.watch(supabaseClientProvider).auth,
+    onSignedOut: () => ref.read(resourceFileServiceProvider).clearCache(),
+  ),
 );
 
 final authSessionStatusProvider = StreamProvider<AuthSessionStatus>(

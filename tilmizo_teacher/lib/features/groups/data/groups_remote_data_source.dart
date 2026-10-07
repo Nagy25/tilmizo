@@ -17,6 +17,8 @@ abstract interface class GroupsRemoteDataSource {
   );
 
   Future<Map<String, dynamic>> archiveGroup(String groupId);
+
+  Future<Map<String, dynamic>> setSuspension(String groupId, bool suspended);
 }
 
 final class SupabaseGroupsDataSource implements GroupsRemoteDataSource {
@@ -65,4 +67,13 @@ final class SupabaseGroupsDataSource implements GroupsRemoteDataSource {
   @override
   Future<Map<String, dynamic>> archiveGroup(String groupId) async =>
       await _client.rpc('archive_group', params: {'p_group_id': groupId});
+
+  @override
+  Future<Map<String, dynamic>> setSuspension(
+    String groupId,
+    bool suspended,
+  ) async => await _client.rpc(
+    'set_group_suspension',
+    params: {'p_group_id': groupId, 'p_suspended': suspended},
+  );
 }

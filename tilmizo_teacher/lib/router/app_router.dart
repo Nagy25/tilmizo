@@ -22,8 +22,14 @@ import '../features/groups/presentation/screens/edit_group_screen.dart';
 import '../features/groups/presentation/screens/empty_groups_screen.dart';
 import '../features/groups/presentation/screens/group_details_screen.dart';
 import '../features/groups/presentation/screens/groups_dashboard_screen.dart';
+import '../features/payments/presentation/screens/group_payments_screen.dart';
+import '../features/payments/presentation/screens/monthly_plan_screen.dart';
+import '../features/payments/presentation/screens/one_time_payment_screen.dart';
 import '../features/profile/presentation/screens/complete_profile_screen.dart';
 import '../features/profile/presentation/screens/edit_profile_screen.dart';
+import '../features/resources/presentation/screens/add_resource_screen.dart';
+import '../features/resources/presentation/screens/edit_resource_screen.dart';
+import '../features/resources/presentation/screens/resources_screen.dart';
 import '../features/teacher_students/presentation/screens/all_students_screen.dart';
 import 'route_guards.dart';
 
@@ -110,6 +116,36 @@ class AppRouter extends RootStackRouter {
       AutoRoute(
         page: StudentAccessDetailsRoute.page,
         path: '/groups/:groupId/students/:membershipId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: ResourcesRoute.page,
+        path: '/groups/:groupId/resources',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: AddResourceRoute.page,
+        path: '/groups/:groupId/resources/new',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: EditResourceRoute.page,
+        path: '/groups/:groupId/resources/:resourceId/edit',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: GroupPaymentsRoute.page,
+        path: '/groups/:groupId/payments',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: MonthlyPlanRoute.page,
+        path: '/groups/:groupId/payments/monthly',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: OneTimePaymentRoute.page,
+        path: '/groups/:groupId/payments/one-time',
         guards: teacherGuards,
       ),
       AutoRoute(

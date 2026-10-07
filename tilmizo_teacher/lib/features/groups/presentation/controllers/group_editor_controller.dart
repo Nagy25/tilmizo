@@ -11,14 +11,18 @@ final class GroupEditorState {
   const GroupEditorState({
     this.isSubmitting = false,
     this.isArchiving = false,
+    this.isSuspending = false,
     this.failure,
   });
 
   final bool isSubmitting;
   final bool isArchiving;
+
+  /// A suspend or resume request is in flight.
+  final bool isSuspending;
   final AppFailureType? failure;
 
-  bool get isBusy => isSubmitting || isArchiving;
+  bool get isBusy => isSubmitting || isArchiving || isSuspending;
 }
 
 final groupEditorControllerProvider =
@@ -46,6 +50,23 @@ class GroupEditorController extends Notifier<GroupEditorState> {
       final archived = await _groups.archiveGroup(groupId);
       if (ref.mounted) state = const GroupEditorState();
       return archived;
+    } on AppFailure catch (failure) {
+      if (ref.mounted) state = GroupEditorState(failure: failure.type);
+      return null;
+    }
+  }
+
+  /// Pauses or resumes the group; existing sessions and records are kept.
+  Future<TeacherGroup?> setSuspended(
+    String groupId, {
+    required bool suspended,
+  }) async {
+    if (state.isBusy) return null;
+    state = const GroupEditorState(isSuspending: true);
+    try {
+      final group = await _groups.setSuspended(groupId, suspended: suspended);
+      if (ref.mounted) state = const GroupEditorState();
+      return group;
     } on AppFailure catch (failure) {
       if (ref.mounted) state = GroupEditorState(failure: failure.type);
       return null;

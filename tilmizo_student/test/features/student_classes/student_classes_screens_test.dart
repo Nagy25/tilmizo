@@ -1,4 +1,5 @@
 import 'package:core_package/core_package.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tilmizo_student/features/group_access/domain/approved_group.dart';
 import 'package:tilmizo_student/features/group_access/presentation/screens/approved_group_screen.dart';
@@ -128,6 +129,8 @@ void main() {
     await _tap(tester, 'دخول المجموعة');
     expect(find.byType(ApprovedGroupScreen), findsOneWidget);
     expect(find.text('مجموعة مؤرشفة'), findsWidgets);
+    await tester.tap(find.byKey(const Key('group-tab-classes')));
+    await tester.pumpAndSettle();
     expect(find.text('حاضر'), findsOneWidget);
   });
 

@@ -74,9 +74,10 @@ final class ClassesRepositoryImpl implements ClassesRepository {
   Future<ClassSession> createOneTimeSession(OneTimeSessionDraft draft) =>
       _guard(() async {
         requireUserId(_auth);
-        final row = await _dataSource.createManualSession(
-          ClassesDto.createSessionParams(draft),
-        );
+        final params = ClassesDto.createSessionParams(draft);
+        final row = draft.paymentAmount == null
+            ? await _dataSource.createManualSession(params)
+            : await _dataSource.createManualSessionWithPayment(params);
         return fetchSession(row['id'] as String);
       });
 

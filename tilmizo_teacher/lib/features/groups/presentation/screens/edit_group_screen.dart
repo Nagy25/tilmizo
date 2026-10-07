@@ -13,6 +13,7 @@ import '../controllers/groups_controller.dart';
 import '../widgets/archive_group_dialog.dart';
 import '../widgets/group_form_controllers.dart';
 import '../widgets/group_form_fields.dart';
+import '../widgets/group_suspension_card.dart';
 
 @RoutePage()
 class EditGroupScreen extends ConsumerWidget {
@@ -97,6 +98,23 @@ class _EditGroupFormState extends ConsumerState<_EditGroupForm> {
     await context.router.maybePop();
   }
 
+  Future<void> _toggleSuspension() async {
+    final suspend = !widget.group.isSuspended;
+    final confirmed = await confirmGroupSuspension(context, suspend: suspend);
+    if (!confirmed || !mounted) return;
+    final updated = await ref
+        .read(groupEditorControllerProvider.notifier)
+        .setSuspended(widget.group.id, suspended: suspend);
+    if (!mounted || updated == null) return;
+    ref.invalidate(groupDetailsProvider(widget.group.id));
+    showTelmizoSnackBar(
+      context,
+      suspend
+          ? LocaleKeys.group_suspended_success.tr()
+          : LocaleKeys.group_resumed_success.tr(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(groupEditorControllerProvider);
@@ -142,6 +160,13 @@ class _EditGroupFormState extends ConsumerState<_EditGroupForm> {
             child: Text(LocaleKeys.edit_group_discard.tr()),
           ),
           if (widget.group.isActive) ...[
+            const SizedBox(height: TelmizoSpacing.lg),
+            GroupSuspensionCard(
+              group: widget.group,
+              isBusy: state.isBusy,
+              isLoading: state.isSuspending,
+              onToggle: _toggleSuspension,
+            ),
             const SizedBox(height: TelmizoSpacing.lg),
             TextButton.icon(
               onPressed: state.isBusy ? null : _archive,

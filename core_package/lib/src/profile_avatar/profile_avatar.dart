@@ -128,8 +128,6 @@ bool isUsableProfileAvatarImage(Uint8List bytes) {
 
 abstract interface class ProfileAvatarService {
   Future<ProfileAvatarUpdate> uploadOwnAvatar(PickedProfileAvatar avatar);
-
-  Future<Uint8List> download(String path, {String? cacheNonce});
 }
 
 final class SupabaseProfileAvatarService implements ProfileAvatarService {
@@ -166,17 +164,6 @@ final class SupabaseProfileAvatarService implements ProfileAvatarService {
         avatarPath: data['avatar_path'] as String,
         updatedAt: DateTime.parse(data['updated_at'] as String),
       );
-    } catch (error) {
-      throw _mapFailure(error);
-    }
-  }
-
-  @override
-  Future<Uint8List> download(String path, {String? cacheNonce}) async {
-    try {
-      return await _client.storage
-          .from(profileAvatarBucket)
-          .download(path, cacheNonce: cacheNonce);
     } catch (error) {
       throw _mapFailure(error);
     }
@@ -225,12 +212,3 @@ final profileAvatarPickerProvider = Provider<ProfileAvatarPicker>(
 final profileAvatarServiceProvider = Provider<ProfileAvatarService>(
   (ref) => SupabaseProfileAvatarService(ref.watch(supabaseClientProvider)),
 );
-
-typedef ProfileAvatarImageRequest = ({String path, String? revision});
-
-final profileAvatarBytesProvider = FutureProvider.autoDispose
-    .family<Uint8List, ProfileAvatarImageRequest>((ref, request) {
-      return ref
-          .watch(profileAvatarServiceProvider)
-          .download(request.path, cacheNonce: request.revision);
-    });

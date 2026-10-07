@@ -5,7 +5,7 @@ import '../domain/teacher_group.dart';
 abstract final class GroupDto {
   static const columns =
       'id, teacher_id, name, subject, grade, invite_code, is_active, '
-      'created_at, updated_at';
+      'is_suspended, created_at, updated_at';
 
   static TeacherGroup fromRow(Map<String, dynamic> row) => TeacherGroup(
     id: row['id'] as String,
@@ -14,6 +14,7 @@ abstract final class GroupDto {
     grade: row['grade'] as String?,
     inviteCode: row['invite_code'] as String?,
     isActive: row['is_active'] as bool,
+    isSuspended: row['is_suspended'] as bool? ?? false,
     createdAt: DateTime.parse(row['created_at'] as String),
     updatedAt: DateTime.parse(row['updated_at'] as String),
   );

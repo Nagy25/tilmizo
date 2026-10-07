@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core_package.dart';
 
 /// Circular avatar with name initials while a usable photo is unavailable.
-class TelmizoAvatar extends ConsumerWidget {
+class TelmizoAvatar extends StatelessWidget {
   const TelmizoAvatar({
     super.key,
     this.avatarUrl,
@@ -27,7 +26,7 @@ class TelmizoAvatar extends ConsumerWidget {
   final bool isUpdating;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final initials = profileInitials(fullName);
     final placeholder = initials.isEmpty
         ? Icon(
@@ -44,38 +43,24 @@ class TelmizoAvatar extends ConsumerWidget {
             ),
           );
     final url = avatarUrl;
-    final isNetworkImage =
-        url != null && Uri.tryParse(url)?.isScheme('https') == true;
-
-    Widget image = placeholder;
-    if (isNetworkImage) {
-      image = Image.network(
-        url,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => placeholder,
-      );
-    } else if (url != null && url.isNotEmpty) {
-      image = ref
-          .watch(
-            profileAvatarBytesProvider((path: url, revision: avatarRevision)),
-          )
-          .when(
-            data: (bytes) => isUsableProfileAvatarImage(bytes)
-                ? Image.memory(
-                    bytes,
-                    width: size,
-                    height: size,
-                    fit: BoxFit.cover,
-                    gaplessPlayback: true,
-                    errorBuilder: (_, _, _) => placeholder,
-                  )
-                : placeholder,
-            loading: () => placeholder,
-            error: (_, _) => placeholder,
+    final source = url == null || url.isEmpty
+        ? null
+        : Uri.tryParse(url)?.isScheme('https') == true
+        ? NetworkImageSource(url)
+        : StorageImageSource(
+            bucket: profileAvatarBucket,
+            path: url,
+            revision: avatarRevision,
+            accept: isUsableProfileAvatarImage,
           );
-    }
+    final image = source == null
+        ? placeholder
+        : TelmizoCachedImage(
+            source: source,
+            width: size,
+            height: size,
+            placeholder: Center(child: placeholder),
+          );
 
     return Semantics(
       image: true,

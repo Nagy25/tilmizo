@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/formatting/byte_size.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../domain/teacher_resource_storage_usage.dart';
 import '../controllers/resource_storage_usage_controller.dart';
@@ -86,10 +87,12 @@ class _StorageUsageContent extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${LocaleKeys.resource_storage_used.tr()}: '
-                '${_formatBytes(usage.usedBytes)}',
-                style: textTheme.titleSmall,
+              Expanded(
+                child: Text(
+                  '${LocaleKeys.resource_storage_used.tr()}: '
+                  '${formatByteSize(usage.usedBytes)}',
+                  style: textTheme.titleSmall,
+                ),
               ),
               Text(
                 LocaleKeys.resource_storage_percent.tr(args: [percent]),
@@ -113,13 +116,13 @@ class _StorageUsageContent extends StatelessWidget {
               Expanded(
                 child: _Metric(
                   label: LocaleKeys.resource_storage_total.tr(),
-                  value: _formatBytes(usage.quotaBytes),
+                  value: formatByteSize(usage.quotaBytes),
                 ),
               ),
               Expanded(
                 child: _Metric(
                   label: LocaleKeys.resource_storage_remaining.tr(),
-                  value: _formatBytes(usage.remainingBytes),
+                  value: formatByteSize(usage.remainingBytes),
                 ),
               ),
             ],
@@ -135,17 +138,17 @@ class _StorageUsageContent extends StatelessWidget {
           _LimitRow(
             icon: Icons.picture_as_pdf_outlined,
             label: LocaleKeys.resource_storage_pdf_file.tr(),
-            value: _formatBytes(usage.pdfFileMaxBytes),
+            value: formatByteSize(usage.pdfFileMaxBytes),
           ),
           _LimitRow(
             icon: Icons.image_outlined,
             label: LocaleKeys.resource_storage_image.tr(),
-            value: _formatBytes(usage.imageMaxBytes),
+            value: formatByteSize(usage.imageMaxBytes),
           ),
           _LimitRow(
             icon: Icons.video_file_outlined,
             label: LocaleKeys.resource_storage_video.tr(),
-            value: _formatBytes(usage.videoMaxBytes),
+            value: formatByteSize(usage.videoMaxBytes),
           ),
         ],
       ),
@@ -199,22 +202,3 @@ class _LimitRow extends StatelessWidget {
     ),
   );
 }
-
-String _formatBytes(int bytes) {
-  const kib = 1024;
-  const mib = 1024 * kib;
-  const gib = 1024 * mib;
-  if (bytes >= gib) {
-    return LocaleKeys.storage_gigabytes.tr(args: [_compactNumber(bytes / gib)]);
-  }
-  if (bytes >= mib) {
-    return LocaleKeys.storage_megabytes.tr(args: [_compactNumber(bytes / mib)]);
-  }
-  if (bytes >= kib) {
-    return LocaleKeys.storage_kilobytes.tr(args: [_compactNumber(bytes / kib)]);
-  }
-  return LocaleKeys.storage_bytes.tr(args: [bytes.toString()]);
-}
-
-String _compactNumber(double value) =>
-    value.toStringAsFixed(value % 1 == 0 ? 0 : 1);

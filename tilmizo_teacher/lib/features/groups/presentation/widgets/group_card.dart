@@ -49,7 +49,10 @@ class GroupCard extends StatelessWidget {
                       child: Text(group.name, style: textTheme.titleLarge),
                     ),
                     const SizedBox(width: TelmizoSpacing.sm),
-                    GroupStatusPill(isActive: group.isActive),
+                    GroupStatusPill(
+                      isActive: group.isActive,
+                      isSuspended: group.isSuspended,
+                    ),
                   ],
                 ),
                 if (details.isNotEmpty) ...[

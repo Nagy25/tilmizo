@@ -13,13 +13,19 @@ import 'package:tilmizo_teacher/features/attendance/data/attendance_repository_i
 import 'package:tilmizo_teacher/features/classes/data/classes_repository_impl.dart';
 import 'package:tilmizo_teacher/features/group_access/data/group_access_repository_impl.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_repository_impl.dart';
+import 'package:tilmizo_teacher/features/payments/data/payments_repository_impl.dart';
+import 'package:tilmizo_teacher/features/profile/data/resource_storage_usage_repository_impl.dart';
 import 'package:tilmizo_teacher/features/profile/data/supabase_profile_repository.dart';
+import 'package:tilmizo_teacher/features/resources/data/resource_file_picker.dart';
+import 'package:tilmizo_teacher/features/resources/data/resources_repository_impl.dart';
 import 'package:tilmizo_teacher/features/teacher_students/data/teacher_students_repository_impl.dart';
 import 'package:tilmizo_teacher/generated/codegen_loader.g.dart';
 import 'package:tilmizo_teacher/router/app_router.dart';
 
 import 'fake_classes.dart';
 import 'fake_group_access.dart';
+import 'fake_payments.dart';
+import 'fake_resources.dart';
 import 'fake_teacher_students.dart';
 import 'fakes.dart';
 
@@ -35,8 +41,12 @@ class TestBackend {
     FakeTeacherStudentsRepository? teacherStudents,
     FakeClassesRepository? classes,
     FakeAttendanceRepository? attendance,
+    FakeResourcesRepository? resources,
+    FakePaymentsRepository? payments,
     this.now,
-  }) : classes = classes ?? FakeClassesRepository(),
+  }) : payments = payments ?? FakePaymentsRepository(),
+       resources = resources ?? FakeResourcesRepository(),
+       classes = classes ?? FakeClassesRepository(),
        attendance = attendance ?? FakeAttendanceRepository(),
        access = access ?? FakeGroupAccessRepository(),
        teacherStudents = teacherStudents ?? FakeTeacherStudentsRepository(),
@@ -51,6 +61,12 @@ class TestBackend {
   final FakeTeacherStudentsRepository teacherStudents;
   final FakeClassesRepository classes;
   final FakeAttendanceRepository attendance;
+  final FakeResourcesRepository resources;
+  final FakePaymentsRepository payments;
+  final usage = FakeUsageRepository();
+  final uploader = FakeContentUploader();
+  final filePicker = FakeFilePicker();
+  final files = FakeResourceFileService();
 
   /// A fixed clock for screens that compare against the current time.
   final DateTime? now;
@@ -63,6 +79,12 @@ class TestBackend {
     teacherStudentsRepositoryProvider.overrideWithValue(teacherStudents),
     classesRepositoryProvider.overrideWithValue(classes),
     attendanceRepositoryProvider.overrideWithValue(attendance),
+    resourcesRepositoryProvider.overrideWithValue(resources),
+    paymentsRepositoryProvider.overrideWithValue(payments),
+    resourceStorageUsageRepositoryProvider.overrideWithValue(usage),
+    resourceContentUploaderProvider.overrideWithValue(uploader),
+    resourceFilePickerProvider.overrideWithValue(filePicker),
+    resourceFileServiceProvider.overrideWithValue(files),
     if (now case final now?) clockProvider.overrideWithValue(() => now),
     appVersionProvider.overrideWithValue('1.0.0'),
   ];

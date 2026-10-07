@@ -34,6 +34,7 @@ TeacherGroup buildGroup({
   String? grade = 'الصف الثاني الثانوي',
   String? inviteCode = 'MATH-2025',
   bool isActive = true,
+  bool isSuspended = false,
   DateTime? createdAt,
 }) => TeacherGroup(
   id: id,
@@ -42,6 +43,7 @@ TeacherGroup buildGroup({
   grade: grade,
   inviteCode: inviteCode,
   isActive: isActive,
+  isSuspended: isSuspended,
   createdAt: createdAt ?? testTime,
   updatedAt: createdAt ?? testTime,
 );
@@ -228,6 +230,29 @@ final class FakeGroupsRepository implements GroupsRepository {
     );
     groups[index] = archived;
     return archived;
+  }
+
+  @override
+  Future<TeacherGroup> setSuspended(
+    String groupId, {
+    required bool suspended,
+  }) async {
+    await _beforeMutation(null, groupId);
+    final index = groups.indexWhere((group) => group.id == groupId);
+    if (index < 0) throw const AppFailure(AppFailureType.notFound);
+    final group = groups[index];
+    if (!group.isActive) throw const AppFailure(AppFailureType.rejected);
+    return groups[index] = TeacherGroup(
+      id: group.id,
+      name: group.name,
+      subject: group.subject,
+      grade: group.grade,
+      inviteCode: group.inviteCode,
+      isActive: true,
+      isSuspended: suspended,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt.add(const Duration(minutes: 1)),
+    );
   }
 
   Future<void> _beforeMutation(String? inviteCode, String? groupId) async {

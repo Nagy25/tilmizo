@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/widgets/app_header.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
+import '../../../payments/presentation/widgets/payment_amount_field.dart';
 import '../../domain/one_time_session_draft.dart';
 import '../controllers/classes_editor_controller.dart';
 import '../formatting/session_formatting.dart';
@@ -35,6 +36,7 @@ class _OneTimeSessionScreenState extends ConsumerState<OneTimeSessionScreen> {
   final _place = TextEditingController();
   final _link = TextEditingController();
   final _notes = TextEditingController();
+  final _payment = TextEditingController();
   var _type = SessionLocationType.physical;
   DateTime? _date;
   ClockTime? _start;
@@ -46,6 +48,7 @@ class _OneTimeSessionScreenState extends ConsumerState<OneTimeSessionScreen> {
     _place.dispose();
     _link.dispose();
     _notes.dispose();
+    _payment.dispose();
     super.dispose();
   }
 
@@ -71,6 +74,8 @@ class _OneTimeSessionScreenState extends ConsumerState<OneTimeSessionScreen> {
             endsAt: range.endsAt,
             location: location,
             notes: trimToNull(_notes.text),
+            // Empty means no amount: the original no-payment RPC is used.
+            paymentAmount: PaymentAmountField.read(_payment),
           ),
         );
     if (created == null || !mounted) return;
@@ -88,6 +93,7 @@ class _OneTimeSessionScreenState extends ConsumerState<OneTimeSessionScreen> {
     return Scaffold(
       appBar: AppHeader(title: LocaleKeys.one_time_title.tr(), showBack: true),
       body: ActiveGroupGate(
+        blockSuspended: true,
         groupId: widget.groupId,
         builder: (group) => Form(
           key: _formKey,
@@ -136,6 +142,22 @@ class _OneTimeSessionScreenState extends ConsumerState<OneTimeSessionScreen> {
               ),
               const SizedBox(height: TelmizoSpacing.lg),
               SessionNotesField(controller: _notes, enabled: enabled),
+              const SizedBox(height: TelmizoSpacing.lg),
+              PaymentAmountField(
+                controller: _payment,
+                enabled: enabled,
+                isRequired: false,
+                fieldKey: const Key('session-payment-amount'),
+                label: LocaleKeys.session_payment_amount_label.tr(),
+                hint: LocaleKeys.session_payment_amount_hint.tr(),
+              ),
+              const SizedBox(height: TelmizoSpacing.xs),
+              Text(
+                LocaleKeys.session_payment_note.tr(),
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: TelmizoColors.onSurfaceVariant,
+                ),
+              ),
               if (_invalidTime) ...[
                 const SizedBox(height: TelmizoSpacing.md),
                 TelmizoInlineMessage(

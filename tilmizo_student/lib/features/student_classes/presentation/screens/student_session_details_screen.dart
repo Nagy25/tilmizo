@@ -24,11 +24,11 @@ class StudentSessionDetailsScreen extends ConsumerWidget {
   final String sessionId;
 
   Future<void> _openMeeting(BuildContext context, String link) async {
-    final uri = Uri.tryParse(link);
-    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+    if (!isValidHttpsUrl(link)) {
       showTelmizoSnackBar(context, LocaleKeys.session_link_error.tr());
       return;
     }
+    final uri = Uri.parse(link);
     try {
       if (!await launchUrl(uri, mode: LaunchMode.externalApplication) &&
           context.mounted) {

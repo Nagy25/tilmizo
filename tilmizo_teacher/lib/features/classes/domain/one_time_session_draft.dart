@@ -1,3 +1,4 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
 
 import 'session_location.dart';
@@ -12,6 +13,7 @@ final class OneTimeSessionDraft {
     required this.endsAt,
     required this.location,
     this.notes,
+    this.paymentAmount,
   });
 
   final String groupId;
@@ -19,4 +21,7 @@ final class OneTimeSessionDraft {
   final DateTime endsAt;
   final SessionLocation location;
   final String? notes;
+
+  /// Optional expected EGP amount, created atomically with the session.
+  final EgpAmount? paymentAmount;
 }

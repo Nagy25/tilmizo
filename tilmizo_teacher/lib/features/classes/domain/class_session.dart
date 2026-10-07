@@ -11,6 +11,7 @@ final class SessionGroup {
     required this.name,
     required this.isActive,
     this.subject,
+    this.isSuspended = false,
   });
 
   final String id;
@@ -20,16 +21,20 @@ final class SessionGroup {
   /// Archived groups are inactive; their sessions are read-only history.
   final bool isActive;
 
+  /// A paused group keeps its sessions but accepts no new payment amounts.
+  final bool isSuspended;
+
   @override
   bool operator ==(Object other) =>
       other is SessionGroup &&
+      other.isSuspended == isSuspended &&
       other.id == id &&
       other.name == name &&
       other.subject == subject &&
       other.isActive == isActive;
 
   @override
-  int get hashCode => Object.hash(id, name, subject, isActive);
+  int get hashCode => Object.hash(id, name, subject, isActive, isSuspended);
 }
 
 /// One class meeting. Location and times are a snapshot: later weekly
@@ -89,6 +94,10 @@ final class ClassSession {
   /// calendar day.
   bool isBeforeAttendanceDay(DateTime now) =>
       CairoTime.calendarDaysBetween(now, startsAt) > 0;
+
+  /// Whether a payment amount may be attached to this existing session.
+  bool get canAttachPayment =>
+      _isWritable && !group.isSuspended && !isCancelled;
 
   bool canTakeAttendance(DateTime now) =>
       _isWritable && !isCancelled && !isBeforeAttendanceDay(now);

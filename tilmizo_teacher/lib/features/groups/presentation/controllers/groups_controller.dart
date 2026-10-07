@@ -54,6 +54,19 @@ class GroupsController extends AsyncNotifier<List<TeacherGroup>> {
     return archived;
   }
 
+  Future<TeacherGroup> setSuspended(
+    String groupId, {
+    required bool suspended,
+  }) async {
+    final updated = await ref
+        .read(groupsRepositoryProvider)
+        .setSuspended(groupId, suspended: suspended);
+    state = AsyncData([
+      for (final group in _current) group.id == groupId ? updated : group,
+    ]);
+    return updated;
+  }
+
   List<TeacherGroup> get _current => state.value ?? const [];
 
   void _removeLocally(String groupId) {

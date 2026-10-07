@@ -14,4 +14,7 @@ abstract interface class GroupsRepository {
   Future<TeacherGroup> updateGroup(String groupId, GroupDraft draft);
 
   Future<TeacherGroup> archiveGroup(String groupId);
+
+  /// Pauses or resumes an active group through `set_group_suspension`.
+  Future<TeacherGroup> setSuspended(String groupId, {required bool suspended});
 }

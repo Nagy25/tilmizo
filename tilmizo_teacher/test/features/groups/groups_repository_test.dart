@@ -65,6 +65,13 @@ final class _FakeGroupsDataSource implements GroupsRemoteDataSource {
   @override
   Future<Map<String, dynamic>> archiveGroup(String groupId) =>
       _run('archive:$groupId', {...groupRow(groupId), 'is_active': false});
+
+  @override
+  Future<Map<String, dynamic>> setSuspension(String groupId, bool suspended) =>
+      _run('suspend:$groupId:$suspended', {
+        ...groupRow(groupId),
+        'is_suspended': suspended,
+      });
 }
 
 void main() {
@@ -167,5 +174,21 @@ void main() {
     expect(repository.fetchOwnGroups(), failure(AppFailureType.network));
     dataSource.error = StateError('boom');
     expect(repository.fetchOwnGroups(), failure(AppFailureType.unknown));
+  });
+
+  test('suspends and resumes through set_group_suspension', () async {
+    final suspended = await repository.setSuspended('g1', suspended: true);
+    expect(dataSource.calls.last, 'suspend:g1:true');
+    expect(suspended.isSuspended, isTrue);
+    expect(suspended.acceptsNewEntries, isFalse);
+
+    final resumed = await repository.setSuspended('g1', suspended: false);
+    expect(resumed.isSuspended, isFalse);
+    expect(resumed.acceptsNewEntries, isTrue);
+  });
+
+  test('rows without is_suspended read as not suspended', () async {
+    dataSource.single = groupRow('g1');
+    expect((await repository.fetchOwnGroup('g1')).isSuspended, isFalse);
   });
 }

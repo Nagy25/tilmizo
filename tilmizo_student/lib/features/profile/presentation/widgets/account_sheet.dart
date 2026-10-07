@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core_package/core_package.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../core/errors/failure_messages.dart';
+import '../../../../router/app_router.dart';
 import '../controllers/current_profile_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
 
@@ -39,6 +41,12 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
     if (failure != null) {
       showTelmizoSnackBar(context, profileAvatarFailureMessage(failure));
     }
+  }
+
+  void _openPaymentHistory() {
+    final router = context.router;
+    Navigator.of(context).pop();
+    router.push(const PaymentHistoryRoute());
   }
 
   Future<void> _signOut() async {
@@ -141,6 +149,18 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
               ),
               const SizedBox(height: TelmizoSpacing.lg),
             ],
+            SizedBox(
+              height: TelmizoSpacing.buttonHeight,
+              child: TextButton.icon(
+                key: const Key('account-payment-history'),
+                onPressed: _signingOut ? null : _openPaymentHistory,
+                icon: const Icon(Icons.receipt_long_outlined),
+                label: Text(LocaleKeys.payments_history_button.tr()),
+                style: TextButton.styleFrom(
+                  alignment: AlignmentDirectional.centerStart,
+                ),
+              ),
+            ),
             SizedBox(
               height: TelmizoSpacing.buttonHeight,
               child: TextButton.icon(

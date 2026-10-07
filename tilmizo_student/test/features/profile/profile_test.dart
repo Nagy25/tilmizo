@@ -51,10 +51,6 @@ final class _FakeAvatarService implements ProfileAvatarService {
   int uploadCount = 0;
 
   @override
-  Future<Uint8List> download(String path, {String? cacheNonce}) =>
-      throw UnimplementedError();
-
-  @override
   Future<ProfileAvatarUpdate> uploadOwnAvatar(
     PickedProfileAvatar avatar,
   ) async {

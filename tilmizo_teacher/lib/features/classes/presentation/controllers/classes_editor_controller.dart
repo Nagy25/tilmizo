@@ -2,6 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../payments/presentation/controllers/payments_providers.dart';
 import '../../data/classes_repository_impl.dart';
 import '../../domain/class_session.dart';
 import '../../domain/classes_repository.dart';
@@ -145,6 +146,8 @@ class ClassesEditorController extends Notifier<ClassesEditorState> {
   ) => _run(action, () async {
     final session = await write();
     refreshSessionViews(ref, sessionId: sessionId ?? session.id);
+    // A new session may carry an amount, and cancelling voids unpaid ones.
+    ref.invalidate(groupPaymentsProvider(session.group.id));
     return session;
   });
 

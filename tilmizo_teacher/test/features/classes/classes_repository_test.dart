@@ -78,6 +78,14 @@ final class _FakeClassesDataSource implements ClassesRemoteDataSource {
   }
 
   @override
+  Future<Map<String, dynamic>> createManualSessionWithPayment(
+    Map<String, dynamic> params,
+  ) {
+    lastPayload = params;
+    return _run('createWithPayment', sessionRow('paid'));
+  }
+
+  @override
   Future<Map<String, dynamic>?> updateSession(
     String id,
     Map<String, dynamic> payload,
@@ -159,7 +167,31 @@ void main() {
       'p_meeting_link': null,
       'p_notes': 'إحضار الكراسة',
     });
-    expect(source.calls.last, 'session:$testUserId:new');
+    expect(source.calls, ['create', 'session:$testUserId:new']);
+  });
+
+  test('a session with an amount uses the atomic payment RPC', () async {
+    source.single = sessionRow('paid');
+    await repository.createOneTimeSession(
+      OneTimeSessionDraft(
+        groupId: 'group-1',
+        startsAt: DateTime.utc(2026, 10, 2, 14),
+        endsAt: DateTime.utc(2026, 10, 2, 15),
+        location: const SessionLocation.online('https://meet.example.com/x'),
+        paymentAmount: const EgpAmount.piasters(12050),
+      ),
+    );
+    expect(source.calls, ['createWithPayment', 'session:$testUserId:paid']);
+    expect(source.lastPayload, {
+      'p_group_id': 'group-1',
+      'p_starts_at': '2026-10-02T14:00:00.000Z',
+      'p_ends_at': '2026-10-02T15:00:00.000Z',
+      'p_location_type': 'online',
+      'p_physical_location': null,
+      'p_meeting_link': 'https://meet.example.com/x',
+      'p_notes': null,
+      'p_payment_amount': 120.5,
+    });
   });
 
   test('session writes send only teacher-writable columns', () async {

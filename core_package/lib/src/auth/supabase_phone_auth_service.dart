@@ -13,9 +13,12 @@ import 'phone_auth_service.dart';
 /// real verification, sessions, profile triggers, and RLS behavior. Session
 /// persistence and refresh are owned by `supabase_flutter`.
 final class SupabasePhoneAuthService implements PhoneAuthService {
-  SupabasePhoneAuthService(this._auth);
+  SupabasePhoneAuthService(this._auth, {this._onSignedOut});
 
   final GoTrueClient _auth;
+
+  /// Runs after a successful sign-out, for example to clear cached files.
+  final Future<void> Function()? _onSignedOut;
 
   @override
   bool get isAuthenticated => _auth.currentSession != null;
@@ -71,6 +74,11 @@ final class SupabasePhoneAuthService implements PhoneAuthService {
       await _auth.signOut();
     } catch (error) {
       throw mapAuthError(error, AuthOperation.signOut);
+    }
+    try {
+      await _onSignedOut?.call();
+    } catch (_) {
+      // The session is gone; a cleanup failure must not block logout.
     }
   }
 

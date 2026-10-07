@@ -1,3 +1,4 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -29,4 +30,11 @@ final class TeacherResourceStorageUsage {
   final DateTime? usageUpdatedAt;
 
   double get progress => (usagePercent / 100).clamp(0, 1).toDouble();
+
+  ResourceUploadLimits get uploadLimits => ResourceUploadLimits(
+    pdfFileMaxBytes: pdfFileMaxBytes,
+    imageMaxBytes: imageMaxBytes,
+    videoMaxBytes: videoMaxBytes,
+    remainingBytes: remainingBytes,
+  );
 }

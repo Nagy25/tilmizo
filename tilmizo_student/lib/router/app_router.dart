@@ -15,6 +15,7 @@ import '../features/group_access/presentation/screens/new_device_required_screen
 import '../features/group_access/presentation/screens/pending_request_screen.dart';
 import '../features/group_access/presentation/screens/replacement_pending_screen.dart';
 import '../features/group_access/presentation/screens/request_rejected_screen.dart';
+import '../features/payments/presentation/screens/payment_history_screen.dart';
 import '../features/profile/presentation/screens/complete_profile_screen.dart';
 import '../features/student_classes/presentation/screens/student_classes_screen.dart';
 import '../features/student_classes/presentation/screens/student_session_details_screen.dart';
@@ -60,6 +61,7 @@ class AppRouter extends RootStackRouter {
       student(RequestRejectedRoute.page, '/groups/:groupId/rejected'),
       student(ApprovedGroupRoute.page, '/groups/:groupId'),
       student(StudentClassesRoute.page, '/classes'),
+      student(PaymentHistoryRoute.page, '/payments'),
       student(StudentSessionDetailsRoute.page, '/classes/:sessionId'),
       student(NewDeviceRequiredRoute.page, '/groups/:groupId/new-device'),
       student(

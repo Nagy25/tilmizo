@@ -28,7 +28,10 @@ class GroupOverviewCard extends StatelessWidget {
             children: [
               Expanded(child: Text(group.name, style: textTheme.headlineSmall)),
               const SizedBox(width: TelmizoSpacing.sm),
-              GroupStatusPill(isActive: group.isActive),
+              GroupStatusPill(
+                isActive: group.isActive,
+                isSuspended: group.isSuspended,
+              ),
               if (onEdit != null)
                 IconButton(
                   key: const Key('group-edit'),

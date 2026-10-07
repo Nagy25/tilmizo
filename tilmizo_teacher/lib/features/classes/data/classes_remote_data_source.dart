@@ -21,6 +21,13 @@ abstract interface class ClassesRemoteDataSource {
   /// Calls `create_manual_class_session` and returns the new session row.
   Future<Map<String, dynamic>> createManualSession(Map<String, dynamic> params);
 
+  /// Calls `create_manual_session_with_payment`, which creates the session
+  /// and its payment amount in one transaction, and returns the new session
+  /// row.
+  Future<Map<String, dynamic>> createManualSessionWithPayment(
+    Map<String, dynamic> params,
+  );
+
   /// Updates only teacher-writable session columns.
   Future<Map<String, dynamic>?> updateSession(
     String id,
@@ -98,6 +105,17 @@ final class SupabaseClassesDataSource implements ClassesRemoteDataSource {
   Future<Map<String, dynamic>> createManualSession(
     Map<String, dynamic> params,
   ) async => await _client.rpc('create_manual_class_session', params: params);
+
+  @override
+  Future<Map<String, dynamic>> createManualSessionWithPayment(
+    Map<String, dynamic> params,
+  ) async {
+    final result = await _client.rpc(
+      'create_manual_session_with_payment',
+      params: params,
+    );
+    return Map<String, dynamic>.from((result as Map)['session'] as Map);
+  }
 
   @override
   Future<Map<String, dynamic>?> updateSession(

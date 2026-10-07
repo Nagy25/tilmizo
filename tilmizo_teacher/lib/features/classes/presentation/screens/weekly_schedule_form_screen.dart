@@ -98,6 +98,7 @@ class _WeeklyScheduleFormScreenState
         showBack: true,
       ),
       body: ActiveGroupGate(
+        blockSuspended: true,
         groupId: widget.groupId,
         builder: (group) => Form(
           key: _formKey,

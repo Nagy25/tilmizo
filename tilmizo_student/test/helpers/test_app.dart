@@ -7,10 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tilmizo_student/app/my_app.dart';
 import 'package:tilmizo_student/features/group_access/data/group_access_repository_impl.dart';
+import 'package:tilmizo_student/features/payments/data/student_payments_repository_impl.dart';
 import 'package:tilmizo_student/features/profile/data/profile_repository_impl.dart';
+import 'package:tilmizo_student/features/resources/data/student_resources_repository_impl.dart';
 import 'package:tilmizo_student/generated/codegen_loader.g.dart';
 import 'package:tilmizo_student/features/student_classes/data/student_classes_repository_impl.dart';
 
+import 'fake_payments.dart';
+import 'fake_resources.dart';
 import 'fakes.dart';
 
 const arabic = Locale('ar');
@@ -31,6 +35,9 @@ class TestBackend {
   final FakeProfileRepository profiles;
   final FakeGroupAccessRepository access;
   final FakeStudentClassesRepository classes;
+  final resources = FakeStudentResourcesRepository();
+  final payments = FakeStudentPaymentsRepository();
+  final files = FakeResourceFileService();
 
   /// Defaults to [testPreferences].
   final SharedPreferences? preferences;
@@ -40,6 +47,9 @@ class TestBackend {
     profileRepositoryProvider.overrideWithValue(profiles),
     groupAccessRepositoryProvider.overrideWithValue(access),
     studentClassesRepositoryProvider.overrideWithValue(classes),
+    studentResourcesRepositoryProvider.overrideWithValue(resources),
+    studentPaymentsRepositoryProvider.overrideWithValue(payments),
+    resourceFileServiceProvider.overrideWithValue(files),
     deviceInfoServiceProvider.overrideWithValue(FakeDeviceInfoService()),
     appVersionProvider.overrideWithValue('1.0.0'),
     sharedPreferencesProvider.overrideWithValue(preferences ?? testPreferences),
