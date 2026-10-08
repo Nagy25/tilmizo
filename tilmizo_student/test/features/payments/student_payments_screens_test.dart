@@ -91,10 +91,13 @@ void main() {
     await _openPaymentsTab(tester, backend);
     final before = backend.payments.fetches.length;
 
-    await tester.tap(find.byKey(const Key('group-tab-info')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('group-tab-payments')));
-    await tester.pumpAndSettle();
+    // Five tabs overflow the scrollable bar, so bring each into view.
+    for (final tab in ['info', 'payments']) {
+      await tester.ensureVisible(find.byKey(Key('group-tab-$tab')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('group-tab-$tab')));
+      await tester.pumpAndSettle();
+    }
     expect(backend.payments.fetches.length, greaterThan(before));
   });
 
@@ -116,7 +119,7 @@ void main() {
     expect(find.text('مذكرة الفصل الأول'), findsOneWidget);
   });
 
-  testWidgets('four tabs stay usable on a narrow RTL phone', (tester) async {
+  testWidgets('every tab stays usable on a narrow RTL phone', (tester) async {
     final backend = _backend()..payments.obligations.add(buildObligation());
     await _openPaymentsTab(tester, backend, viewSize: const Size(320, 900));
     expect(tester.takeException(), isNull);

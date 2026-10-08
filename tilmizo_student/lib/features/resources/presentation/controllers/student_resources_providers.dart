@@ -6,19 +6,6 @@ import '../../../group_access/domain/student_access_state.dart';
 import '../../../group_access/presentation/controllers/group_access_providers.dart';
 import '../../data/student_resources_repository_impl.dart';
 
-/// Waits for the access overview and fails unless this session is approved
-/// for [groupId]. Watching it drops every resource provider's data as soon
-/// as access is suspended, removed or replaced.
-Future<void> requireApprovedAccess(Ref ref, String groupId) async {
-  final approved = await ref.watch(
-    groupAccessOverviewProvider.selectAsync(
-      (entries) =>
-          findEntry(entries, groupId)?.state == StudentAccessState.approved,
-    ),
-  );
-  if (!approved) throw const AppFailure(AppFailureType.notFound);
-}
-
 @immutable
 final class StudentResourcesState {
   const StudentResourcesState({

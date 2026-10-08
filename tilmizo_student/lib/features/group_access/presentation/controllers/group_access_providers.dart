@@ -34,18 +34,25 @@ GroupAccessEntry? findEntry(List<GroupAccessEntry> entries, String groupId) {
   return null;
 }
 
+/// Waits for the access overview and fails unless this session is approved
+/// for [groupId]. Watching it drops a group-scoped provider's data as soon
+/// as access is suspended, removed or replaced.
+Future<void> requireApprovedAccess(Ref ref, String groupId) async {
+  final approved = await ref.watch(
+    groupAccessOverviewProvider.selectAsync(
+      (entries) =>
+          findEntry(entries, groupId)?.state == StudentAccessState.approved,
+    ),
+  );
+  if (!approved) throw const AppFailure(AppFailureType.notFound);
+}
+
 /// Group details, fetched only while the overview says this session is
 /// approved. When access is replaced, suspended, or removed, the overview
 /// changes and this provider drops its cached data immediately.
 final approvedGroupProvider = FutureProvider.autoDispose
     .family<ApprovedGroup, String>((ref, groupId) async {
-      final approved = await ref.watch(
-        groupAccessOverviewProvider.selectAsync(
-          (entries) =>
-              findEntry(entries, groupId)?.state == StudentAccessState.approved,
-        ),
-      );
-      if (!approved) throw const AppFailure(AppFailureType.notFound);
+      await requireApprovedAccess(ref, groupId);
       return ref
           .watch(groupAccessRepositoryProvider)
           .fetchApprovedGroup(groupId);

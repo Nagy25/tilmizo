@@ -1,5 +1,6 @@
 library;
 
+export 'src/announcements/announcement.dart';
 export 'src/auth/auth_failure.dart';
 export 'src/auth/auth_providers.dart';
 export 'src/auth/auth_session_status.dart';
@@ -26,6 +27,7 @@ export 'src/errors/network_errors.dart';
 export 'src/errors/require_user_id.dart';
 export 'src/group_access/group_access_values.dart';
 export 'src/helpers/context_extensions.dart';
+export 'src/homework/homework.dart';
 export 'src/images/telmizo_cached_image.dart';
 export 'src/images/telmizo_image_cache.dart';
 export 'src/helpers/text_normalization.dart';
@@ -51,6 +53,7 @@ export 'src/services/storage/secure_store_service.dart';
 export 'src/services/storage/shared_preferences_store_service.dart';
 export 'src/services/storage/store_service.dart';
 export 'src/time/cairo_time.dart';
+export 'src/time/calendar_date.dart';
 export 'src/time/clock_time.dart';
 export 'src/widgets/egyptian_phone_field.dart';
 export 'src/widgets/otp_code_input.dart';

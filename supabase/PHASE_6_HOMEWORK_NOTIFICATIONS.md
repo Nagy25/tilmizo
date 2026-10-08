@@ -1,0 +1,65 @@
+# Phase 6 Supabase contract
+
+This phase is backend-only. The migration creates `homework`, `homework_resources`,
+`homework_link_submissions`, `announcements`, `announcement_reads`, and
+`user_notifications`. Authenticated clients can select permitted rows, but write
+through RPCs. The existing private `group-resources` bucket, upload flow, and
+teacher quota are unchanged.
+
+## Teacher RPCs
+
+- `create_homework(p_session_id, p_instructions, p_submission_type, p_due_date, p_resource_ids)`.
+  Upload Resource files first using Phase 4, then pass their IDs. At least
+  instructions or one uploaded Resource is required. Only uploaded Resources
+  from the group are accepted; a session-scoped Resource must match the session.
+- `delete_homework(p_homework_id)`. Deletes link submissions and attachment
+  associations, not the Resource files. There is no homework edit RPC.
+- `create_announcement(p_group_id, p_title, p_body)`,
+  `update_announcement(p_announcement_id, p_title, p_body)`, and
+  `delete_announcement(p_announcement_id)`.
+
+These writes require ownership of an active, unsuspended group. Teacher and
+approved students can list homework and announcements directly, including in
+archived groups. `homework_resources` provides the attachment IDs.
+
+## Student RPCs
+
+- `submit_homework_link(p_homework_id, p_url)` inserts or replaces the caller's
+  HTTPS link. It requires the currently approved group session and link-type
+  homework. The cutoff is the end of `due_date` in `Africa/Cairo`.
+- `mark_announcement_read(p_announcement_id)` records the caller's read time.
+  No row in `announcement_reads` means unread.
+
+No manual-submission state, status, grading, comments, or student file upload
+is stored.
+
+## Notification center and push
+
+Read `user_notifications` ordered by `created_at desc` and use
+`mark_notification_read(p_notification_id)` or `mark_all_notifications_read()`.
+The recipient owns their notification rows regardless of later group changes.
+Backend triggers generate immediate events; the `phase6-reminders` Cron job
+generates due/upcoming/overdue events every 15 minutes with deduplication.
+
+Mobile clients later call `register_notification_device(p_token, p_platform,
+p_app)` after obtaining an FCM token, and `revoke_notification_device(p_token)`
+on sign-out or token retirement. The registration captures the authenticated
+Supabase session ID, so replaced student sessions cannot receive new group
+pushes. Supported platforms are `android` and `ios`; apps are `student` and
+`teacher`.
+
+The deployed `notification-dispatch` Edge Function runs every five minutes
+using the existing Vault-backed internal dispatch secret. It leaves jobs queued
+until `FCM_SERVICE_ACCOUNT_JSON` is set as a Supabase Edge Function secret. This
+must contain the Firebase **server service account** JSON for FCM HTTP v1; the
+Android `google-services.json` and iOS `GoogleService-Info.plist` are separate
+client files and must never be used as this server credential. No mobile push
+can be delivered until the apps register FCM tokens in a later phase.
+
+## Verification
+
+Run `tests/phase_6_homework_notifications_smoke.sql` and
+`tests/phase_6_lifecycle_queue_smoke.sql` in the Supabase SQL editor. Both use
+live fixture IDs and roll back all mutations. The Edge Function can be checked
+with an unauthenticated POST (401) and the Vault-backed Cron invocation (200;
+`configured: false` until FCM credentials are supplied).

@@ -9,6 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../group_access/presentation/controllers/group_access_providers.dart';
+import '../../../homework/presentation/controllers/student_homework_providers.dart';
+import '../../../homework/presentation/widgets/session_homework_section.dart';
 import '../../domain/student_class.dart';
 import '../controllers/student_classes_providers.dart';
 import '../formatting/student_class_formatting.dart';
@@ -50,7 +52,9 @@ class StudentSessionDetailsScreen extends ConsumerWidget {
         child: RefreshIndicator(
           onRefresh: () async {
             await ref.read(groupAccessOverviewProvider.notifier).refresh();
-            ref.invalidate(studentClassSessionProvider(sessionId));
+            ref
+              ..invalidate(studentClassSessionProvider(sessionId))
+              ..invalidate(studentSessionHomeworkProvider);
           },
           child: session.when(
             loading: () => const TelmizoLoadingView(),
@@ -168,6 +172,8 @@ class _SessionDetailsBody extends StatelessWidget {
             lines: [note],
           ),
         ],
+        const SizedBox(height: TelmizoSpacing.md),
+        SessionHomeworkSection(groupId: session.groupId, sessionId: session.id),
         if (session.status == SessionStatus.cancelled) ...[
           const SizedBox(height: TelmizoSpacing.md),
           TelmizoCard(

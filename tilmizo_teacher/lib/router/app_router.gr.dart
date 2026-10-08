@@ -11,18 +11,76 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AddHomeworkScreen]
+class AddHomeworkRoute extends PageRouteInfo<AddHomeworkRouteArgs> {
+  AddHomeworkRoute({
+    Key? key,
+    required String sessionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AddHomeworkRoute.name,
+         args: AddHomeworkRouteArgs(key: key, sessionId: sessionId),
+         rawPathParams: {'sessionId': sessionId},
+         initialChildren: children,
+       );
+
+  static const String name = 'AddHomeworkRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<AddHomeworkRouteArgs>(
+        orElse: () =>
+            AddHomeworkRouteArgs(sessionId: pathParams.getString('sessionId')),
+      );
+      return AddHomeworkScreen(key: args.key, sessionId: args.sessionId);
+    },
+  );
+}
+
+class AddHomeworkRouteArgs {
+  const AddHomeworkRouteArgs({this.key, required this.sessionId});
+
+  final Key? key;
+
+  final String sessionId;
+
+  @override
+  String toString() {
+    return 'AddHomeworkRouteArgs{key: $key, sessionId: $sessionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AddHomeworkRouteArgs) return false;
+    return key == other.key && sessionId == other.sessionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ sessionId.hashCode;
+}
+
+/// generated route for
 /// [AddResourceScreen]
 class AddResourceRoute extends PageRouteInfo<AddResourceRouteArgs> {
   AddResourceRoute({
     Key? key,
     required String groupId,
     String? type,
+    String? sessionId,
     List<PageRouteInfo>? children,
   }) : super(
          AddResourceRoute.name,
-         args: AddResourceRouteArgs(key: key, groupId: groupId, type: type),
+         args: AddResourceRouteArgs(
+           key: key,
+           groupId: groupId,
+           type: type,
+           sessionId: sessionId,
+         ),
          rawPathParams: {'groupId': groupId},
-         rawQueryParams: {'type': type},
+         rawQueryParams: {'type': type, 'sessionId': sessionId},
          initialChildren: children,
        );
 
@@ -37,19 +95,26 @@ class AddResourceRoute extends PageRouteInfo<AddResourceRouteArgs> {
         orElse: () => AddResourceRouteArgs(
           groupId: pathParams.getString('groupId'),
           type: queryParams.optString('type'),
+          sessionId: queryParams.optString('sessionId'),
         ),
       );
       return AddResourceScreen(
         key: args.key,
         groupId: args.groupId,
         type: args.type,
+        sessionId: args.sessionId,
       );
     },
   );
 }
 
 class AddResourceRouteArgs {
-  const AddResourceRouteArgs({this.key, required this.groupId, this.type});
+  const AddResourceRouteArgs({
+    this.key,
+    required this.groupId,
+    this.type,
+    this.sessionId,
+  });
 
   final Key? key;
 
@@ -57,20 +122,26 @@ class AddResourceRouteArgs {
 
   final String? type;
 
+  final String? sessionId;
+
   @override
   String toString() {
-    return 'AddResourceRouteArgs{key: $key, groupId: $groupId, type: $type}';
+    return 'AddResourceRouteArgs{key: $key, groupId: $groupId, type: $type, sessionId: $sessionId}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AddResourceRouteArgs) return false;
-    return key == other.key && groupId == other.groupId && type == other.type;
+    return key == other.key &&
+        groupId == other.groupId &&
+        type == other.type &&
+        sessionId == other.sessionId;
   }
 
   @override
-  int get hashCode => key.hashCode ^ groupId.hashCode ^ type.hashCode;
+  int get hashCode =>
+      key.hashCode ^ groupId.hashCode ^ type.hashCode ^ sessionId.hashCode;
 }
 
 /// generated route for
@@ -87,6 +158,58 @@ class AllStudentsRoute extends PageRouteInfo<void> {
       return const AllStudentsScreen();
     },
   );
+}
+
+/// generated route for
+/// [AnnouncementsScreen]
+class AnnouncementsRoute extends PageRouteInfo<AnnouncementsRouteArgs> {
+  AnnouncementsRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         AnnouncementsRoute.name,
+         args: AnnouncementsRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'AnnouncementsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<AnnouncementsRouteArgs>(
+        orElse: () =>
+            AnnouncementsRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return AnnouncementsScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class AnnouncementsRouteArgs {
+  const AnnouncementsRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'AnnouncementsRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AnnouncementsRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
 }
 
 /// generated route for
@@ -501,6 +624,58 @@ class GroupDetailsRouteArgs {
 }
 
 /// generated route for
+/// [GroupHomeworkScreen]
+class GroupHomeworkRoute extends PageRouteInfo<GroupHomeworkRouteArgs> {
+  GroupHomeworkRoute({
+    Key? key,
+    required String groupId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         GroupHomeworkRoute.name,
+         args: GroupHomeworkRouteArgs(key: key, groupId: groupId),
+         rawPathParams: {'groupId': groupId},
+         initialChildren: children,
+       );
+
+  static const String name = 'GroupHomeworkRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<GroupHomeworkRouteArgs>(
+        orElse: () =>
+            GroupHomeworkRouteArgs(groupId: pathParams.getString('groupId')),
+      );
+      return GroupHomeworkScreen(key: args.key, groupId: args.groupId);
+    },
+  );
+}
+
+class GroupHomeworkRouteArgs {
+  const GroupHomeworkRouteArgs({this.key, required this.groupId});
+
+  final Key? key;
+
+  final String groupId;
+
+  @override
+  String toString() {
+    return 'GroupHomeworkRouteArgs{key: $key, groupId: $groupId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! GroupHomeworkRouteArgs) return false;
+    return key == other.key && groupId == other.groupId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
 /// [GroupPaymentsScreen]
 class GroupPaymentsRoute extends PageRouteInfo<GroupPaymentsRouteArgs> {
   GroupPaymentsRoute({
@@ -670,6 +845,59 @@ class GroupsDashboardRoute extends PageRouteInfo<void> {
       return const GroupsDashboardScreen();
     },
   );
+}
+
+/// generated route for
+/// [HomeworkDetailsScreen]
+class HomeworkDetailsRoute extends PageRouteInfo<HomeworkDetailsRouteArgs> {
+  HomeworkDetailsRoute({
+    Key? key,
+    required String homeworkId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         HomeworkDetailsRoute.name,
+         args: HomeworkDetailsRouteArgs(key: key, homeworkId: homeworkId),
+         rawPathParams: {'homeworkId': homeworkId},
+         initialChildren: children,
+       );
+
+  static const String name = 'HomeworkDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<HomeworkDetailsRouteArgs>(
+        orElse: () => HomeworkDetailsRouteArgs(
+          homeworkId: pathParams.getString('homeworkId'),
+        ),
+      );
+      return HomeworkDetailsScreen(key: args.key, homeworkId: args.homeworkId);
+    },
+  );
+}
+
+class HomeworkDetailsRouteArgs {
+  const HomeworkDetailsRouteArgs({this.key, required this.homeworkId});
+
+  final Key? key;
+
+  final String homeworkId;
+
+  @override
+  String toString() {
+    return 'HomeworkDetailsRouteArgs{key: $key, homeworkId: $homeworkId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! HomeworkDetailsRouteArgs) return false;
+    return key == other.key && homeworkId == other.homeworkId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ homeworkId.hashCode;
 }
 
 /// generated route for

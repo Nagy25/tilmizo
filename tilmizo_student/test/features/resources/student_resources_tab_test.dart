@@ -25,6 +25,9 @@ Future<void> _openResourcesTab(WidgetTester tester, TestBackend backend) async {
   await tester.tap(find.text('دخول المجموعة').last);
   await tester.pumpAndSettle();
   expect(find.byType(ApprovedGroupScreen), findsOneWidget);
+  // Six tabs overflow the scrollable bar.
+  await tester.ensureVisible(find.byKey(const Key('group-tab-resources')));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('group-tab-resources')));
   await tester.pumpAndSettle();
 }

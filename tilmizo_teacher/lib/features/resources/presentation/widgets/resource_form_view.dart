@@ -23,6 +23,7 @@ class ResourceFormView extends ConsumerStatefulWidget {
     required this.groupId,
     required this.initialType,
     this.resource,
+    this.initialSessionId,
   });
 
   final String groupId;
@@ -30,6 +31,9 @@ class ResourceFormView extends ConsumerStatefulWidget {
 
   /// The resource being edited; uploaded content cannot be replaced.
   final GroupResource? resource;
+
+  /// The session preselected for a new resource.
+  final String? initialSessionId;
 
   @override
   ConsumerState<ResourceFormView> createState() => _ResourceFormViewState();
@@ -43,7 +47,8 @@ class _ResourceFormViewState extends ConsumerState<ResourceFormView> {
   );
   late final _url = TextEditingController(text: widget.resource?.externalUrl);
   late ResourceType _type = widget.initialType;
-  late String? _sessionId = widget.resource?.sessionId;
+  late String? _sessionId =
+      widget.resource?.sessionId ?? widget.initialSessionId;
   PickedResourceFile? _file;
   String? _fileError;
 

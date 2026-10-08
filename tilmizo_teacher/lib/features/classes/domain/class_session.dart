@@ -99,6 +99,10 @@ final class ClassSession {
   bool get canAttachPayment =>
       _isWritable && !group.isSuspended && !isCancelled;
 
+  /// Whether homework may be created for this session: the same rule as
+  /// `create_homework` (active, unsuspended group; uncancelled session).
+  bool get canAddHomework => _isWritable && !group.isSuspended && !isCancelled;
+
   bool canTakeAttendance(DateTime now) =>
       _isWritable && !isCancelled && !isBeforeAttendanceDay(now);
 

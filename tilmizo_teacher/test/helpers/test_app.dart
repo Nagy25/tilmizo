@@ -9,10 +9,12 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tilmizo_teacher/app/my_app.dart';
+import 'package:tilmizo_teacher/features/announcements/data/announcements_repository_impl.dart';
 import 'package:tilmizo_teacher/features/attendance/data/attendance_repository_impl.dart';
 import 'package:tilmizo_teacher/features/classes/data/classes_repository_impl.dart';
 import 'package:tilmizo_teacher/features/group_access/data/group_access_repository_impl.dart';
 import 'package:tilmizo_teacher/features/groups/data/groups_repository_impl.dart';
+import 'package:tilmizo_teacher/features/homework/data/homework_repository_impl.dart';
 import 'package:tilmizo_teacher/features/payments/data/payments_repository_impl.dart';
 import 'package:tilmizo_teacher/features/profile/data/resource_storage_usage_repository_impl.dart';
 import 'package:tilmizo_teacher/features/profile/data/supabase_profile_repository.dart';
@@ -22,8 +24,10 @@ import 'package:tilmizo_teacher/features/teacher_students/data/teacher_students_
 import 'package:tilmizo_teacher/generated/codegen_loader.g.dart';
 import 'package:tilmizo_teacher/router/app_router.dart';
 
+import 'fake_announcements.dart';
 import 'fake_classes.dart';
 import 'fake_group_access.dart';
+import 'fake_homework.dart';
 import 'fake_payments.dart';
 import 'fake_resources.dart';
 import 'fake_teacher_students.dart';
@@ -43,8 +47,12 @@ class TestBackend {
     FakeAttendanceRepository? attendance,
     FakeResourcesRepository? resources,
     FakePaymentsRepository? payments,
+    FakeAnnouncementsRepository? announcements,
+    FakeHomeworkRepository? homework,
     this.now,
-  }) : payments = payments ?? FakePaymentsRepository(),
+  }) : homework = homework ?? FakeHomeworkRepository(),
+       announcements = announcements ?? FakeAnnouncementsRepository(),
+       payments = payments ?? FakePaymentsRepository(),
        resources = resources ?? FakeResourcesRepository(),
        classes = classes ?? FakeClassesRepository(),
        attendance = attendance ?? FakeAttendanceRepository(),
@@ -63,6 +71,8 @@ class TestBackend {
   final FakeAttendanceRepository attendance;
   final FakeResourcesRepository resources;
   final FakePaymentsRepository payments;
+  final FakeAnnouncementsRepository announcements;
+  final FakeHomeworkRepository homework;
   final usage = FakeUsageRepository();
   final uploader = FakeContentUploader();
   final filePicker = FakeFilePicker();
@@ -81,6 +91,8 @@ class TestBackend {
     attendanceRepositoryProvider.overrideWithValue(attendance),
     resourcesRepositoryProvider.overrideWithValue(resources),
     paymentsRepositoryProvider.overrideWithValue(payments),
+    announcementsRepositoryProvider.overrideWithValue(announcements),
+    homeworkRepositoryProvider.overrideWithValue(homework),
     resourceStorageUsageRepositoryProvider.overrideWithValue(usage),
     resourceContentUploaderProvider.overrideWithValue(uploader),
     resourceFilePickerProvider.overrideWithValue(filePicker),
@@ -173,6 +185,9 @@ Future<void> tapVisible(WidgetTester tester, Finder finder) async {
     200,
     scrollable: find.byType(Scrollable).first,
   );
+  // Built is not the same as on screen: bring it fully into view.
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
   await tester.tap(finder);
   await tester.pumpAndSettle();
 }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/announcements/presentation/screens/announcements_screen.dart';
 import '../features/attendance/presentation/screens/attendance_screen.dart';
 import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/phone_login_screen.dart';
@@ -18,6 +19,9 @@ import '../features/group_access/presentation/screens/join_request_details_scree
 import '../features/group_access/presentation/screens/join_requests_screen.dart';
 import '../features/group_access/presentation/screens/student_access_details_screen.dart';
 import '../features/groups/presentation/screens/create_group_screen.dart';
+import '../features/homework/presentation/screens/add_homework_screen.dart';
+import '../features/homework/presentation/screens/group_homework_screen.dart';
+import '../features/homework/presentation/screens/homework_details_screen.dart';
 import '../features/groups/presentation/screens/edit_group_screen.dart';
 import '../features/groups/presentation/screens/empty_groups_screen.dart';
 import '../features/groups/presentation/screens/group_details_screen.dart';
@@ -134,6 +138,21 @@ class AppRouter extends RootStackRouter {
         guards: teacherGuards,
       ),
       AutoRoute(
+        page: GroupHomeworkRoute.page,
+        path: '/groups/:groupId/homework',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: HomeworkDetailsRoute.page,
+        path: '/homework/:homeworkId',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: AnnouncementsRoute.page,
+        path: '/groups/:groupId/announcements',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
         page: GroupPaymentsRoute.page,
         path: '/groups/:groupId/payments',
         guards: teacherGuards,
@@ -181,6 +200,11 @@ class AppRouter extends RootStackRouter {
       AutoRoute(
         page: SessionEditRoute.page,
         path: '/sessions/:sessionId/edit',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: AddHomeworkRoute.page,
+        path: '/sessions/:sessionId/homework/new',
         guards: teacherGuards,
       ),
       AutoRoute(

@@ -8,20 +8,23 @@ import '../resource_labels.dart';
 
 /// The add-resource type picker. Each choice maps to one exact backend type;
 /// upload limits come from `get_my_resource_storage_usage()` when loaded.
+/// [types] narrows the choices, for example to uploads for homework.
 Future<ResourceType?> showResourceTypeSheet(
   BuildContext context, {
   ResourceUploadLimits? limits,
+  Iterable<ResourceType> types = ResourceType.values,
 }) => showModalBottomSheet<ResourceType>(
   context: context,
   isScrollControlled: true,
   showDragHandle: true,
-  builder: (context) => _ResourceTypeSheet(limits: limits),
+  builder: (context) => _ResourceTypeSheet(limits: limits, types: types),
 );
 
 class _ResourceTypeSheet extends StatelessWidget {
-  const _ResourceTypeSheet({required this.limits});
+  const _ResourceTypeSheet({required this.limits, required this.types});
 
   final ResourceUploadLimits? limits;
+  final Iterable<ResourceType> types;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class _ResourceTypeSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: TelmizoSpacing.md),
-            for (final type in ResourceType.values)
+            for (final type in types)
               ListTile(
                 key: Key('resource-type-${type.backendValue}'),
                 contentPadding: EdgeInsets.zero,

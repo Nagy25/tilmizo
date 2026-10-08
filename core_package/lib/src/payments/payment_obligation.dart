@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../time/calendar_date.dart';
 import 'egp_amount.dart';
 import 'payment_values.dart';
 
@@ -114,18 +115,6 @@ final class PaymentObligation {
     if (value is String && value.isNotEmpty) return value;
     throw FormatException('Missing payment column', key);
   }
-}
-
-/// Parses a Postgres `date` (`YYYY-MM-DD`) as a UTC midnight calendar value
-/// without any time-zone conversion.
-DateTime parseCalendarDate(String value) {
-  final match = RegExp(r'^(\d{4})-(\d{2})-(\d{2})$').firstMatch(value);
-  if (match == null) throw FormatException('Invalid date', value);
-  return DateTime.utc(
-    int.parse(match.group(1)!),
-    int.parse(match.group(2)!),
-    int.parse(match.group(3)!),
-  );
 }
 
 /// Unpaid and paid totals of current records. Void rows are excluded, and

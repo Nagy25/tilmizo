@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../core/widgets/app_header.dart';
 import '../../../../generated/locale_keys.g.dart';
+import '../../../homework/presentation/controllers/homework_providers.dart';
+import '../../../homework/presentation/widgets/session_homework_card.dart';
 import '../../../payments/presentation/controllers/payments_providers.dart';
 import '../../../payments/presentation/widgets/session_payment_card.dart';
 import '../../domain/class_session.dart';
@@ -70,7 +72,9 @@ class SessionDetailsScreen extends ConsumerWidget {
         },
         data: (session) => RefreshIndicator(
           onRefresh: () {
-            ref.invalidate(sessionPaymentAmountProvider(sessionId));
+            ref
+              ..invalidate(sessionPaymentAmountProvider(sessionId))
+              ..invalidate(sessionHomeworkProvider(sessionId));
             return ref.refresh(sessionDetailsProvider(sessionId).future);
           },
           child: ListView(
@@ -103,6 +107,8 @@ class SessionDetailsScreen extends ConsumerWidget {
               ),
               const SizedBox(height: TelmizoSpacing.md),
               SessionPaymentCard(session: session),
+              const SizedBox(height: TelmizoSpacing.md),
+              SessionHomeworkCard(session: session),
               if (session.canEdit) ...[
                 const SizedBox(height: TelmizoSpacing.md),
                 TelmizoInlineMessage(

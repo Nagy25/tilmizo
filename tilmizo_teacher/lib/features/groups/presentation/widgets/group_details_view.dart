@@ -2,7 +2,9 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/teacher_group.dart';
+import '../../../announcements/presentation/widgets/announcements_home_tile.dart';
 import '../../../classes/presentation/widgets/classes_home_tile.dart';
+import '../../../homework/presentation/widgets/homework_home_tile.dart';
 import '../../../group_access/presentation/widgets/group_access_entry_card.dart';
 import '../../../payments/presentation/widgets/payments_home_tile.dart';
 import '../../../resources/presentation/widgets/resources_home_tile.dart';
@@ -27,9 +29,13 @@ class GroupDetailsView extends StatelessWidget {
       const SizedBox(height: TelmizoSpacing.lg),
       ClassesHomeTile(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),
+      HomeworkHomeTile(groupId: group.id),
+      const SizedBox(height: TelmizoSpacing.lg),
       ResourcesHomeTile(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),
       PaymentsHomeTile(groupId: group.id),
+      const SizedBox(height: TelmizoSpacing.lg),
+      AnnouncementsHomeTile(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),
       GroupAccessEntryCard(groupId: group.id),
       const SizedBox(height: TelmizoSpacing.lg),

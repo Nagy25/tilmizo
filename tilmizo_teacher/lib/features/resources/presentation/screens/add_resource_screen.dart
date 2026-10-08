@@ -16,12 +16,17 @@ class AddResourceScreen extends StatelessWidget {
     super.key,
     @PathParam('groupId') required this.groupId,
     @QueryParam('type') this.type,
+    @QueryParam('sessionId') this.sessionId,
   });
 
   final String groupId;
 
   /// A backend type value; unknown values fall back to PDF.
   final String? type;
+
+  /// Preselects the session when the upload starts from one, such as
+  /// attaching a new file to homework.
+  final String? sessionId;
 
   ResourceType get _initialType {
     try {
@@ -40,8 +45,11 @@ class AddResourceScreen extends StatelessWidget {
     body: ActiveGroupGate(
       groupId: groupId,
       archivedMessage: LocaleKeys.resources_archived_notice.tr(),
-      builder: (group) =>
-          ResourceFormView(groupId: group.id, initialType: _initialType),
+      builder: (group) => ResourceFormView(
+        groupId: group.id,
+        initialType: _initialType,
+        initialSessionId: sessionId,
+      ),
     ),
   );
 }

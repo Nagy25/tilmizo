@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const app_name = 'app_name';
   static const brand_name = 'brand_name';
   static const brand_student = 'brand_student';
@@ -42,7 +42,8 @@ abstract class  LocaleKeys {
   static const otp_field_semantics = 'otp_field_semantics';
   static const otp_digits_entered = 'otp_digits_entered';
   static const otp_resend_in = 'otp_resend_in';
-  static const otp_resend_countdown_semantics = 'otp_resend_countdown_semantics';
+  static const otp_resend_countdown_semantics =
+      'otp_resend_countdown_semantics';
   static const otp_resend = 'otp_resend';
   static const otp_resent = 'otp_resent';
   static const otp_verify = 'otp_verify';
@@ -291,5 +292,71 @@ abstract class  LocaleKeys {
   static const payments_history_intro = 'payments_history_intro';
   static const payments_history_button = 'payments_history_button';
   static const payments_previous_group = 'payments_previous_group';
-
+  static const group_tab_announcements = 'group_tab_announcements';
+  static const announcements_intro = 'announcements_intro';
+  static const announcements_new = 'announcements_new';
+  static const announcements_unread_semantics =
+      'announcements_unread_semantics';
+  static const announcements_published_on = 'announcements_published_on';
+  static const announcements_edited = 'announcements_edited';
+  static const announcements_empty_title = 'announcements_empty_title';
+  static const announcements_empty_body = 'announcements_empty_body';
+  static const announcements_load_error_title =
+      'announcements_load_error_title';
+  static const announcements_access_lost_title =
+      'announcements_access_lost_title';
+  static const announcements_access_lost_body =
+      'announcements_access_lost_body';
+  static const announcements_load_more = 'announcements_load_more';
+  static const announcements_load_more_error = 'announcements_load_more_error';
+  static const announcements_mark_read_failed =
+      'announcements_mark_read_failed';
+  static const announcements_close = 'announcements_close';
+  static const group_tab_homework = 'group_tab_homework';
+  static const homework_intro = 'homework_intro';
+  static const homework_heading = 'homework_heading';
+  static const homework_heading_fallback = 'homework_heading_fallback';
+  static const homework_files_only = 'homework_files_only';
+  static const homework_files_count = 'homework_files_count';
+  static const homework_due_on = 'homework_due_on';
+  static const homework_no_due = 'homework_no_due';
+  static const homework_type_manual = 'homework_type_manual';
+  static const homework_type_link = 'homework_type_link';
+  static const homework_type_none = 'homework_type_none';
+  static const homework_empty_title = 'homework_empty_title';
+  static const homework_empty_body = 'homework_empty_body';
+  static const homework_load_error_title = 'homework_load_error_title';
+  static const homework_access_lost_title = 'homework_access_lost_title';
+  static const homework_access_lost_body = 'homework_access_lost_body';
+  static const homework_details_title = 'homework_details_title';
+  static const homework_instructions_title = 'homework_instructions_title';
+  static const homework_no_instructions = 'homework_no_instructions';
+  static const homework_attachments_title = 'homework_attachments_title';
+  static const homework_attachments_load_error =
+      'homework_attachments_load_error';
+  static const homework_attachment_unavailable =
+      'homework_attachment_unavailable';
+  static const homework_session_cancelled = 'homework_session_cancelled';
+  static const homework_manual_title = 'homework_manual_title';
+  static const homework_manual_body = 'homework_manual_body';
+  static const homework_none_body = 'homework_none_body';
+  static const homework_link_title = 'homework_link_title';
+  static const homework_link_intro = 'homework_link_intro';
+  static const homework_link_intro_no_due = 'homework_link_intro_no_due';
+  static const homework_link_label = 'homework_link_label';
+  static const homework_link_invalid = 'homework_link_invalid';
+  static const homework_link_saved_label = 'homework_link_saved_label';
+  static const homework_link_none_saved = 'homework_link_none_saved';
+  static const homework_link_save = 'homework_link_save';
+  static const homework_link_edit = 'homework_link_edit';
+  static const homework_link_saved = 'homework_link_saved';
+  static const homework_link_updated_at = 'homework_link_updated_at';
+  static const homework_link_closed = 'homework_link_closed';
+  static const homework_link_closed_server = 'homework_link_closed_server';
+  static const homework_link_open = 'homework_link_open';
+  static const homework_link_open_failed = 'homework_link_open_failed';
+  static const homework_link_load_error = 'homework_link_load_error';
+  static const session_homework_title = 'session_homework_title';
+  static const session_homework_none = 'session_homework_none';
+  static const session_homework_load_error = 'session_homework_load_error';
 }

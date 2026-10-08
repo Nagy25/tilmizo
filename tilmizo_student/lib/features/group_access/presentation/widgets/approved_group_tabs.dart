@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../announcements/presentation/controllers/student_announcements_providers.dart';
+import '../../../announcements/presentation/widgets/student_announcements_tab.dart';
+import '../../../homework/presentation/controllers/student_homework_providers.dart';
+import '../../../homework/presentation/widgets/student_homework_tab.dart';
 import '../../../payments/presentation/controllers/student_payments_providers.dart';
 import '../../../payments/presentation/widgets/student_payments_view.dart';
 import '../../../resources/presentation/controllers/student_resources_providers.dart';
@@ -17,7 +21,8 @@ import '../controllers/group_access_providers.dart';
 import 'approved_group_info_tab.dart';
 import 'approved_group_tab_list.dart';
 
-/// Info, Classes, Resources and Payments tabs for an approved group.
+/// Info, Classes, Homework, Announcements, Resources and Payments tabs for
+/// an approved group.
 class ApprovedGroupTabs extends ConsumerStatefulWidget {
   const ApprovedGroupTabs({
     super.key,
@@ -34,10 +39,12 @@ class ApprovedGroupTabs extends ConsumerStatefulWidget {
 
 class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
     with SingleTickerProviderStateMixin {
-  static const _resourcesTab = 2;
-  static const _paymentsTab = 3;
+  static const _homeworkTab = 2;
+  static const _announcementsTab = 3;
+  static const _resourcesTab = 4;
+  static const _paymentsTab = 5;
 
-  late final _tabs = TabController(length: 4, vsync: this)
+  late final _tabs = TabController(length: 6, vsync: this)
     ..addListener(_onTabChanged);
 
   late final AppLifecycleListener _lifecycle;
@@ -47,10 +54,12 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
   @override
   void initState() {
     super.initState();
-    // Resources and payments are not in Supabase Realtime; reload them on
-    // app resume.
+    // Homework, announcements, resources and payments are not in Supabase
+    // Realtime; reload them on app resume.
     _lifecycle = AppLifecycleListener(
       onResume: () {
+        refreshStudentHomework(ref, _groupId);
+        refreshStudentAnnouncements(ref, _groupId);
         refreshStudentResources(ref, _groupId);
         refreshStudentPayments(ref, _groupId);
       },
@@ -66,6 +75,10 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
 
   void _onTabChanged() {
     if (_tabs.indexIsChanging) return;
+    if (_tabs.index == _homeworkTab) refreshStudentHomework(ref, _groupId);
+    if (_tabs.index == _announcementsTab) {
+      refreshStudentAnnouncements(ref, _groupId);
+    }
     if (_tabs.index == _resourcesTab) refreshStudentResources(ref, _groupId);
     if (_tabs.index == _paymentsTab) refreshStudentPayments(ref, _groupId);
   }
@@ -74,6 +87,8 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
     await ref.read(groupAccessOverviewProvider.notifier).refresh();
     ref.invalidate(approvedGroupProvider(_groupId));
     refreshStudentClasses(ref);
+    refreshStudentHomework(ref, _groupId);
+    refreshStudentAnnouncements(ref, _groupId);
     refreshStudentResources(ref, _groupId);
     refreshStudentPayments(ref, _groupId);
   }
@@ -84,7 +99,7 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
     final total = counts?.values.fold(0, (sum, count) => sum + count);
     return Column(
       children: [
-        // Scrollable so four Arabic labels and the badge fit narrow RTL
+        // Scrollable so six Arabic labels and the badge fit narrow RTL
         // phones without truncation.
         TabBar(
           controller: _tabs,
@@ -98,6 +113,14 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
             Tab(
               key: const Key('group-tab-classes'),
               text: LocaleKeys.group_tab_classes.tr(),
+            ),
+            Tab(
+              key: const Key('group-tab-homework'),
+              text: LocaleKeys.group_tab_homework.tr(),
+            ),
+            Tab(
+              key: const Key('group-tab-announcements'),
+              text: LocaleKeys.group_tab_announcements.tr(),
             ),
             Tab(
               key: const Key('group-tab-resources'),
@@ -138,6 +161,8 @@ class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
                   StudentGroupSessionsSection(groupId: _groupId),
                 ],
               ),
+              StudentHomeworkTab(groupId: _groupId, onRefresh: _refresh),
+              StudentAnnouncementsTab(groupId: _groupId, onRefresh: _refresh),
               StudentResourcesTab(groupId: _groupId, onRefresh: _refresh),
               StudentPaymentsView(groupId: _groupId, onRefresh: _refresh),
             ],

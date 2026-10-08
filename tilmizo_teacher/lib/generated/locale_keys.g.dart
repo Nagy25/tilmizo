@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const app_name = 'app_name';
   static const brand_name = 'brand_name';
   static const brand_teacher = 'brand_teacher';
@@ -48,7 +48,8 @@ abstract class  LocaleKeys {
   static const otp_field_semantics = 'otp_field_semantics';
   static const otp_digits_entered = 'otp_digits_entered';
   static const otp_resend_in = 'otp_resend_in';
-  static const otp_resend_countdown_semantics = 'otp_resend_countdown_semantics';
+  static const otp_resend_countdown_semantics =
+      'otp_resend_countdown_semantics';
   static const otp_resend = 'otp_resend';
   static const otp_resent = 'otp_resent';
   static const otp_verify = 'otp_verify';
@@ -191,7 +192,8 @@ abstract class  LocaleKeys {
   static const access_load_error_title = 'access_load_error_title';
   static const access_unnamed_student = 'access_unnamed_student';
   static const access_request_type_join = 'access_request_type_join';
-  static const access_request_type_replacement = 'access_request_type_replacement';
+  static const access_request_type_replacement =
+      'access_request_type_replacement';
   static const access_platform_android = 'access_platform_android';
   static const access_platform_ios = 'access_platform_ios';
   static const access_requested_on = 'access_requested_on';
@@ -201,24 +203,29 @@ abstract class  LocaleKeys {
   static const access_approved_device = 'access_approved_device';
   static const access_no_approved_device = 'access_no_approved_device';
   static const access_device_privacy = 'access_device_privacy';
-  static const access_replacement_warning_title = 'access_replacement_warning_title';
-  static const access_replacement_warning_body = 'access_replacement_warning_body';
+  static const access_replacement_warning_title =
+      'access_replacement_warning_title';
+  static const access_replacement_warning_body =
+      'access_replacement_warning_body';
   static const access_join_info_body = 'access_join_info_body';
   static const access_approve = 'access_approve';
   static const access_reject = 'access_reject';
   static const access_approve_confirm_title = 'access_approve_confirm_title';
   static const access_approve_confirm_body = 'access_approve_confirm_body';
-  static const access_approve_replacement_confirm_body = 'access_approve_replacement_confirm_body';
+  static const access_approve_replacement_confirm_body =
+      'access_approve_replacement_confirm_body';
   static const access_reject_confirm_title = 'access_reject_confirm_title';
   static const access_reject_confirm_body = 'access_reject_confirm_body';
   static const access_approved_success = 'access_approved_success';
   static const access_replacement_success = 'access_replacement_success';
   static const access_rejected_success = 'access_rejected_success';
   static const access_request_details_title = 'access_request_details_title';
-  static const access_request_unavailable_title = 'access_request_unavailable_title';
+  static const access_request_unavailable_title =
+      'access_request_unavailable_title';
   static const access_request_unavailable = 'access_request_unavailable';
   static const access_student_details_title = 'access_student_details_title';
-  static const access_member_unavailable_title = 'access_member_unavailable_title';
+  static const access_member_unavailable_title =
+      'access_member_unavailable_title';
   static const access_member_unavailable = 'access_member_unavailable';
   static const access_status_active = 'access_status_active';
   static const access_status_suspended = 'access_status_suspended';
@@ -390,7 +397,8 @@ abstract class  LocaleKeys {
   static const attendance_status_excused = 'attendance_status_excused';
   static const attendance_filter_all = 'attendance_filter_all';
   static const attendance_search_hint = 'attendance_search_hint';
-  static const attendance_mark_unmarked_present = 'attendance_mark_unmarked_present';
+  static const attendance_mark_unmarked_present =
+      'attendance_mark_unmarked_present';
   static const attendance_unmarked_note = 'attendance_unmarked_note';
   static const attendance_former_title = 'attendance_former_title';
   static const attendance_former_body = 'attendance_former_body';
@@ -402,7 +410,8 @@ abstract class  LocaleKeys {
   static const attendance_saved_partial = 'attendance_saved_partial';
   static const attendance_row_failed = 'attendance_row_failed';
   static const attendance_unsaved_badge = 'attendance_unsaved_badge';
-  static const attendance_read_only_cancelled = 'attendance_read_only_cancelled';
+  static const attendance_read_only_cancelled =
+      'attendance_read_only_cancelled';
   static const attendance_read_only_archived = 'attendance_read_only_archived';
   static const attendance_read_only_future = 'attendance_read_only_future';
   static const attendance_discard_title = 'attendance_discard_title';
@@ -430,7 +439,8 @@ abstract class  LocaleKeys {
   static const resources_tile_subtitle = 'resources_tile_subtitle';
   static const resources_count = 'resources_count';
   static const resources_header_subtitle = 'resources_header_subtitle';
-  static const resources_storage_teacher_wide = 'resources_storage_teacher_wide';
+  static const resources_storage_teacher_wide =
+      'resources_storage_teacher_wide';
   static const resources_search_hint = 'resources_search_hint';
   static const resources_search_clear = 'resources_search_clear';
   static const resources_filter_all = 'resources_filter_all';
@@ -469,8 +479,10 @@ abstract class  LocaleKeys {
   static const resource_type_pdf_body = 'resource_type_pdf_body';
   static const resource_type_image_body = 'resource_type_image_body';
   static const resource_type_file_body = 'resource_type_file_body';
-  static const resource_type_uploaded_video_body = 'resource_type_uploaded_video_body';
-  static const resource_type_external_link_body = 'resource_type_external_link_body';
+  static const resource_type_uploaded_video_body =
+      'resource_type_uploaded_video_body';
+  static const resource_type_external_link_body =
+      'resource_type_external_link_body';
   static const resource_type_video_link_body = 'resource_type_video_link_body';
   static const resource_type_sheet_title = 'resource_type_sheet_title';
   static const resource_type_sheet_subtitle = 'resource_type_sheet_subtitle';
@@ -491,8 +503,10 @@ abstract class  LocaleKeys {
   static const resource_form_rules_video = 'resource_form_rules_video';
   static const resource_form_file_required = 'resource_form_file_required';
   static const resource_form_file_empty = 'resource_form_file_empty';
-  static const resource_form_file_name_too_long = 'resource_form_file_name_too_long';
-  static const resource_form_file_wrong_format = 'resource_form_file_wrong_format';
+  static const resource_form_file_name_too_long =
+      'resource_form_file_name_too_long';
+  static const resource_form_file_wrong_format =
+      'resource_form_file_wrong_format';
   static const resource_form_file_too_large = 'resource_form_file_too_large';
   static const resource_form_file_quota = 'resource_form_file_quota';
   static const resource_form_file_immutable = 'resource_form_file_immutable';
@@ -503,12 +517,16 @@ abstract class  LocaleKeys {
   static const resource_form_title_hint = 'resource_form_title_hint';
   static const resource_form_title_required = 'resource_form_title_required';
   static const resource_form_title_too_long = 'resource_form_title_too_long';
-  static const resource_form_description_label = 'resource_form_description_label';
-  static const resource_form_description_hint = 'resource_form_description_hint';
+  static const resource_form_description_label =
+      'resource_form_description_label';
+  static const resource_form_description_hint =
+      'resource_form_description_hint';
   static const resource_form_session_label = 'resource_form_session_label';
   static const resource_form_session_none = 'resource_form_session_none';
-  static const resource_form_session_pick_title = 'resource_form_session_pick_title';
-  static const resource_form_session_load_error = 'resource_form_session_load_error';
+  static const resource_form_session_pick_title =
+      'resource_form_session_pick_title';
+  static const resource_form_session_load_error =
+      'resource_form_session_load_error';
   static const resource_form_publish = 'resource_form_publish';
   static const resource_form_save = 'resource_form_save';
   static const resource_form_created = 'resource_form_created';
@@ -519,14 +537,19 @@ abstract class  LocaleKeys {
   static const resource_upload_cancel = 'resource_upload_cancel';
   static const resource_upload_cancelled = 'resource_upload_cancelled';
   static const resource_upload_retry = 'resource_upload_retry';
-  static const resource_error_group_not_active = 'resource_error_group_not_active';
+  static const resource_error_group_not_active =
+      'resource_error_group_not_active';
   static const resource_error_quota = 'resource_error_quota';
   static const resource_error_too_large = 'resource_error_too_large';
-  static const resource_error_invalid_content = 'resource_error_invalid_content';
+  static const resource_error_invalid_content =
+      'resource_error_invalid_content';
   static const resource_error_invalid_link = 'resource_error_invalid_link';
-  static const resource_error_invalid_session = 'resource_error_invalid_session';
-  static const resource_error_invalid_details = 'resource_error_invalid_details';
-  static const resource_error_reservation_expired = 'resource_error_reservation_expired';
+  static const resource_error_invalid_session =
+      'resource_error_invalid_session';
+  static const resource_error_invalid_details =
+      'resource_error_invalid_details';
+  static const resource_error_reservation_expired =
+      'resource_error_reservation_expired';
   static const resource_error_upload_failed = 'resource_error_upload_failed';
   static const resource_error_not_found = 'resource_error_not_found';
   static const resource_open_denied = 'resource_open_denied';
@@ -541,11 +564,13 @@ abstract class  LocaleKeys {
   static const resource_delete_confirm = 'resource_delete_confirm';
   static const resource_delete_irreversible = 'resource_delete_irreversible';
   static const resource_delete_success = 'resource_delete_success';
-  static const resource_delete_cleanup_pending = 'resource_delete_cleanup_pending';
+  static const resource_delete_cleanup_pending =
+      'resource_delete_cleanup_pending';
   static const group_status_suspended = 'group_status_suspended';
   static const group_suspension_title = 'group_suspension_title';
   static const group_suspension_active_body = 'group_suspension_active_body';
-  static const group_suspension_suspended_body = 'group_suspension_suspended_body';
+  static const group_suspension_suspended_body =
+      'group_suspension_suspended_body';
   static const group_suspend_action = 'group_suspend_action';
   static const group_resume_action = 'group_resume_action';
   static const group_suspend_confirm_title = 'group_suspend_confirm_title';
@@ -621,9 +646,11 @@ abstract class  LocaleKeys {
   static const payments_monthly_setup = 'payments_monthly_setup';
   static const payments_monthly_edit = 'payments_monthly_edit';
   static const payments_monthly_stop = 'payments_monthly_stop';
-  static const payments_monthly_existing_note = 'payments_monthly_existing_note';
+  static const payments_monthly_existing_note =
+      'payments_monthly_existing_note';
   static const payments_monthly_form_title = 'payments_monthly_form_title';
-  static const payments_monthly_form_edit_title = 'payments_monthly_form_edit_title';
+  static const payments_monthly_form_edit_title =
+      'payments_monthly_form_edit_title';
   static const payments_monthly_form_intro = 'payments_monthly_form_intro';
   static const payments_monthly_edit_notice = 'payments_monthly_edit_notice';
   static const payments_monthly_current = 'payments_monthly_current';
@@ -646,7 +673,8 @@ abstract class  LocaleKeys {
   static const payments_one_time_name_label = 'payments_one_time_name_label';
   static const payments_one_time_name_hint = 'payments_one_time_name_hint';
   static const payments_one_time_name_empty = 'payments_one_time_name_empty';
-  static const payments_one_time_name_too_long = 'payments_one_time_name_too_long';
+  static const payments_one_time_name_too_long =
+      'payments_one_time_name_too_long';
   static const payments_description_label = 'payments_description_label';
   static const payments_description_hint = 'payments_description_hint';
   static const payments_description_too_long = 'payments_description_too_long';
@@ -666,18 +694,146 @@ abstract class  LocaleKeys {
   static const session_payment_note = 'session_payment_note';
   static const payments_due_day_label = 'payments_due_day_label';
   static const payments_due_choice_first = 'payments_due_choice_first';
-  static const payments_due_choice_first_body = 'payments_due_choice_first_body';
+  static const payments_due_choice_first_body =
+      'payments_due_choice_first_body';
   static const payments_due_choice_specific = 'payments_due_choice_specific';
-  static const payments_due_choice_specific_body = 'payments_due_choice_specific_body';
+  static const payments_due_choice_specific_body =
+      'payments_due_choice_specific_body';
   static const payments_due_choice_join = 'payments_due_choice_join';
   static const payments_due_choice_join_body = 'payments_due_choice_join_body';
   static const payments_due_day_value = 'payments_due_day_value';
   static const payments_due_day_sheet_title = 'payments_due_day_sheet_title';
-  static const payments_due_day_sheet_subtitle = 'payments_due_day_sheet_subtitle';
+  static const payments_due_day_sheet_subtitle =
+      'payments_due_day_sheet_subtitle';
   static const payments_due_day_clamp_note = 'payments_due_day_clamp_note';
   static const payments_due_day_join_note = 'payments_due_day_join_note';
   static const payments_monthly_card_due = 'payments_monthly_card_due';
-  static const payments_monthly_card_join_due = 'payments_monthly_card_join_due';
+  static const payments_monthly_card_join_due =
+      'payments_monthly_card_join_due';
   static const payments_monthly_current_due = 'payments_monthly_current_due';
-
+  static const announcements_title = 'announcements_title';
+  static const announcements_tile_subtitle = 'announcements_tile_subtitle';
+  static const announcements_tile_latest = 'announcements_tile_latest';
+  static const announcements_add = 'announcements_add';
+  static const announcements_empty_title = 'announcements_empty_title';
+  static const announcements_empty_body = 'announcements_empty_body';
+  static const announcements_empty_read_only_body =
+      'announcements_empty_read_only_body';
+  static const announcements_load_error_title =
+      'announcements_load_error_title';
+  static const announcements_load_more = 'announcements_load_more';
+  static const announcements_load_more_error = 'announcements_load_more_error';
+  static const announcements_archived_notice = 'announcements_archived_notice';
+  static const announcements_suspended_notice =
+      'announcements_suspended_notice';
+  static const announcements_published_on = 'announcements_published_on';
+  static const announcements_edited = 'announcements_edited';
+  static const announcement_form_add_title = 'announcement_form_add_title';
+  static const announcement_form_add_subtitle =
+      'announcement_form_add_subtitle';
+  static const announcement_form_title_label = 'announcement_form_title_label';
+  static const announcement_form_title_hint = 'announcement_form_title_hint';
+  static const announcement_form_title_required =
+      'announcement_form_title_required';
+  static const announcement_form_title_too_long =
+      'announcement_form_title_too_long';
+  static const announcement_form_body_label = 'announcement_form_body_label';
+  static const announcement_form_body_hint = 'announcement_form_body_hint';
+  static const announcement_form_body_required =
+      'announcement_form_body_required';
+  static const announcement_form_body_too_long =
+      'announcement_form_body_too_long';
+  static const announcement_form_publish = 'announcement_form_publish';
+  static const announcement_created = 'announcement_created';
+  static const announcement_delete_title = 'announcement_delete_title';
+  static const announcement_delete_body = 'announcement_delete_body';
+  static const announcement_delete_confirm = 'announcement_delete_confirm';
+  static const announcement_deleted = 'announcement_deleted';
+  static const announcement_error_group_not_writable =
+      'announcement_error_group_not_writable';
+  static const announcement_error_not_found = 'announcement_error_not_found';
+  static const announcement_error_invalid = 'announcement_error_invalid';
+  static const homework_title = 'homework_title';
+  static const homework_tile_subtitle = 'homework_tile_subtitle';
+  static const homework_count = 'homework_count';
+  static const homework_from_session_hint = 'homework_from_session_hint';
+  static const homework_empty_title = 'homework_empty_title';
+  static const homework_empty_body = 'homework_empty_body';
+  static const homework_empty_read_only_body = 'homework_empty_read_only_body';
+  static const homework_open_classes = 'homework_open_classes';
+  static const homework_load_error_title = 'homework_load_error_title';
+  static const homework_archived_notice = 'homework_archived_notice';
+  static const homework_suspended_notice = 'homework_suspended_notice';
+  static const homework_heading = 'homework_heading';
+  static const homework_heading_fallback = 'homework_heading_fallback';
+  static const homework_files_only = 'homework_files_only';
+  static const homework_files_count = 'homework_files_count';
+  static const homework_due_on = 'homework_due_on';
+  static const homework_no_due = 'homework_no_due';
+  static const homework_type_manual = 'homework_type_manual';
+  static const homework_type_link = 'homework_type_link';
+  static const homework_type_none = 'homework_type_none';
+  static const homework_type_manual_body = 'homework_type_manual_body';
+  static const homework_type_link_body = 'homework_type_link_body';
+  static const homework_type_none_body = 'homework_type_none_body';
+  static const homework_session_cancelled = 'homework_session_cancelled';
+  static const session_homework_title = 'session_homework_title';
+  static const session_homework_none = 'session_homework_none';
+  static const session_homework_load_error = 'session_homework_load_error';
+  static const homework_add = 'homework_add';
+  static const homework_form_intro = 'homework_form_intro';
+  static const homework_form_instructions_label =
+      'homework_form_instructions_label';
+  static const homework_form_instructions_hint =
+      'homework_form_instructions_hint';
+  static const homework_form_instructions_too_long =
+      'homework_form_instructions_too_long';
+  static const homework_form_content_required =
+      'homework_form_content_required';
+  static const homework_form_files_label = 'homework_form_files_label';
+  static const homework_form_files_note = 'homework_form_files_note';
+  static const homework_form_files_empty = 'homework_form_files_empty';
+  static const homework_form_files_load_error =
+      'homework_form_files_load_error';
+  static const homework_form_upload = 'homework_form_upload';
+  static const homework_form_type_label = 'homework_form_type_label';
+  static const homework_form_due_label = 'homework_form_due_label';
+  static const homework_form_due_pick = 'homework_form_due_pick';
+  static const homework_form_due_clear = 'homework_form_due_clear';
+  static const homework_form_due_note = 'homework_form_due_note';
+  static const homework_form_publish = 'homework_form_publish';
+  static const homework_created = 'homework_created';
+  static const homework_details_title = 'homework_details_title';
+  static const homework_instructions_title = 'homework_instructions_title';
+  static const homework_no_instructions = 'homework_no_instructions';
+  static const homework_attachments_title = 'homework_attachments_title';
+  static const homework_attachments_none = 'homework_attachments_none';
+  static const homework_attachments_load_error =
+      'homework_attachments_load_error';
+  static const homework_attachment_unavailable =
+      'homework_attachment_unavailable';
+  static const homework_submissions_title = 'homework_submissions_title';
+  static const homework_submissions_none = 'homework_submissions_none';
+  static const homework_submissions_load_error =
+      'homework_submissions_load_error';
+  static const homework_submission_unknown_student =
+      'homework_submission_unknown_student';
+  static const homework_submission_updated = 'homework_submission_updated';
+  static const homework_submission_copy = 'homework_submission_copy';
+  static const homework_link_copied = 'homework_link_copied';
+  static const homework_open_session = 'homework_open_session';
+  static const homework_created_on = 'homework_created_on';
+  static const homework_delete = 'homework_delete';
+  static const homework_delete_title = 'homework_delete_title';
+  static const homework_delete_body = 'homework_delete_body';
+  static const homework_delete_confirm = 'homework_delete_confirm';
+  static const homework_deleted = 'homework_deleted';
+  static const homework_not_found_title = 'homework_not_found_title';
+  static const homework_error_group_not_writable =
+      'homework_error_group_not_writable';
+  static const homework_error_session_cancelled =
+      'homework_error_session_cancelled';
+  static const homework_error_invalid_content =
+      'homework_error_invalid_content';
+  static const homework_error_not_found = 'homework_error_not_found';
 }

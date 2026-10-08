@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "541147574009",
+    "project_id": "telmizo-25dff",
+    "storage_bucket": "telmizo-25dff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541147574009:android:2519b5c26fb745d34e3c28",
+        "android_client_info": {
+          "package_name": "com.telmzo.student.smartech.app.tilmizo_student"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqR06rl8rDaXGV8E2TBAB1hJSOl-GU0qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541147574009:android:6e2f46d45a9775b74e3c28",
+        "android_client_info": {
+          "package_name": "com.telmzo.teacher.smartech.app.tilmizo_teacher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqR06rl8rDaXGV8E2TBAB1hJSOl-GU0qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

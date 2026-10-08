@@ -619,6 +619,78 @@ class StudentClassesRouteArgs {
 }
 
 /// generated route for
+/// [StudentHomeworkDetailsScreen]
+class StudentHomeworkDetailsRoute
+    extends PageRouteInfo<StudentHomeworkDetailsRouteArgs> {
+  StudentHomeworkDetailsRoute({
+    Key? key,
+    required String groupId,
+    required String homeworkId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         StudentHomeworkDetailsRoute.name,
+         args: StudentHomeworkDetailsRouteArgs(
+           key: key,
+           groupId: groupId,
+           homeworkId: homeworkId,
+         ),
+         rawPathParams: {'groupId': groupId, 'homeworkId': homeworkId},
+         initialChildren: children,
+       );
+
+  static const String name = 'StudentHomeworkDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<StudentHomeworkDetailsRouteArgs>(
+        orElse: () => StudentHomeworkDetailsRouteArgs(
+          groupId: pathParams.getString('groupId'),
+          homeworkId: pathParams.getString('homeworkId'),
+        ),
+      );
+      return StudentHomeworkDetailsScreen(
+        key: args.key,
+        groupId: args.groupId,
+        homeworkId: args.homeworkId,
+      );
+    },
+  );
+}
+
+class StudentHomeworkDetailsRouteArgs {
+  const StudentHomeworkDetailsRouteArgs({
+    this.key,
+    required this.groupId,
+    required this.homeworkId,
+  });
+
+  final Key? key;
+
+  final String groupId;
+
+  final String homeworkId;
+
+  @override
+  String toString() {
+    return 'StudentHomeworkDetailsRouteArgs{key: $key, groupId: $groupId, homeworkId: $homeworkId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! StudentHomeworkDetailsRouteArgs) return false;
+    return key == other.key &&
+        groupId == other.groupId &&
+        homeworkId == other.homeworkId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ groupId.hashCode ^ homeworkId.hashCode;
+}
+
+/// generated route for
 /// [StudentSessionDetailsScreen]
 class StudentSessionDetailsRoute
     extends PageRouteInfo<StudentSessionDetailsRouteArgs> {

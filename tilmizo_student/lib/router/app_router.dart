@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/auth/presentation/screens/otp_verification_screen.dart';
 import '../features/auth/presentation/screens/phone_login_screen.dart';
 import '../features/auth/presentation/screens/splash_screen.dart';
+import '../features/homework/presentation/screens/student_homework_details_screen.dart';
 import '../features/group_access/presentation/screens/access_removed_screen.dart';
 import '../features/group_access/presentation/screens/access_replaced_screen.dart';
 import '../features/group_access/presentation/screens/approved_group_screen.dart';
@@ -63,6 +64,10 @@ class AppRouter extends RootStackRouter {
       student(StudentClassesRoute.page, '/classes'),
       student(PaymentHistoryRoute.page, '/payments'),
       student(StudentSessionDetailsRoute.page, '/classes/:sessionId'),
+      student(
+        StudentHomeworkDetailsRoute.page,
+        '/groups/:groupId/homework/:homeworkId',
+      ),
       student(NewDeviceRequiredRoute.page, '/groups/:groupId/new-device'),
       student(
         ReplacementPendingRoute.page,

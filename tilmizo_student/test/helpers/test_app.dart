@@ -6,13 +6,17 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tilmizo_student/app/my_app.dart';
+import 'package:tilmizo_student/features/announcements/data/student_announcements_repository_impl.dart';
 import 'package:tilmizo_student/features/group_access/data/group_access_repository_impl.dart';
+import 'package:tilmizo_student/features/homework/data/student_homework_repository_impl.dart';
 import 'package:tilmizo_student/features/payments/data/student_payments_repository_impl.dart';
 import 'package:tilmizo_student/features/profile/data/profile_repository_impl.dart';
 import 'package:tilmizo_student/features/resources/data/student_resources_repository_impl.dart';
 import 'package:tilmizo_student/generated/codegen_loader.g.dart';
 import 'package:tilmizo_student/features/student_classes/data/student_classes_repository_impl.dart';
 
+import 'fake_announcements.dart';
+import 'fake_homework.dart';
 import 'fake_payments.dart';
 import 'fake_resources.dart';
 import 'fakes.dart';
@@ -26,6 +30,7 @@ class TestBackend {
     FakeProfileRepository? profiles,
     FakeGroupAccessRepository? access,
     FakeStudentClassesRepository? classes,
+    this.now,
   }) : auth = auth ?? FakePhoneAuthService(),
        profiles = profiles ?? FakeProfileRepository(),
        access = access ?? FakeGroupAccessRepository(),
@@ -36,8 +41,13 @@ class TestBackend {
   final FakeGroupAccessRepository access;
   final FakeStudentClassesRepository classes;
   final resources = FakeStudentResourcesRepository();
+  final announcements = FakeStudentAnnouncementsRepository();
+  final homework = FakeStudentHomeworkRepository();
   final payments = FakeStudentPaymentsRepository();
   final files = FakeResourceFileService();
+
+  /// A fixed clock for Cairo cutoff checks; the real clock when null.
+  DateTime? now;
 
   /// Defaults to [testPreferences].
   final SharedPreferences? preferences;
@@ -48,6 +58,9 @@ class TestBackend {
     groupAccessRepositoryProvider.overrideWithValue(access),
     studentClassesRepositoryProvider.overrideWithValue(classes),
     studentResourcesRepositoryProvider.overrideWithValue(resources),
+    studentAnnouncementsRepositoryProvider.overrideWithValue(announcements),
+    studentHomeworkRepositoryProvider.overrideWithValue(homework),
+    if (now != null) clockProvider.overrideWithValue(() => now!),
     studentPaymentsRepositoryProvider.overrideWithValue(payments),
     resourceFileServiceProvider.overrideWithValue(files),
     deviceInfoServiceProvider.overrideWithValue(FakeDeviceInfoService()),
