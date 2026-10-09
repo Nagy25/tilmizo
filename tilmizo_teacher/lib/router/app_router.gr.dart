@@ -1077,6 +1077,22 @@ class MonthlyPlanRouteArgs {
 }
 
 /// generated route for
+/// [NotificationsScreen]
+class NotificationsRoute extends PageRouteInfo<void> {
+  const NotificationsRoute({List<PageRouteInfo>? children})
+    : super(NotificationsRoute.name, initialChildren: children);
+
+  static const String name = 'NotificationsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NotificationsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [OneTimePaymentScreen]
 class OneTimePaymentRoute extends PageRouteInfo<OneTimePaymentRouteArgs> {
   OneTimePaymentRoute({

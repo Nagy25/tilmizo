@@ -2,6 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../groups/presentation/controllers/groups_controller.dart';
+import '../../../notifications/presentation/controllers/home_permission_notice_controller.dart';
 import '../../../profile/presentation/controllers/current_profile_controller.dart';
 import '../../domain/app_destination.dart';
 
@@ -33,12 +34,15 @@ Future<AppDestination> resolveAppDestination(Ref ref) async {
   }
 }
 
-/// Clears cached teacher data so the next read fetches it for the current
-/// session.
+/// Clears cached teacher data, including notification state, so the next
+/// read fetches it for the current session.
 final resetSessionDataProvider = Provider<void Function()>(
   (ref) => () {
     ref.invalidate(currentProfileProvider);
     ref.invalidate(groupsControllerProvider);
+    ref.invalidate(unreadNotificationCountProvider);
+    ref.invalidate(pendingNotificationOpenProvider);
+    ref.invalidate(homePermissionNoticeDismissedProvider);
   },
 );
 

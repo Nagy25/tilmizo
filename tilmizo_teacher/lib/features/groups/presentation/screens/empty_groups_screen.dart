@@ -8,6 +8,7 @@ import '../../../../router/app_router.dart';
 import '../widgets/groups_app_header.dart';
 import '../widgets/teacher_greeting.dart';
 import '../../../teacher_students/presentation/widgets/all_students_home_tile.dart';
+import '../../../notifications/presentation/widgets/home_notification_permission_notice.dart';
 
 /// Dedicated first-run screen when the teacher owns no groups.
 @RoutePage()
@@ -23,6 +24,7 @@ class EmptyGroupsScreen extends StatelessWidget {
         children: [
           const TeacherGreeting(),
           const SizedBox(height: TelmizoSpacing.lg),
+          const HomeNotificationPermissionNotice(),
           TelmizoCard(
             padding: const EdgeInsets.all(TelmizoSpacing.xl),
             child: Column(

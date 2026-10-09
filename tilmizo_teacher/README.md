@@ -49,3 +49,50 @@ message is sent. Before production, remove the test mapping in Supabase, turn
 off `ENABLE_TEST_PHONE_AUTH`, remove both test values, and configure an
 approved OTP delivery provider. The retained WhatsApp Edge Function is a
 future delivery option and is not used by the test number.
+
+## Push notifications
+
+Firebase Cloud Messaging uses the native `android/app/google-services.json`
+(applied by the `com.google.gms.google-services` Gradle plugin). Never add the
+Firebase service-account JSON to the app; it belongs only in the Supabase
+`FCM_SERVICE_ACCOUNT_JSON` Edge Function secret.
+
+After sign-in the mobile app asks for notification permission once per
+installation; web asks when the teacher presses **Enable notifications** in
+the profile. Once permission is granted, it registers the FCM token with
+`register_notification_device`,
+and revokes it before sign-out. A push payload (`event_type`, `target_id`)
+is only a navigation hint: the target is re-read under RLS, and the
+notification center opens when it is unavailable. The in-app notification
+center works without the permission.
+
+Teacher web push requires a Web Push key pair in Firebase Console → Project
+settings → Cloud Messaging → Web Push certificates. Put its **public** key in
+`WEB_PUSH_VAPID_KEY` in the web build's Dart defines (for local builds,
+`config/env.local.json`). Keep the private key in Firebase. The web app and
+`web/firebase-messaging-sw.js` must use the same Firebase project. Serve the
+app over HTTPS or localhost, and allow notifications in the browser. The FCM
+plugin registers the messaging worker when obtaining a token; no additional
+registration in `web/index.html` is needed. `web/flutter_bootstrap.js` leaves
+Flutter's legacy PWA worker disabled so it cannot replace the messaging worker.
+Apply the
+`20261009164005_teacher_web_push` Supabase migration before using web push so
+`register_notification_device` accepts `platform=web` for teacher sessions.
+On web, the teacher must press **Enable notifications** on the home screen,
+notification center, or profile; the browser permission prompt cannot be
+opened automatically after sign-in.
+The home notice can be closed for the current session; it appears again after
+the next sign-in or app restart while notifications remain disabled.
+Build with `flutter build web --dart-define-from-file=config/env.local.json`
+after adding the public key, then deploy the rebuilt web assets.
+
+The backend does not create teacher-directed events yet, so the teacher
+notification center stays empty until it does. Existing student-directed
+events do not become teacher notifications merely by registering a token.
+
+iOS push is disabled until it is configured:
+
+1. Add `ios/Runner/GoogleService-Info.plist` for this app's bundle ID.
+2. Enable the Push Notifications capability and the Remote notifications
+   background mode, and upload an APNs key in the Firebase console.
+3. Set `"IOS_PUSH_ENABLED": true` in `config/env.local.json`.

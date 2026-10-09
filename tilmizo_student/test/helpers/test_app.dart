@@ -17,6 +17,7 @@ import 'package:tilmizo_student/features/student_classes/data/student_classes_re
 
 import 'fake_announcements.dart';
 import 'fake_homework.dart';
+import 'fake_notifications.dart';
 import 'fake_payments.dart';
 import 'fake_resources.dart';
 import 'fakes.dart';
@@ -30,8 +31,14 @@ class TestBackend {
     FakeProfileRepository? profiles,
     FakeGroupAccessRepository? access,
     FakeStudentClassesRepository? classes,
+    FakePushNotificationsService? push,
     this.now,
-  }) : auth = auth ?? FakePhoneAuthService(),
+  }) : push =
+           push ??
+           (FakePushNotificationsService(
+             status: NotificationPermissionStatus.unsupported,
+           )..available = false),
+       auth = auth ?? FakePhoneAuthService(),
        profiles = profiles ?? FakeProfileRepository(),
        access = access ?? FakeGroupAccessRepository(),
        classes = classes ?? FakeStudentClassesRepository();
@@ -45,6 +52,11 @@ class TestBackend {
   final homework = FakeStudentHomeworkRepository();
   final payments = FakeStudentPaymentsRepository();
   final files = FakeResourceFileService();
+  final notifications = FakeNotificationsRepository();
+  final targets = FakeNotificationTargetLookup();
+
+  /// Inert (unavailable) unless a test passes its own.
+  final FakePushNotificationsService push;
 
   /// A fixed clock for Cairo cutoff checks; the real clock when null.
   DateTime? now;
@@ -66,6 +78,10 @@ class TestBackend {
     deviceInfoServiceProvider.overrideWithValue(FakeDeviceInfoService()),
     appVersionProvider.overrideWithValue('1.0.0'),
     sharedPreferencesProvider.overrideWithValue(preferences ?? testPreferences),
+    notificationsRepositoryProvider.overrideWithValue(notifications),
+    notificationTargetLookupProvider.overrideWithValue(targets),
+    pushNotificationsServiceProvider.overrideWithValue(push),
+    notificationAppProvider.overrideWithValue(NotificationApp.student),
   ];
 
   ProviderContainer createContainer() {

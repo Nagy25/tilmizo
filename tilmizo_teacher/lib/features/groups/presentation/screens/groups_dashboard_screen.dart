@@ -17,6 +17,7 @@ import '../../../classes/presentation/controllers/classes_providers.dart';
 import '../../../classes/presentation/widgets/classes_home_tile.dart';
 import '../../../teacher_students/presentation/widgets/all_students_home_tile.dart';
 import '../../../teacher_students/presentation/controllers/teacher_students_provider.dart';
+import '../../../notifications/presentation/widgets/home_notification_permission_notice.dart';
 
 @RoutePage()
 class GroupsDashboardScreen extends ConsumerStatefulWidget {
@@ -78,6 +79,7 @@ class _GroupsDashboardScreenState extends ConsumerState<GroupsDashboardScreen> {
             children: [
               const TeacherGreeting(),
               const SizedBox(height: TelmizoSpacing.lg),
+              const HomeNotificationPermissionNotice(),
               GroupsSummaryCard(groups: groups),
               const SizedBox(height: TelmizoSpacing.md),
               const AllStudentsHomeTile(),

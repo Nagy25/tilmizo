@@ -15,6 +15,9 @@ Future<void> main() async {
   final supabaseConfig = SupabaseConfig.fromEnvironment();
   registerTelmizoFontLicenses();
   CairoTime.ensureInitialized();
+  // Mobile push only; unconfigured iOS builds run without it. Not awaited,
+  // so a slow or failing Firebase start never delays the UI.
+  PushNotificationsBootstrap.start();
 
   final (sharedPreferences, _, _, _) = await (
     SharedPreferences.getInstance(),
@@ -36,6 +39,7 @@ Future<void> main() async {
       child: ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+          notificationAppProvider.overrideWithValue(NotificationApp.student),
         ],
         // Screens surface failures explicitly; automatic retries would hide
         // them behind repeated background requests.

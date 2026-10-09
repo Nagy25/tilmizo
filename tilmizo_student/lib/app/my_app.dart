@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/auth/presentation/controllers/app_flow_controller.dart';
 import '../features/group_access/data/approved_groups_memory.dart';
+import '../features/notifications/presentation/widgets/app_notifications_host.dart';
 import '../generated/locale_keys.g.dart';
 import '../router/app_router.dart';
 
@@ -54,8 +55,12 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      builder: (context, child) =>
-          TelmizoMobileFrame(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) => TelmizoMobileFrame(
+        child: AppNotificationsHost(
+          router: _router,
+          child: child ?? const SizedBox.shrink(),
+        ),
+      ),
     );
   }
 }

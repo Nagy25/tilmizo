@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../core/errors/failure_messages.dart';
 import '../../../../router/app_router.dart';
+import '../../../notifications/presentation/notification_labels.dart';
 import '../controllers/current_profile_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
 
@@ -87,8 +88,10 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
     final profile = ref.watch(currentProfileProvider).value;
     final avatarState = ref.watch(profileAvatarControllerProvider);
     final textTheme = context.textTheme;
+    // Scrollable: the sheet is height-capped and the notification card can
+    // push the actions past it on short phones or large text.
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(
           TelmizoSpacing.lg,
           0,
@@ -149,6 +152,12 @@ class _AccountSheetState extends ConsumerState<_AccountSheet> {
               ),
               const SizedBox(height: TelmizoSpacing.lg),
             ],
+            // Optional, and hidden when push is unavailable on this build.
+            NotificationPermissionCard(
+              labels: notificationPermissionLabels(),
+              showWhenEnabled: true,
+            ),
+            const SizedBox(height: TelmizoSpacing.sm),
             SizedBox(
               height: TelmizoSpacing.buttonHeight,
               child: TextButton.icon(

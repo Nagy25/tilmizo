@@ -48,12 +48,15 @@ StudentFlowResult flowForEntries(List<GroupAccessEntry> entries) {
   );
 }
 
-/// Clears cached student data so the next read reflects the current session.
+/// Clears cached student data, including notification state, so the next
+/// read reflects the current session.
 final resetSessionDataProvider = Provider<void Function()>(
   (ref) => () {
     ref.invalidate(currentProfileProvider);
     ref.invalidate(groupAccessOverviewProvider);
     ref.invalidate(approvedGroupProvider);
+    ref.invalidate(unreadNotificationCountProvider);
+    ref.invalidate(pendingNotificationOpenProvider);
   },
 );
 

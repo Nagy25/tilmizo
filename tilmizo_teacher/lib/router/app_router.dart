@@ -26,6 +26,7 @@ import '../features/groups/presentation/screens/edit_group_screen.dart';
 import '../features/groups/presentation/screens/empty_groups_screen.dart';
 import '../features/groups/presentation/screens/group_details_screen.dart';
 import '../features/groups/presentation/screens/groups_dashboard_screen.dart';
+import '../features/notifications/presentation/screens/notifications_screen.dart';
 import '../features/payments/presentation/screens/group_payments_screen.dart';
 import '../features/payments/presentation/screens/monthly_plan_screen.dart';
 import '../features/payments/presentation/screens/one_time_payment_screen.dart';
@@ -80,6 +81,11 @@ class AppRouter extends RootStackRouter {
       AutoRoute(
         page: GroupsDashboardRoute.page,
         path: '/groups',
+        guards: teacherGuards,
+      ),
+      AutoRoute(
+        page: NotificationsRoute.page,
+        path: '/notifications',
         guards: teacherGuards,
       ),
       AutoRoute(

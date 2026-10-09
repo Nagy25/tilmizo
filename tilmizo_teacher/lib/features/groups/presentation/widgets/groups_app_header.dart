@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/widgets/app_header.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
+import '../../../notifications/presentation/widgets/notifications_bell.dart';
 import '../../../profile/presentation/controllers/current_profile_controller.dart';
 
-/// Groups top bar with profile access.
+/// Groups top bar with the notification bell and profile access.
 class GroupsAppHeader extends ConsumerWidget implements PreferredSizeWidget {
   const GroupsAppHeader({super.key});
 
@@ -18,27 +19,38 @@ class GroupsAppHeader extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profile = ref.watch(currentProfileProvider).value;
     return AppHeader(
       title: LocaleKeys.app_name.tr(),
       subtitle: LocaleKeys.groups_header_subtitle.tr(),
-      trailing: Tooltip(
-        message: LocaleKeys.groups_profile_button.tr(),
-        child: Semantics(
-          button: true,
-          label: LocaleKeys.groups_profile_button.tr(),
-          child: InkResponse(
-            onTap: () => context.router.push(const EditProfileRoute()),
-            radius: 28,
-            child: SizedBox.square(
-              dimension: 52,
-              child: Center(
-                child: TelmizoAvatar(
-                  avatarUrl: profile?.avatarUrl,
-                  fullName: profile?.fullName,
-                  avatarRevision: profile?.updatedAt.toUtc().toIso8601String(),
-                  size: 44,
-                ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const NotificationsBell(),
+          const SizedBox(width: TelmizoSpacing.xs),
+          _profileButton(context, ref),
+        ],
+      ),
+    );
+  }
+
+  Widget _profileButton(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(currentProfileProvider).value;
+    return Tooltip(
+      message: LocaleKeys.groups_profile_button.tr(),
+      child: Semantics(
+        button: true,
+        label: LocaleKeys.groups_profile_button.tr(),
+        child: InkResponse(
+          onTap: () => context.router.push(const EditProfileRoute()),
+          radius: 28,
+          child: SizedBox.square(
+            dimension: 52,
+            child: Center(
+              child: TelmizoAvatar(
+                avatarUrl: profile?.avatarUrl,
+                fullName: profile?.fullName,
+                avatarRevision: profile?.updatedAt.toUtc().toIso8601String(),
+                size: 44,
               ),
             ),
           ),

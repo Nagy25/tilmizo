@@ -120,11 +120,13 @@ class ApprovedGroupRoute extends PageRouteInfo<ApprovedGroupRouteArgs> {
   ApprovedGroupRoute({
     Key? key,
     required String groupId,
+    String? tab,
     List<PageRouteInfo>? children,
   }) : super(
          ApprovedGroupRoute.name,
-         args: ApprovedGroupRouteArgs(key: key, groupId: groupId),
+         args: ApprovedGroupRouteArgs(key: key, groupId: groupId, tab: tab),
          rawPathParams: {'groupId': groupId},
+         rawQueryParams: {'tab': tab},
          initialChildren: children,
        );
 
@@ -134,36 +136,45 @@ class ApprovedGroupRoute extends PageRouteInfo<ApprovedGroupRouteArgs> {
     name,
     builder: (data) {
       final pathParams = data.inheritedPathParams;
+      final queryParams = data.queryParams;
       final args = data.argsAs<ApprovedGroupRouteArgs>(
-        orElse: () =>
-            ApprovedGroupRouteArgs(groupId: pathParams.getString('groupId')),
+        orElse: () => ApprovedGroupRouteArgs(
+          groupId: pathParams.getString('groupId'),
+          tab: queryParams.optString('tab'),
+        ),
       );
-      return ApprovedGroupScreen(key: args.key, groupId: args.groupId);
+      return ApprovedGroupScreen(
+        key: args.key,
+        groupId: args.groupId,
+        tab: args.tab,
+      );
     },
   );
 }
 
 class ApprovedGroupRouteArgs {
-  const ApprovedGroupRouteArgs({this.key, required this.groupId});
+  const ApprovedGroupRouteArgs({this.key, required this.groupId, this.tab});
 
   final Key? key;
 
   final String groupId;
 
+  final String? tab;
+
   @override
   String toString() {
-    return 'ApprovedGroupRouteArgs{key: $key, groupId: $groupId}';
+    return 'ApprovedGroupRouteArgs{key: $key, groupId: $groupId, tab: $tab}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ApprovedGroupRouteArgs) return false;
-    return key == other.key && groupId == other.groupId;
+    return key == other.key && groupId == other.groupId && tab == other.tab;
   }
 
   @override
-  int get hashCode => key.hashCode ^ groupId.hashCode;
+  int get hashCode => key.hashCode ^ groupId.hashCode ^ tab.hashCode;
 }
 
 /// generated route for
@@ -281,6 +292,22 @@ class NewDeviceRequiredRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ groupId.hashCode;
+}
+
+/// generated route for
+/// [NotificationsScreen]
+class NotificationsRoute extends PageRouteInfo<void> {
+  const NotificationsRoute({List<PageRouteInfo>? children})
+    : super(NotificationsRoute.name, initialChildren: children);
+
+  static const String name = 'NotificationsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NotificationsScreen();
+    },
+  );
 }
 
 /// generated route for

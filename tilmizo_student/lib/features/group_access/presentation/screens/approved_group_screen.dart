@@ -21,9 +21,14 @@ class ApprovedGroupScreen extends ConsumerWidget {
   const ApprovedGroupScreen({
     super.key,
     @PathParam('groupId') required this.groupId,
+    @QueryParam('tab') this.tab,
   });
 
   final String groupId;
+
+  /// An [ApprovedGroupTab] name to open first, for example from a
+  /// notification.
+  final String? tab;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,7 +58,11 @@ class ApprovedGroupScreen extends ConsumerWidget {
                   retryLabel: LocaleKeys.common_retry.tr(),
                   onRetry: () => ref.invalidate(groupAccessOverviewProvider),
                 ),
-                data: (group) => ApprovedGroupTabs(group: group, entry: entry),
+                data: (group) => ApprovedGroupTabs(
+                  group: group,
+                  entry: entry,
+                  initialTab: ApprovedGroupTab.parse(tab),
+                ),
               ),
         ),
       ),

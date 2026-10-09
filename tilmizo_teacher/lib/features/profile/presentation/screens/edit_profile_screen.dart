@@ -9,6 +9,7 @@ import '../../../../core/errors/failure_messages.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../../router/app_router.dart';
 import '../../../auth/presentation/controllers/app_flow_controller.dart';
+import '../../../notifications/presentation/notification_labels.dart';
 import '../controllers/profile_form_controller.dart';
 import '../controllers/profile_avatar_controller.dart';
 import '../widgets/profile_form.dart';
@@ -113,6 +114,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             ),
             const SizedBox(height: TelmizoSpacing.xl),
             const ResourceStorageUsageCard(),
+            const SizedBox(height: TelmizoSpacing.xl),
+            // Optional notification permission control on supported devices
+            // and browsers; never required to use the app.
+            NotificationPermissionCard(
+              labels: notificationPermissionLabels(),
+              showWhenEnabled: true,
+            ),
             const SizedBox(height: TelmizoSpacing.xl),
             const Divider(),
             const SizedBox(height: TelmizoSpacing.md),

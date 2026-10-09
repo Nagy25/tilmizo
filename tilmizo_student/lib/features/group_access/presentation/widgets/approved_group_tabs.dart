@@ -21,6 +21,20 @@ import '../controllers/group_access_providers.dart';
 import 'approved_group_info_tab.dart';
 import 'approved_group_tab_list.dart';
 
+/// The approved-group tabs, in display order. [name] is the `tab` query
+/// value of the approved-group route.
+enum ApprovedGroupTab {
+  info,
+  classes,
+  homework,
+  announcements,
+  resources,
+  payments;
+
+  static ApprovedGroupTab parse(String? value) =>
+      values.where((tab) => tab.name == value).firstOrNull ?? info;
+}
+
 /// Info, Classes, Homework, Announcements, Resources and Payments tabs for
 /// an approved group.
 class ApprovedGroupTabs extends ConsumerStatefulWidget {
@@ -28,10 +42,12 @@ class ApprovedGroupTabs extends ConsumerStatefulWidget {
     super.key,
     required this.group,
     required this.entry,
+    this.initialTab = ApprovedGroupTab.info,
   });
 
   final ApprovedGroup group;
   final GroupAccessEntry entry;
+  final ApprovedGroupTab initialTab;
 
   @override
   ConsumerState<ApprovedGroupTabs> createState() => _ApprovedGroupTabsState();
@@ -39,13 +55,16 @@ class ApprovedGroupTabs extends ConsumerStatefulWidget {
 
 class _ApprovedGroupTabsState extends ConsumerState<ApprovedGroupTabs>
     with SingleTickerProviderStateMixin {
-  static const _homeworkTab = 2;
-  static const _announcementsTab = 3;
-  static const _resourcesTab = 4;
-  static const _paymentsTab = 5;
+  static final _homeworkTab = ApprovedGroupTab.homework.index;
+  static final _announcementsTab = ApprovedGroupTab.announcements.index;
+  static final _resourcesTab = ApprovedGroupTab.resources.index;
+  static final _paymentsTab = ApprovedGroupTab.payments.index;
 
-  late final _tabs = TabController(length: 6, vsync: this)
-    ..addListener(_onTabChanged);
+  late final _tabs = TabController(
+    length: ApprovedGroupTab.values.length,
+    vsync: this,
+    initialIndex: widget.initialTab.index,
+  )..addListener(_onTabChanged);
 
   late final AppLifecycleListener _lifecycle;
 

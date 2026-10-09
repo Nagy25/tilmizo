@@ -77,3 +77,27 @@ After changing routes or routable screens:
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
+
+## Push notifications
+
+Firebase Cloud Messaging uses the native `android/app/google-services.json`
+(applied by the `com.google.gms.google-services` Gradle plugin). Never add the
+Firebase service-account JSON to the app; it belongs only in the Supabase
+`FCM_SERVICE_ACCOUNT_JSON` Edge Function secret.
+
+After sign-in the app asks for notification permission once per
+installation, registers the FCM token with `register_notification_device`,
+and revokes it before sign-out. A push payload (`event_type`, `target_id`)
+is only a navigation hint: the target is re-read under RLS, and the
+notification center opens when it is unavailable. The in-app notification
+center works without the permission.
+
+Taps on announcement and resource notifications open the group on the
+matching tab (`/groups/:groupId?tab=announcements`).
+
+iOS push is disabled until it is configured:
+
+1. Add `ios/Runner/GoogleService-Info.plist` for this app's bundle ID.
+2. Enable the Push Notifications capability and the Remote notifications
+   background mode, and upload an APNs key in the Firebase console.
+3. Set `"IOS_PUSH_ENABLED": true` in `config/env.local.json`.

@@ -28,6 +28,7 @@ import 'fake_announcements.dart';
 import 'fake_classes.dart';
 import 'fake_group_access.dart';
 import 'fake_homework.dart';
+import 'fake_notifications.dart';
 import 'fake_payments.dart';
 import 'fake_resources.dart';
 import 'fake_teacher_students.dart';
@@ -49,8 +50,14 @@ class TestBackend {
     FakePaymentsRepository? payments,
     FakeAnnouncementsRepository? announcements,
     FakeHomeworkRepository? homework,
+    FakePushNotificationsService? push,
     this.now,
-  }) : homework = homework ?? FakeHomeworkRepository(),
+  }) : push =
+           push ??
+           (FakePushNotificationsService(
+             status: NotificationPermissionStatus.unsupported,
+           )..available = false),
+       homework = homework ?? FakeHomeworkRepository(),
        announcements = announcements ?? FakeAnnouncementsRepository(),
        payments = payments ?? FakePaymentsRepository(),
        resources = resources ?? FakeResourcesRepository(),
@@ -77,6 +84,11 @@ class TestBackend {
   final uploader = FakeContentUploader();
   final filePicker = FakeFilePicker();
   final files = FakeResourceFileService();
+  final notifications = FakeNotificationsRepository();
+  final targets = FakeNotificationTargetLookup();
+
+  /// Inert (unavailable) unless a test passes its own.
+  final FakePushNotificationsService push;
 
   /// A fixed clock for screens that compare against the current time.
   final DateTime? now;
@@ -99,6 +111,12 @@ class TestBackend {
     resourceFileServiceProvider.overrideWithValue(files),
     if (now case final now?) clockProvider.overrideWithValue(() => now),
     appVersionProvider.overrideWithValue('1.0.0'),
+    notificationsRepositoryProvider.overrideWithValue(notifications),
+    notificationTargetLookupProvider.overrideWithValue(targets),
+    pushNotificationsServiceProvider.overrideWithValue(push),
+    notificationAppProvider.overrideWithValue(NotificationApp.teacher),
+    if (testPreferences case final preferences?)
+      sharedPreferencesProvider.overrideWithValue(preferences),
   ];
 
   ProviderContainer createContainer() {
@@ -111,9 +129,13 @@ class TestBackend {
   }
 }
 
+/// Mock preferences shared by tests; reset by [initTestLocalization].
+SharedPreferences? testPreferences;
+
 Future<void> initTestLocalization() async {
   CairoTime.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
+  testPreferences = await SharedPreferences.getInstance();
   EasyLocalization.logger.enableBuildModes = [];
   await EasyLocalization.ensureInitialized();
 }

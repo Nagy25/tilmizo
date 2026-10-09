@@ -359,4 +359,42 @@ abstract class LocaleKeys {
   static const session_homework_title = 'session_homework_title';
   static const session_homework_none = 'session_homework_none';
   static const session_homework_load_error = 'session_homework_load_error';
+  static const notifications_title = 'notifications_title';
+  static const notifications_subtitle = 'notifications_subtitle';
+  static const notifications_bell_semantics = 'notifications_bell_semantics';
+  static const notifications_empty_title = 'notifications_empty_title';
+  static const notifications_empty_body = 'notifications_empty_body';
+  static const notifications_load_error_title =
+      'notifications_load_error_title';
+  static const notifications_mark_all_read = 'notifications_mark_all_read';
+  static const notifications_mark_read = 'notifications_mark_read';
+  static const notifications_mark_read_failed =
+      'notifications_mark_read_failed';
+  static const notifications_unread = 'notifications_unread';
+  static const notifications_load_more_error = 'notifications_load_more_error';
+  static const notifications_time_now = 'notifications_time_now';
+  static const notifications_time_minutes = 'notifications_time_minutes';
+  static const notifications_time_hours = 'notifications_time_hours';
+  static const notifications_time_yesterday = 'notifications_time_yesterday';
+  static const notifications_target_unavailable =
+      'notifications_target_unavailable';
+  static const notifications_open_failed = 'notifications_open_failed';
+  static const notifications_foreground_new = 'notifications_foreground_new';
+  static const notifications_foreground_view = 'notifications_foreground_view';
+  static const notifications_permission_disabled_title =
+      'notifications_permission_disabled_title';
+  static const notifications_permission_disabled_body =
+      'notifications_permission_disabled_body';
+  static const notifications_permission_blocked_body =
+      'notifications_permission_blocked_body';
+  static const notifications_permission_enable =
+      'notifications_permission_enable';
+  static const notifications_permission_open_settings =
+      'notifications_permission_open_settings';
+  static const notifications_permission_manual =
+      'notifications_permission_manual';
+  static const notifications_permission_enabled_title =
+      'notifications_permission_enabled_title';
+  static const notifications_permission_enabled_body =
+      'notifications_permission_enabled_body';
 }
